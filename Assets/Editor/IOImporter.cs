@@ -55,7 +55,7 @@ public class IOImporter : UnityEditor.AssetImporters.ScriptedImporter
         {
             try
             {
-                prefab = Resources.Load<GameObject>("Parts/Prefabs/" + parts[i].Name);
+                prefab = Resources.Load<GameObject>("Parts/" + parts[i].Name);
                 meshes[i] = Instantiate(prefab, main.transform);
                 meshes[i].transform.position = new Vector3(-parts[i].Matrix.m03, parts[i].Matrix.m13, -parts[i].Matrix.m23);
                 meshes[i].transform.Rotate(-parts[i].Matrix.rotation.eulerAngles.x, parts[i].Matrix.rotation.eulerAngles.y, -parts[i].Matrix.rotation.eulerAngles.z);
