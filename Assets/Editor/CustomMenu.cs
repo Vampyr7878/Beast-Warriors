@@ -7,7 +7,7 @@ public class CustomMenu : MonoBehaviour
     [MenuItem("Beast Warriors/Cleanup SavePrefabs")]
     public static  void CleanupSavePrefabs()
     {
-        DirectoryInfo dir = new DirectoryInfo(@"Assets\Resources\Parts\Prefabs");
+        DirectoryInfo dir = new DirectoryInfo(@"Assets\Resources\Parts");
         foreach (FileInfo file in dir.GetFiles("*.prefab"))
         {
             string path = file.FullName.Replace("\\", "/");
