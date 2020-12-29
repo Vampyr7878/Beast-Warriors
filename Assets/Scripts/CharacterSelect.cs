@@ -22,7 +22,13 @@ public class CharacterSelect : MonoBehaviour
 
     List<string> characterPaths;
 
+    List<bool> characterEnabled;
+
+    List<int> activeCharacters;
+
     int page;
+
+    int pages;
 
     void Awake()
     {
@@ -31,6 +37,8 @@ public class CharacterSelect : MonoBehaviour
         connection = new SqliteConnection(dbPath);
         characterNames = new List<string>();
         characterPaths = new List<string>();
+        characterEnabled = new List<bool>();
+        activeCharacters = new List<int>();
         connection.Open();
         using (SqliteCommand command = connection.CreateCommand())
         {
@@ -41,10 +49,19 @@ public class CharacterSelect : MonoBehaviour
             {
                 characterNames.Add(reader.GetString(1));
                 characterPaths.Add(reader.GetString(2));
+                characterEnabled.Add(reader.GetBoolean(3));
             }
         }
         connection.Close();
         instances = new GameObject[choices.Length];
+        pages = Mathf.CeilToInt(characterEnabled.FindAll(b => b).Count / (float)choices.Length);
+        for (int i = 0; i < characterEnabled.Count; i++)
+        {
+            if (characterEnabled[i])
+            {
+                activeCharacters.Add(i);
+            }
+        }
     }
 
     void Start()
@@ -77,11 +94,19 @@ public class CharacterSelect : MonoBehaviour
         }
         for (int i = 0; i < choices.Length; i++)
         {
-            choices[i].GetComponentInChildren<TextMeshPro>().text = characterNames[i + page * choices.Length];
-            choices[i].GetComponent<Choice>().character = characterPaths[i + page * choices.Length];
-            GameObject prefab = Resources.Load<GameObject>("Beast Warriors/" + characterPaths[i + page * choices.Length]);
-            instances[i] = Instantiate(prefab, choices[i].transform);
-            instances[i].GetComponent<BeastWarrior>().enabled = false;
+            if (i + page * choices.Length >= activeCharacters.Count)
+            {
+                choices[i].SetActive(false);
+            }
+            else
+            {
+                choices[i].SetActive(true);
+                choices[i].GetComponentInChildren<TextMeshPro>().text = characterNames[activeCharacters[i + page * choices.Length]];
+                choices[i].GetComponent<Choice>().character = characterPaths[activeCharacters[i + page * choices.Length]];
+                GameObject prefab = Resources.Load<GameObject>("Beast Warriors/" + characterPaths[activeCharacters[i + page * choices.Length]]);
+                instances[i] = Instantiate(prefab, choices[i].transform);
+                instances[i].GetComponent<BeastWarrior>().enabled = false;
+            }
         }
     }
 
@@ -97,7 +122,7 @@ public class CharacterSelect : MonoBehaviour
 
     public void NextButton()
     {
-        int value = page == (characterNames.Count / 3) - 1 ? page : page + 1;
+        int value = page == pages - 1 ? page : page + 1;
         if (value != page)
         {
             page = value;
