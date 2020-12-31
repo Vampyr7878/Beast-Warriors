@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using static UnityEngine.InputSystem.InputAction;
 
 public class Character : MonoBehaviour
@@ -47,7 +48,6 @@ public class Character : MonoBehaviour
         bodyParts = new Transform[skeleton.Count];
         terrainCollsion = new List<Collision>();
         string character = PlayerPrefs.GetString("Character");
-        //character = "Airazor/Transmetal/Airazor Foxmetal";
         GameObject prefab = Resources.Load<GameObject>("Beast Warriors/" + character);
         GameObject instance = Instantiate(prefab, transform);
         RuntimeAnimatorController controller = instance.GetComponent<Animator>().runtimeAnimatorController;
@@ -177,11 +177,7 @@ public class Character : MonoBehaviour
 
     public void OnExit(CallbackContext context)
     {
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#else
-        Application.Quit();
-#endif
+        SceneManager.LoadScene("CharacterSelect");
     }
 
     void OnCollisionEnter(Collision collision)
