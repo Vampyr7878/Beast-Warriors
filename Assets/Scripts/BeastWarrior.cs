@@ -11,6 +11,10 @@ public abstract class BeastWarrior : MonoBehaviour
 
     protected float[] cameraPosition;
 
+    protected bool lightShoot;
+
+    protected bool heavyShoot;
+
     protected void Awake()
     {
         cameraPosition = new float[4];
@@ -19,6 +23,8 @@ public abstract class BeastWarrior : MonoBehaviour
         cameraPosition[2] = -1.5f;
         cameraPosition[3] = -1.5f;
         weapon = 1;
+        lightShoot = false;
+        heavyShoot = false;
     }
 
     protected void Start()
@@ -48,4 +54,6 @@ public abstract class BeastWarrior : MonoBehaviour
     public abstract void OnRangedWeak(CallbackContext context);
 
     public abstract void OnRangedStrong(CallbackContext context);
+
+    public abstract void OnAttack(CallbackContext context);
 }

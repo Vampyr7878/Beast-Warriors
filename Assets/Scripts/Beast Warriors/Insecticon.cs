@@ -79,4 +79,17 @@ public class Insecticon : BeastWarrior
         EquipLeftSickle(left);
         EquipCrossbow(rightHold);
     }
+
+    public override void OnAttack(CallbackContext context)
+    {
+        switch (weapon)
+        {
+            case 3:
+                Debug.Log("Light Fire");
+                break;
+            case 4:
+                Debug.Log("Heavy Fire");
+                break;
+        }
+    }
 }

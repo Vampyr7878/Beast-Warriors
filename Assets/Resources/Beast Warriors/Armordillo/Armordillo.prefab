@@ -832,6 +832,13 @@ MonoBehaviour:
   maceHolster: {fileID: 1932839539731493198}
   gunHolster: {fileID: 3862053276573127348}
   hold: {fileID: 8581415798640961191}
+  lightBarrels:
+  - {fileID: 1488890525659523961}
+  - {fileID: 6450374066562848739}
+  heavyBarrel: {fileID: 3008691953436336987}
+  bullet: {fileID: 3474837066459004095, guid: 0dea4693c7d850e48b7253a911891254, type: 3}
+  laser: {fileID: 1902466104029136014, guid: 386d27ab257dd55428cc6279eee12f9b, type: 3}
+  fireRate: 0.1
 --- !u!1 &925621033153351971
 GameObject:
   m_ObjectHideFlags: 0
@@ -1877,6 +1884,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBodyPart: 1
+--- !u!1 &1488890525659523961
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6695336430130298612}
+  m_Layer: 0
+  m_Name: Light Barrel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6695336430130298612
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1488890525659523961}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3701379101999001358}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1624064545067503991
 GameObject:
   m_ObjectHideFlags: 0
@@ -3566,7 +3603,8 @@ Transform:
   m_LocalRotation: {x: -0.50000024, y: 0.50000024, z: 0.49999976, w: -0.49999976}
   m_LocalPosition: {x: -39.97047, y: -449.7054, z: 19.97512}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 3590582038524614087}
   m_Father: {fileID: 1050470285720415032}
   m_RootOrder: 46
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -7934,7 +7972,8 @@ Transform:
   m_LocalRotation: {x: -0.50000024, y: 0.50000024, z: 0.49999976, w: -0.49999976}
   m_LocalPosition: {x: -39.97047, y: -449.7054, z: -20.02488}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 6695336430130298612}
   m_Father: {fileID: 1050470285720415032}
   m_RootOrder: 45
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -8000,6 +8039,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBodyPart: 0
+--- !u!1 &6450374066562848739
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3590582038524614087}
+  m_Layer: 0
+  m_Name: Light Barrel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3590582038524614087
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6450374066562848739}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 7611625089441996892}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6460650047922923479
 GameObject:
   m_ObjectHideFlags: 0
@@ -11216,5 +11285,10 @@ GameObject:
 --- !u!4 &7363050481361347840 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8499670448460230030, guid: 2b8ce80e47211154a873e4683323924d, type: 3}
+  m_PrefabInstance: {fileID: 1430502404265379982}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3008691953436336987 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4186992228812630997, guid: 2b8ce80e47211154a873e4683323924d, type: 3}
   m_PrefabInstance: {fileID: 1430502404265379982}
   m_PrefabAsset: {fileID: 0}

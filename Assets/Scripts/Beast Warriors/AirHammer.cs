@@ -1,3 +1,4 @@
+using UnityEngine;
 using static UnityEngine.InputSystem.InputAction;
 
 public class AirHammer : BeastWarrior
@@ -28,5 +29,18 @@ public class AirHammer : BeastWarrior
         weapon = 4;
         animator.SetLayerWeight(1, 1f);
         animator.SetInteger("Weapon", weapon);
+    }
+
+    public override void OnAttack(CallbackContext context)
+    {
+        switch (weapon)
+        {
+            case 3:
+                Debug.Log("Light Fire");
+                break;
+            case 4:
+                Debug.Log("Heavy Fire");
+                break;
+        }
     }
 }

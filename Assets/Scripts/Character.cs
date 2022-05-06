@@ -104,6 +104,7 @@ public class Character : MonoBehaviour
         input.actionEvents[5].AddListener(warrior.OnMeleeStrong);
         input.actionEvents[6].AddListener(warrior.OnRangedWeak);
         input.actionEvents[7].AddListener(warrior.OnRangedStrong);
+        input.actionEvents[8].AddListener(warrior.OnAttack);
     }
 
     void Update()
