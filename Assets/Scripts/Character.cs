@@ -42,7 +42,7 @@ public class Character : MonoBehaviour
 
     void Awake()
     {
-        cameraAngle = 20f;
+        cameraAngle = characterCamera.transform.rotation.eulerAngles.x;
         isMoving = false;
         isJumping = false;
         bodyParts = new Transform[skeleton.Count];
@@ -139,7 +139,7 @@ public class Character : MonoBehaviour
         Vector3 rotation = characterCamera.transform.rotation.eulerAngles;
         float angle = Mathf.Clamp(rotation.x - look.y, cameraAngle - cameraRange, cameraAngle + cameraRange);
         characterCamera.transform.eulerAngles = new Vector3(angle, rotation.y, rotation.z);
-        skeleton[2].eulerAngles = new Vector3(angle - 20f, skeleton[2].eulerAngles.y, skeleton[2].eulerAngles.z);
+        skeleton[2].eulerAngles = new Vector3(angle - cameraAngle, skeleton[2].eulerAngles.y, skeleton[2].eulerAngles.z);
         MoveParts();
     }
 

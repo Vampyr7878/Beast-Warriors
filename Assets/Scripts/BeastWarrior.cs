@@ -5,6 +5,8 @@ public abstract class BeastWarrior : MonoBehaviour
 {
     protected Camera characterCamera;
 
+    protected Transform cameraAimHelper;
+
     protected Animator animator;
 
     protected int weapon;
@@ -31,6 +33,7 @@ public abstract class BeastWarrior : MonoBehaviour
     {
         animator = transform.parent.GetComponentInChildren<Animator>();
         characterCamera = transform.parent.GetComponent<Character>().characterCamera;
+        cameraAimHelper = characterCamera.GetComponentsInChildren<Transform>()[1];
     }
 
     protected void FixedUpdate()

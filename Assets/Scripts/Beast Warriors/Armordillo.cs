@@ -64,7 +64,7 @@ public class Armordillo : BeastWarrior
     {
         int layerMask = 1 << 3;
         layerMask = ~layerMask;
-        if (Physics.Raycast(characterCamera.transform.position, characterCamera.transform.TransformDirection(Vector3.forward), out RaycastHit hit, Mathf.Infinity, layerMask))
+        if (Physics.Raycast(cameraAimHelper.position, cameraAimHelper.TransformDirection(Vector3.forward), out RaycastHit hit, Mathf.Infinity, layerMask))
         {
             GameObject b = Instantiate(bullet);
             b.transform.position = lightBarrels[barrel].transform.position;
@@ -72,7 +72,7 @@ public class Armordillo : BeastWarrior
             GameObject h = b.transform.GetChild(1).gameObject;
             h.transform.position = hit.point;
             Debug.DrawLine(lightBarrels[barrel].transform.position, hit.point, Color.blue, 3600);
-            Debug.DrawRay(characterCamera.transform.position, characterCamera.transform.TransformDirection(Vector3.forward) * hit.distance, Color.cyan, 3600);
+            Debug.DrawRay(cameraAimHelper.position, cameraAimHelper.TransformDirection(Vector3.forward) * hit.distance, Color.cyan, 3600);
         }
         barrel = barrel == (lightBarrels.Length - 1) ? 0 : barrel + 1;
     }
@@ -81,7 +81,7 @@ public class Armordillo : BeastWarrior
     {
         int layerMask = 1 << 3;
         layerMask = ~layerMask;
-        if (Physics.Raycast(characterCamera.transform.position, characterCamera.transform.TransformDirection(Vector3.forward), out RaycastHit hit, Mathf.Infinity, layerMask))
+        if (Physics.Raycast(cameraAimHelper.position, cameraAimHelper.TransformDirection(Vector3.forward), out RaycastHit hit, Mathf.Infinity, layerMask))
         {
             LineRenderer l = Instantiate(laser);
             l.transform.position = heavyBarrel.transform.position;
@@ -100,7 +100,7 @@ public class Armordillo : BeastWarrior
             m = h.GetComponent<ParticleSystem>().main;
             m.startColor = new MinMaxGradient(Color.red);
             Debug.DrawLine(heavyBarrel.transform.position, hit.point, Color.red, 3600);
-            Debug.DrawRay(characterCamera.transform.position, characterCamera.transform.TransformDirection(Vector3.forward) * hit.distance, Color.magenta, 3600);
+            Debug.DrawRay(cameraAimHelper.position, cameraAimHelper.TransformDirection(Vector3.forward) * hit.distance, Color.magenta, 3600);
         }
         heavyShoot = false;
     }
@@ -146,13 +146,11 @@ public class Armordillo : BeastWarrior
         switch(weapon)
         {
             case 3:
-                Debug.Log("Light Fire");
                 lightShoot = context.performed;
                 time = fireRate;
                 barrel = 0;
                 break;
             case 4:
-                Debug.Log("Heavy Fire");
                 heavyShoot = context.performed;
                 break;
         }
