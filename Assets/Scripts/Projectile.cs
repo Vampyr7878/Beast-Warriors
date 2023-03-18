@@ -24,7 +24,7 @@ public class Projectile : MonoBehaviour
         {
             GameObject ef = Instantiate(energyFlash);
             ef.transform.position = transform.position;
-            ef.transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 0f);
+            ef.transform.eulerAngles = new Vector3(-transform.eulerAngles.x, transform.eulerAngles.y, 0f);
             ef.GetComponent<Light>().color = light.color;
             MainModule m = ef.GetComponent<ParticleSystem>().main;
             Color color = light.color;

@@ -1,5 +1,6 @@
 using UnityEngine;
 using static UnityEngine.InputSystem.InputAction;
+using static UnityEngine.ParticleSystem;
 
 public class Insecticon : BeastWarrior
 {
@@ -18,6 +19,40 @@ public class Insecticon : BeastWarrior
     public GameObject rightHold;
 
     public GameObject leftHold;
+
+    public GameObject[] lightBarrels;
+
+    public GameObject heavyBarrel;
+
+    public GameObject bullet;
+
+    public GameObject energyFlash;
+
+    public LineRenderer bolt;
+
+    public float fireRate;
+
+    private float time;
+
+    private int barrel;
+
+    protected new void FixedUpdate()
+    {
+        base.FixedUpdate();
+        if (lightShoot)
+        {
+            if (time >= fireRate)
+            {
+                ShootMachineGun();
+                time = 0;
+            }
+            time += Time.deltaTime;
+        }
+        if (heavyShoot)
+        {
+            ShootEnergyBall();
+        }
+    }
 
     void EquipRightSickle(GameObject attachment)
     {
@@ -38,6 +73,50 @@ public class Insecticon : BeastWarrior
         crossbow.transform.parent = attachment.transform;
         crossbow.transform.localPosition = Vector3.zero;
         crossbow.transform.localEulerAngles = Vector3.zero;
+    }
+
+    void ShootMachineGun()
+    {
+        int layerMask = 1 << 3;
+        layerMask = ~layerMask;
+        if (Physics.Raycast(cameraAimHelper.position, cameraAimHelper.TransformDirection(Vector3.forward), out RaycastHit hit, Mathf.Infinity, layerMask))
+        {
+            GameObject b = Instantiate(bullet);
+            b.transform.position = lightBarrels[barrel].transform.position;
+            b.transform.eulerAngles = new Vector3(0f, transform.eulerAngles.y, 0f);
+            GameObject h = b.transform.GetChild(1).gameObject;
+            h.transform.position = hit.point;
+            Debug.DrawLine(lightBarrels[barrel].transform.position, hit.point, Color.blue, 3600);
+            b = Instantiate(bullet);
+            b.transform.position = lightBarrels[barrel + 2].transform.position;
+            b.transform.eulerAngles = new Vector3(0f, transform.eulerAngles.y, 0f);
+            h = b.transform.GetChild(1).gameObject;
+            h.transform.position = hit.point;
+            Debug.DrawLine(lightBarrels[barrel + 2].transform.position, hit.point, Color.blue, 3600);
+            Debug.DrawRay(cameraAimHelper.position, cameraAimHelper.TransformDirection(Vector3.forward) * hit.distance, Color.cyan, 3600);
+        }
+        barrel = barrel == (lightBarrels.Length - 3) ? 0 : barrel + 1;
+    }
+
+    void ShootEnergyBall()
+    {
+        GameObject ef = Instantiate(energyFlash);
+        ef.transform.position = heavyBarrel.transform.position;
+        ef.transform.eulerAngles = new Vector3(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
+        ef.GetComponent<Light>().color = Color.magenta;
+        MainModule m = ef.GetComponent<ParticleSystem>().main;
+        Color color = Color.green;
+        color.a /= 8;
+        m.startColor = new MinMaxGradient(color);
+        LineRenderer l = Instantiate(bolt);
+        l.transform.position = heavyBarrel.transform.position;
+        l.transform.eulerAngles = new Vector3(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
+        l.SetPosition(0, Vector3.zero);
+        l.startColor = Color.green;
+        l.endColor = Color.green;
+        l.material.SetColor("_Color", Color.green);
+        l.GetComponent<Light>().color = Color.green;
+        heavyShoot = false;
     }
 
     public override void OnMeleeWeak(CallbackContext context)
@@ -85,10 +164,12 @@ public class Insecticon : BeastWarrior
         switch (weapon)
         {
             case 3:
-                Debug.Log("Light Fire");
+                lightShoot = context.performed;
+                time = fireRate;
+                barrel = 0;
                 break;
             case 4:
-                Debug.Log("Heavy Fire");
+                heavyShoot = context.performed;
                 break;
         }
     }
