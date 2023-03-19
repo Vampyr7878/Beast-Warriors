@@ -116,8 +116,8 @@ public class Convobat : BeastWarrior
         GradientAlphaKey[] alphas = new GradientAlphaKey[3];
         alphas[0].alpha = 0f;
         alphas[0].time = 0f;
-        alphas[1].alpha = 0.5f;
-        alphas[1].time = 0.1f;
+        alphas[1].alpha = 1f;
+        alphas[1].time = 0.5f;
         alphas[2].alpha = 0f;
         alphas[2].time = 1f;
         g.SetKeys(colors, alphas);
