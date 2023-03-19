@@ -30,6 +30,8 @@ public class Convobat : BeastWarrior
 
     public Color rippleColor;
 
+    public float laserInaccuracy;
+
     protected new void FixedUpdate()
     {
         base.FixedUpdate();
@@ -47,7 +49,8 @@ public class Convobat : BeastWarrior
     {
         int layerMask = 1 << 3;
         layerMask = ~layerMask;
-        if (Physics.Raycast(cameraAimHelper.position, cameraAimHelper.TransformDirection(Vector3.forward), out RaycastHit hit, Mathf.Infinity, layerMask))
+        Vector3 direction = new Vector3(Random.Range(-laserInaccuracy, laserInaccuracy), Random.Range(-laserInaccuracy, laserInaccuracy), 1);
+        if (Physics.Raycast(cameraAimHelper.position, cameraAimHelper.TransformDirection(direction), out RaycastHit hit, Mathf.Infinity, layerMask))
         {
             LineRenderer l = Instantiate(laser);
             l.transform.position = lightBarrels[0].transform.position;
@@ -83,7 +86,7 @@ public class Convobat : BeastWarrior
             m.startColor = new MinMaxGradient(laserColor);
             Debug.DrawLine(lightBarrels[0].transform.position, hit.point, Color.red, 3600);
             Debug.DrawLine(lightBarrels[1].transform.position, hit.point, Color.red, 3600);
-            Debug.DrawRay(cameraAimHelper.position, cameraAimHelper.TransformDirection(Vector3.forward) * hit.distance, Color.magenta, 3600);
+            Debug.DrawRay(cameraAimHelper.position, cameraAimHelper.TransformDirection(direction) * hit.distance, Color.magenta, 3600);
         }
         lightShoot = false;
     }
