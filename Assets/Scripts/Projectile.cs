@@ -5,7 +5,7 @@ public class Projectile : MonoBehaviour
 {
     public float speed;
 
-    public GameObject energyFlash;
+    public GameObject flash;
 
     private Rigidbody body;
 
@@ -20,16 +20,14 @@ public class Projectile : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.name != "Character")
+        if (other.gameObject.name != "Character" && !other.isTrigger)
         {
-            GameObject ef = Instantiate(energyFlash);
-            ef.transform.position = transform.position;
-            ef.transform.eulerAngles = new Vector3(-transform.eulerAngles.x, transform.eulerAngles.y, 0f);
-            ef.GetComponent<Light>().color = light.color;
-            MainModule m = ef.GetComponent<ParticleSystem>().main;
-            Color color = light.color;
-            color.a /= 8;
-            m.startColor = new MinMaxGradient(color);
+            GameObject f = Instantiate(flash);
+            f.transform.position = transform.position;
+            f.transform.eulerAngles = new Vector3(-transform.eulerAngles.x, transform.eulerAngles.y, 0f);
+            f.GetComponent<Light>().color = light.color;
+            MainModule m = f.GetComponent<ParticleSystem>().main;
+            m.startColor = new MinMaxGradient(light.color);
             Destroy(gameObject);
         }
     }

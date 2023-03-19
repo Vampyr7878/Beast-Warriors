@@ -16,9 +16,13 @@ public class Iguanus : BeastWarrior
 
     public GameObject bullet;
 
-    public GameObject energyFlash;
+    public GameObject flash;
 
-    public GameObject energyBall;
+    public GameObject ball;
+
+    public Color flashColor;
+
+    public Color ballColor;
 
     public float fireRate;
 
@@ -40,7 +44,7 @@ public class Iguanus : BeastWarrior
         }
         if (heavyShoot)
         {
-            ShootEnergyBall();
+            ShootBall();
         }
     }
 
@@ -74,26 +78,24 @@ public class Iguanus : BeastWarrior
         barrel = barrel == (lightBarrels.Length - 3) ? 0 : barrel + 1;
     }
 
-    void ShootEnergyBall()
+    void ShootBall()
     {
-        GameObject ef = Instantiate(energyFlash);
-        ef.transform.position = heavyBarrel.transform.position;
-        ef.transform.eulerAngles = new Vector3(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
-        ef.GetComponent<Light>().color = Color.magenta;
-        MainModule m = ef.GetComponent<ParticleSystem>().main;
-        Color color = Color.magenta;
-        color.a /= 8;
-        m.startColor = new MinMaxGradient(color);
-        GameObject eb = Instantiate(energyBall);
-        eb.transform.position = heavyBarrel.transform.position;
-        eb.transform.eulerAngles = new Vector3(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
-        eb.GetComponent<Light>().color = Color.green;
-        ColorOverLifetimeModule c = eb.GetComponent<ParticleSystem>().colorOverLifetime;
+        GameObject f = Instantiate(flash);
+        f.transform.position = heavyBarrel.transform.position;
+        f.transform.eulerAngles = new Vector3(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
+        f.GetComponent<Light>().color = flashColor;
+        MainModule m = f.GetComponent<ParticleSystem>().main;
+        m.startColor = new MinMaxGradient(flashColor);
+        GameObject b = Instantiate(ball);
+        b.transform.position = heavyBarrel.transform.position;
+        b.transform.eulerAngles = new Vector3(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
+        b.GetComponent<Light>().color = ballColor;
+        ColorOverLifetimeModule c = b.GetComponent<ParticleSystem>().colorOverLifetime;
         Gradient g = new Gradient();
         GradientColorKey[] colors = new GradientColorKey[2];
-        colors[0].color = Color.magenta;
+        colors[0].color = flashColor;
         colors[0].time = 0f;
-        colors[1].color = Color.green;
+        colors[1].color = ballColor;
         colors[1].time = 1f;
         GradientAlphaKey[] alphas = new GradientAlphaKey[2];
         alphas[0].alpha = 1f;

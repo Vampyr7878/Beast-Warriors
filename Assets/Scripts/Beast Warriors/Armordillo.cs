@@ -22,6 +22,8 @@ public class Armordillo : BeastWarrior
 
     public LineRenderer laser;
 
+    public Color laserColor;
+
     public float fireRate;
 
     private float time;
@@ -87,18 +89,18 @@ public class Armordillo : BeastWarrior
             l.transform.position = heavyBarrel.transform.position;
             l.SetPosition(0, Vector3.zero);
             l.SetPosition(1, hit.point - heavyBarrel.transform.position);
-            l.startColor = Color.red;
-            l.endColor = Color.red;
-            l.material.SetColor("_Color", Color.red);
+            l.startColor = laserColor;
+            l.endColor = laserColor;
+            l.material.SetColor("_Color", laserColor);
             GameObject f = l.transform.GetChild(0).gameObject;
-            f.GetComponent<Light>().color = Color.red;
+            f.GetComponent<Light>().color = laserColor;
             MainModule m = f.GetComponent<ParticleSystem>().main;
-            m.startColor = new MinMaxGradient(Color.red);
+            m.startColor = new MinMaxGradient(laserColor);
             GameObject h = l.transform.GetChild(1).gameObject;
             h.transform.position = hit.point;
-            h.GetComponent<Light>().color = Color.red;
+            h.GetComponent<Light>().color = laserColor;
             m = h.GetComponent<ParticleSystem>().main;
-            m.startColor = new MinMaxGradient(Color.red);
+            m.startColor = new MinMaxGradient(laserColor);
             Debug.DrawLine(heavyBarrel.transform.position, hit.point, Color.red, 3600);
             Debug.DrawRay(cameraAimHelper.position, cameraAimHelper.TransformDirection(Vector3.forward) * hit.distance, Color.magenta, 3600);
         }

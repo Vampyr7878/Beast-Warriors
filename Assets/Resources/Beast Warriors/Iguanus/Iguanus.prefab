@@ -519,7 +519,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &241747436857351099
 Animator:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -536,7 +536,8 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &241747436857350981
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -559,8 +560,10 @@ MonoBehaviour:
   - {fileID: 3716211922286793712}
   heavyBarrel: {fileID: 8649567048410580554}
   bullet: {fileID: 3474837066459004095, guid: 0dea4693c7d850e48b7253a911891254, type: 3}
-  energyFlash: {fileID: 6304360778048044942, guid: b4ecd4512de45ef47b17645b22d5ccf4, type: 3}
-  energyBall: {fileID: 6304360778048044942, guid: 9ab29343c34bddc46b650d1953792baa, type: 3}
+  Flash: {fileID: 6304360778048044942, guid: b4ecd4512de45ef47b17645b22d5ccf4, type: 3}
+  Ball: {fileID: 6304360778048044942, guid: 9ab29343c34bddc46b650d1953792baa, type: 3}
+  flashColor: {r: 0.69803923, g: 0.05882353, b: 0.011764706, a: 1}
+  ballColor: {r: 0.94509804, g: 0.8, b: 0.21176471, a: 1}
   fireRate: 0.1
 --- !u!1 &242510179507736992
 GameObject:

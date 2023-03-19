@@ -83,13 +83,13 @@ LineRenderer:
   - {x: 0, y: 0, z: 1}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.1
+    widthMultiplier: 0.4
     widthCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0.002784729
-        value: 0.5
+        time: 0.12848282
+        value: 1
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -245,7 +245,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 100
-  energyFlash: {fileID: 6304360778048044942, guid: b4ecd4512de45ef47b17645b22d5ccf4, type: 3}
+  flash: {fileID: 6304360778048044942, guid: b4ecd4512de45ef47b17645b22d5ccf4, type: 3}
 --- !u!54 &8568994404108892188
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -273,7 +273,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.1, y: 0.1, z: 1}
+  m_Size: {x: 0.4, y: 0.4, z: 1.2}
   m_Center: {x: 0, y: 0, z: 0.5}
 --- !u!108 &-1135448451268682671
 Light:
