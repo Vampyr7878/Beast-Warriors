@@ -6,10 +6,7 @@
         _NormalMap("Normal Map", 2D) = "bump" {}
         _Glossiness("Smoothness", Range(0,1)) = 0.5
         _Metallic("Metallic", Range(0,1)) = 0.0
-        [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend("Source Blend", Int) = 1
-        [Enum(UnityEngine.Rendering.BlendMode)] _DstBlend("Destination Blend", Int) = 0
         [Enum(UnityEngine.Rendering.CullMode)] _Cull("Culling", Int) = 0
-        [ToggleOff] _DepthTest("Depth Test", Float) = 1.0
         [ToggleOff] _SpecularHighlights("Specular Highlights", Float) = 1.0
         [ToggleOff] _GlossyReflections("Glossy Reflections", Float) = 1.0
     }
@@ -17,8 +14,8 @@
     {
         Tags { "Queue" = "Transparent" "RenderType" = "Transparent" }
         LOD 200
-        ZWrite[_DepthTest]
-        Blend[_SrcBlend][_DstBlend]
+        ZWrite On
+        Blend SrcAlpha OneMinusSrcAlpha
         Cull[_Cull]
 
         CGPROGRAM

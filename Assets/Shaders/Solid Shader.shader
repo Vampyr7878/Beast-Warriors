@@ -2,17 +2,17 @@
 {
     Properties
     {
-        _Color ("Color", Color) = (1,1,1,1)
-        _NormalMap ("Normal Map", 2D) = "bump" {}
-        _Glossiness ("Smoothness", Range(0,1)) = 0.5
-        _Metallic ("Metallic", Range(0,1)) = 0.0
+        _Color("Color", Color) = (1,1,1,1)
+        _NormalMap("Normal Map", 2D) = "bump" {}
+        _Glossiness("Smoothness", Range(0,1)) = 0.5
+        _Metallic("Metallic", Range(0,1)) = 0.0
         [Enum(UnityEngine.Rendering.CullMode)] _Cull("Culling", Int) = 0
         [ToggleOff] _SpecularHighlights("Specular Highlights", Float) = 1.0
         [ToggleOff] _GlossyReflections("Glossy Reflections", Float) = 1.0
     }
     SubShader
     {
-        Tags { "RenderType"="Opaque" }
+        Tags { "RenderType" = "Opaque" }
         LOD 200
         ZWrite On
         Cull[_Cull]

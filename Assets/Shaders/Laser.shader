@@ -57,7 +57,7 @@ Shader "Custom/Laser Shader"
                 o.Metallic = _Metallic;
                 o.Smoothness = _Glossiness;
                 o.Alpha = c.a;
-                //o.Emission = c.rgb;
+                o.Emission = c.rgb;
             }
             ENDCG
         }

@@ -2,14 +2,16 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!21 &2100000
 Material:
-  serializedVersion: 6
+  serializedVersion: 8
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: 13
   m_Shader: {fileID: 4800000, guid: 653883477e6e0a84895d681f9f66cc30, type: 3}
-  m_ShaderKeywords: _DEPTHTEST_OFF
+  m_ValidKeywords: []
+  m_InvalidKeywords:
+  - _DEPTHTEST_OFF
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -63,13 +65,14 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
     - _BumpScale: 1
     - _Cull: 0
     - _Cutoff: 0.5
     - _DepthTest: 0
     - _DetailNormalMapScale: 1
-    - _DstBlend: 2
+    - _DstBlend: 10
     - _GlossMapScale: 1
     - _Glossiness: 0.1
     - _GlossyReflections: 1
@@ -79,7 +82,7 @@ Material:
     - _Parallax: 0.02
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
-    - _SrcBlend: 3
+    - _SrcBlend: 5
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
