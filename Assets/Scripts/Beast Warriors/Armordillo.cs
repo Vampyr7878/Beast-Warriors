@@ -1,6 +1,5 @@
 using UnityEngine;
 using static UnityEngine.InputSystem.InputAction;
-using static UnityEngine.ParticleSystem;
 
 public class Armordillo : BeastWarrior
 {
@@ -71,16 +70,7 @@ public class Armordillo : BeastWarrior
         int layerMask = 1 << 3;
         layerMask = ~layerMask;
         Vector3 direction = new Vector3(Random.Range(-bulletInaccuracy, bulletInaccuracy), Random.Range(-bulletInaccuracy, bulletInaccuracy), 1);
-        if (Physics.Raycast(cameraAimHelper.position, cameraAimHelper.TransformDirection(direction), out RaycastHit hit, Mathf.Infinity, layerMask))
-        {
-            GameObject b = Instantiate(bullet);
-            b.transform.position = lightBarrels[barrel].transform.position;
-            b.transform.eulerAngles = new Vector3(0f, transform.eulerAngles.y, 0f);
-            GameObject h = b.transform.GetChild(1).gameObject;
-            h.transform.position = hit.point;
-            Debug.DrawLine(lightBarrels[barrel].transform.position, hit.point, Color.blue, 3600);
-            Debug.DrawRay(cameraAimHelper.position, cameraAimHelper.TransformDirection(direction) * hit.distance, Color.cyan, 3600);
-        }
+        RaycastBullet(bullet, direction, layerMask, lightBarrels[barrel]);
         barrel = barrel == (lightBarrels.Length - 1) ? 0 : barrel + 1;
     }
 
@@ -89,27 +79,7 @@ public class Armordillo : BeastWarrior
         int layerMask = 1 << 3;
         layerMask = ~layerMask;
         Vector3 direction = new Vector3(Random.Range(-laserInaccuracy, laserInaccuracy), Random.Range(-laserInaccuracy, laserInaccuracy), 1);
-        if (Physics.Raycast(cameraAimHelper.position, cameraAimHelper.TransformDirection(direction), out RaycastHit hit, Mathf.Infinity, layerMask))
-        {
-            LineRenderer l = Instantiate(laser);
-            l.transform.position = heavyBarrel.transform.position;
-            l.SetPosition(0, Vector3.zero);
-            l.SetPosition(1, hit.point - heavyBarrel.transform.position);
-            l.startColor = laserColor;
-            l.endColor = laserColor;
-            l.material.SetColor("_Color", laserColor);
-            GameObject f = l.transform.GetChild(0).gameObject;
-            f.GetComponent<Light>().color = laserColor;
-            MainModule m = f.GetComponent<ParticleSystem>().main;
-            m.startColor = new MinMaxGradient(laserColor);
-            GameObject h = l.transform.GetChild(1).gameObject;
-            h.transform.position = hit.point;
-            h.GetComponent<Light>().color = laserColor;
-            m = h.GetComponent<ParticleSystem>().main;
-            m.startColor = new MinMaxGradient(laserColor);
-            Debug.DrawLine(heavyBarrel.transform.position, hit.point, Color.red, 3600);
-            Debug.DrawRay(cameraAimHelper.position, cameraAimHelper.TransformDirection(direction) * hit.distance, Color.magenta, 3600);
-        }
+        RaycastLaser(laser, direction, layerMask, heavyBarrel, laserColor);
         heavyShoot = false;
     }
 

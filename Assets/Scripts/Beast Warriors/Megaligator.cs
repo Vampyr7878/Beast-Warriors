@@ -1,8 +1,7 @@
 using UnityEngine;
 using static UnityEngine.InputSystem.InputAction;
-using static UnityEngine.ParticleSystem;
 
-public class Iguanus : BeastWarrior
+public class Megaligator : BeastWarrior
 {
     public GameObject gun;
 
@@ -62,38 +61,14 @@ public class Iguanus : BeastWarrior
         int layerMask = 1 << 3;
         layerMask = ~layerMask;
         Vector3 direction = new Vector3(Random.Range(-bulletInaccuracy, bulletInaccuracy), Random.Range(-bulletInaccuracy, bulletInaccuracy), 1);
-        if (Physics.Raycast(cameraAimHelper.position, cameraAimHelper.TransformDirection(direction), out RaycastHit hit, Mathf.Infinity, layerMask))
-        {
-            GameObject b = Instantiate(bullet);
-            b.transform.position = lightBarrels[barrel].transform.position;
-            b.transform.eulerAngles = new Vector3(0f, transform.eulerAngles.y, 0f);
-            GameObject h = b.transform.GetChild(1).gameObject;
-            h.transform.position = hit.point;
-            Debug.DrawLine(lightBarrels[barrel].transform.position, hit.point, Color.blue, 3600);
-            b = Instantiate(bullet);
-            b.transform.position = lightBarrels[barrel + 2].transform.position;
-            b.transform.eulerAngles = new Vector3(0f, transform.eulerAngles.y, 0f);
-            h = b.transform.GetChild(1).gameObject;
-            h.transform.position = hit.point;
-            Debug.DrawLine(lightBarrels[barrel + 2].transform.position, hit.point, Color.blue, 3600);
-            Debug.DrawRay(cameraAimHelper.position, cameraAimHelper.TransformDirection(direction) * hit.distance, Color.cyan, 3600);
-        }
+        RaycastBullet(bullet, direction, layerMask, lightBarrels[barrel]);
+        RaycastBullet(bullet, direction, layerMask, lightBarrels[barrel + 2]);
         barrel = barrel == (lightBarrels.Length - 3) ? 0 : barrel + 1;
     }
 
     void ShootBall()
     {
-        GameObject f = Instantiate(flash);
-        f.transform.position = heavyBarrel.transform.position;
-        f.transform.eulerAngles = new Vector3(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
-        f.GetComponent<Light>().color = flashColor;
-        MainModule m = f.GetComponent<ParticleSystem>().main;
-        m.startColor = new MinMaxGradient(flashColor);
-        GameObject b = Instantiate(ball);
-        b.transform.position = heavyBarrel.transform.position;
-        b.transform.eulerAngles = new Vector3(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
-        b.GetComponent<Light>().color = ballColor;
-        ColorOverLifetimeModule c = b.GetComponent<ParticleSystem>().colorOverLifetime;
+        Vector3 direction = new Vector3(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
         Gradient g = new Gradient();
         GradientColorKey[] colors = new GradientColorKey[2];
         colors[0].color = flashColor;
@@ -106,7 +81,7 @@ public class Iguanus : BeastWarrior
         alphas[1].alpha = 1f;
         alphas[1].time = 1f;
         g.SetKeys(colors, alphas);
-        c.color = new MinMaxGradient(g);
+        ProjectileParticle(flash, ball, direction, direction, heavyBarrel, flashColor, ballColor, g);
         heavyShoot = false;
     }
 

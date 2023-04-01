@@ -1,6 +1,5 @@
 using UnityEngine;
 using static UnityEngine.InputSystem.InputAction;
-using static UnityEngine.ParticleSystem;
 
 public class Insecticon : BeastWarrior
 {
@@ -84,41 +83,15 @@ public class Insecticon : BeastWarrior
         int layerMask = 1 << 3;
         layerMask = ~layerMask;
         Vector3 direction = new Vector3(Random.Range(-bulletInaccuracy, bulletInaccuracy), Random.Range(-bulletInaccuracy, bulletInaccuracy), 1);
-        if (Physics.Raycast(cameraAimHelper.position, cameraAimHelper.TransformDirection(direction), out RaycastHit hit, Mathf.Infinity, layerMask))
-        {
-            GameObject b = Instantiate(bullet);
-            b.transform.position = lightBarrels[barrel].transform.position;
-            b.transform.eulerAngles = new Vector3(0f, transform.eulerAngles.y, 0f);
-            GameObject h = b.transform.GetChild(1).gameObject;
-            h.transform.position = hit.point;
-            Debug.DrawLine(lightBarrels[barrel].transform.position, hit.point, Color.blue, 3600);
-            b = Instantiate(bullet);
-            b.transform.position = lightBarrels[barrel + 3].transform.position;
-            b.transform.eulerAngles = new Vector3(0f, transform.eulerAngles.y, 0f);
-            h = b.transform.GetChild(1).gameObject;
-            h.transform.position = hit.point;
-            Debug.DrawLine(lightBarrels[barrel + 3].transform.position, hit.point, Color.blue, 3600);
-            Debug.DrawRay(cameraAimHelper.position, cameraAimHelper.TransformDirection(direction) * hit.distance, Color.cyan, 3600);
-        }
+        RaycastBullet(bullet, direction, layerMask, lightBarrels[barrel]);
+        RaycastBullet(bullet, direction, layerMask, lightBarrels[barrel + 3]);
         barrel = barrel == (lightBarrels.Length - 4) ? 0 : barrel + 1;
     }
 
     void ShootBolt()
     {
-        GameObject f = Instantiate(flash);
-        f.transform.position = heavyBarrel.transform.position;
-        f.transform.eulerAngles = new Vector3(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
-        f.GetComponent<Light>().color = boltColor;
-        MainModule m = f.GetComponent<ParticleSystem>().main;
-        m.startColor = new MinMaxGradient(boltColor);
-        LineRenderer b = Instantiate(bolt);
-        b.transform.position = heavyBarrel.transform.position;
-        b.transform.eulerAngles = new Vector3(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
-        b.SetPosition(0, Vector3.zero);
-        b.startColor = boltColor;
-        b.endColor = boltColor;
-        b.material.SetColor("_Color", boltColor);
-        b.GetComponent<Light>().color = boltColor;
+        Vector3 direction = new Vector3(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
+        ProjectileBolt(flash, bolt, direction, heavyBarrel, boltColor);
         heavyShoot = false;
     }
 

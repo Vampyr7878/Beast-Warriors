@@ -65,7 +65,6 @@ public class Razorbeast : BeastWarrior
         gun.transform.parent = attachment.transform;
         gun.transform.localPosition = Vector3.zero;
         gun.transform.localEulerAngles = Vector3.zero;
-        barrel = 0;
     }
 
     void DeployGuns(bool enable)
@@ -87,16 +86,7 @@ public class Razorbeast : BeastWarrior
         int layerMask = 1 << 3;
         layerMask = ~layerMask;
         Vector3 direction = new Vector3(Random.Range(-bulletInaccuracy, bulletInaccuracy), Random.Range(-bulletInaccuracy, bulletInaccuracy), 1);
-        if (Physics.Raycast(cameraAimHelper.position, cameraAimHelper.TransformDirection(direction), out RaycastHit hit, Mathf.Infinity, layerMask))
-        {
-            GameObject b = Instantiate(bullet);
-            b.transform.position = lightBarrels[barrel].transform.position;
-            b.transform.eulerAngles = new Vector3(0f, transform.eulerAngles.y, 0f);
-            GameObject h = b.transform.GetChild(1).gameObject;
-            h.transform.position = hit.point;
-            Debug.DrawLine(lightBarrels[barrel].transform.position, hit.point, Color.blue, 3600);
-            Debug.DrawRay(cameraAimHelper.position, cameraAimHelper.TransformDirection(direction) * hit.distance, Color.cyan, 3600);
-        }
+        RaycastBullet(bullet, direction, layerMask, lightBarrels[barrel]);
         barrel = barrel == (lightBarrels.Length - 1) ? 0 : barrel + 1;
     }
 
@@ -108,22 +98,10 @@ public class Razorbeast : BeastWarrior
         s.transform.position = heavyBarrels[barrel].transform.position;
         s.transform.eulerAngles = new Vector3(0f, transform.eulerAngles.y, 0f);
         Vector3 direction;
-        GameObject b;
-        GameObject h;
         for (int i = 0; i < slugCount; i++)
         {
             direction = new Vector3(Random.Range(-bulletInaccuracy, bulletInaccuracy), Random.Range(-bulletInaccuracy, bulletInaccuracy), 1);
-            if (Physics.Raycast(cameraAimHelper.position, cameraAimHelper.TransformDirection(direction), out RaycastHit hit, Mathf.Infinity, layerMask))
-            {
-                b = Instantiate(bullet);
-                b.transform.position = heavyBarrels[barrel].transform.position;
-                b.transform.eulerAngles = new Vector3(0f, transform.eulerAngles.y, 0f);
-                b.GetComponent<AudioSource>().enabled = false;
-                h = b.transform.GetChild(1).gameObject;
-                h.transform.position = hit.point;
-                Debug.DrawLine(heavyBarrels[barrel].transform.position, hit.point, Color.blue, 3600);
-                Debug.DrawRay(cameraAimHelper.position, cameraAimHelper.TransformDirection(direction) * hit.distance, Color.cyan, 3600);
-            }
+            RaycastBullet(bullet, direction, layerMask, heavyBarrels[barrel], false);
         }
         barrel = barrel == (heavyBarrels.Length - 1) ? 0 : barrel + 1;
         heavyShoot = false;
@@ -163,6 +141,7 @@ public class Razorbeast : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         EquipGun(hold);
         DeployGuns(false);
+        barrel = 0;
     }
 
     public override void OnAttack(CallbackContext context)

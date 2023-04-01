@@ -1,6 +1,5 @@
 using UnityEngine;
 using static UnityEngine.InputSystem.InputAction;
-using static UnityEngine.ParticleSystem;
 
 public class Convobat : BeastWarrior
 {
@@ -50,66 +49,15 @@ public class Convobat : BeastWarrior
         int layerMask = 1 << 3;
         layerMask = ~layerMask;
         Vector3 direction = new Vector3(Random.Range(-laserInaccuracy, laserInaccuracy), Random.Range(-laserInaccuracy, laserInaccuracy), 1);
-        if (Physics.Raycast(cameraAimHelper.position, cameraAimHelper.TransformDirection(direction), out RaycastHit hit, Mathf.Infinity, layerMask))
-        {
-            LineRenderer l = Instantiate(laser);
-            l.transform.position = lightBarrels[0].transform.position;
-            l.SetPosition(0, Vector3.zero);
-            l.SetPosition(1, hit.point - lightBarrels[0].transform.position);
-            l.startColor = laserColor;
-            l.endColor = laserColor;
-            l.material.SetColor("_Color", laserColor);
-            GameObject f = l.transform.GetChild(0).gameObject;
-            f.GetComponent<Light>().color = laserColor;
-            MainModule m = f.GetComponent<ParticleSystem>().main;
-            m.startColor = new MinMaxGradient(laserColor);
-            GameObject h = l.transform.GetChild(1).gameObject;
-            h.transform.position = hit.point;
-            h.GetComponent<Light>().color = laserColor;
-            m = h.GetComponent<ParticleSystem>().main;
-            m.startColor = new MinMaxGradient(laserColor);
-            l = Instantiate(laser);
-            l.transform.position = lightBarrels[1].transform.position;
-            l.SetPosition(0, Vector3.zero);
-            l.SetPosition(1, hit.point - lightBarrels[1].transform.position);
-            l.startColor = laserColor;
-            l.endColor = laserColor;
-            l.material.SetColor("_Color", laserColor);
-            f = l.transform.GetChild(0).gameObject;
-            f.GetComponent<Light>().color = laserColor;
-            m = f.GetComponent<ParticleSystem>().main;
-            m.startColor = new MinMaxGradient(laserColor);
-            h = l.transform.GetChild(1).gameObject;
-            h.transform.position = hit.point;
-            h.GetComponent<Light>().color = laserColor;
-            m = h.GetComponent<ParticleSystem>().main;
-            m.startColor = new MinMaxGradient(laserColor);
-            Debug.DrawLine(lightBarrels[0].transform.position, hit.point, Color.red, 3600);
-            Debug.DrawLine(lightBarrels[1].transform.position, hit.point, Color.red, 3600);
-            Debug.DrawRay(cameraAimHelper.position, cameraAimHelper.TransformDirection(direction) * hit.distance, Color.magenta, 3600);
-        }
+        RaycastLaser(laser, direction, layerMask, lightBarrels[0], laserColor);
+        RaycastLaser(laser, direction, layerMask, lightBarrels[1], laserColor);
         lightShoot = false;
     }
 
     void ShootRipple()
     {
-        GameObject s = Instantiate(sonic);
-        s.transform.position = heavyBarrels[0].transform.position;
-        s.transform.eulerAngles = new Vector3(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y + 180, 0f);
-        s.GetComponent<Light>().color = rippleColor;
-        MainModule m = s.GetComponent<ParticleSystem>().main;
-        m.startColor = new MinMaxGradient(rippleColor);
-        s = Instantiate(sonic);
-        s.transform.position = heavyBarrels[1].transform.position;
-        s.transform.eulerAngles = new Vector3(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y + 180, 0f);
-        s.GetComponent<Light>().color = rippleColor;
-        m = s.GetComponent<ParticleSystem>().main;
-        m.startColor = new MinMaxGradient(rippleColor);
-        GameObject r = Instantiate(ripple);
-        r.transform.position = heavyBarrels[0].transform.position;
-        r.transform.eulerAngles = new Vector3(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
-        r.GetComponent<Light>().color = rippleColor;
-        ColorOverLifetimeModule c = r.GetComponent<ParticleSystem>().colorOverLifetime;
+        Vector3 sonicDirection = new Vector3(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y + 180, 0f);
+        Vector3 rippleDirection = new Vector3(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
         Gradient g = new Gradient();
         GradientColorKey[] colors = new GradientColorKey[2];
         colors[0].color = rippleColor;
@@ -124,13 +72,8 @@ public class Convobat : BeastWarrior
         alphas[2].alpha = 0f;
         alphas[2].time = 1f;
         g.SetKeys(colors, alphas);
-        c.color = new MinMaxGradient(g);
-        r = Instantiate(ripple);
-        r.transform.position = heavyBarrels[1].transform.position;
-        r.transform.eulerAngles = new Vector3(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
-        r.GetComponent<Light>().color = rippleColor;
-        c = r.GetComponent<ParticleSystem>().colorOverLifetime;
-        c.color = new MinMaxGradient(g);
+        ProjectileParticle(sonic, ripple, sonicDirection, rippleDirection, heavyBarrels[0], rippleColor, rippleColor, g);
+        ProjectileParticle(sonic, ripple, sonicDirection, rippleDirection, heavyBarrels[1], rippleColor, rippleColor, g);
         heavyShoot = false;
     }
 

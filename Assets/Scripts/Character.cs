@@ -54,6 +54,7 @@ public class Character : MonoBehaviour
         animator = GetComponentInChildren<Animator>();
         animator.runtimeAnimatorController = controller;
         warrior = instance.GetComponent<BeastWarrior>();
+        PlayerPrefs.SetString("Character", character);
     }
 
     void Start()

@@ -1,5 +1,6 @@
 using UnityEngine;
 using static UnityEngine.InputSystem.InputAction;
+using static UnityEngine.ParticleSystem;
 
 public class Terrorsaur : BeastWarrior
 {
@@ -8,6 +9,64 @@ public class Terrorsaur : BeastWarrior
     public GameObject holster;
 
     public GameObject hold;
+
+    public GameObject lightBarrel;
+
+    public GameObject[] heavyBarrels;
+
+    public GameObject flash;
+
+    public GameObject ball;
+
+    public GameObject explosion;
+
+    public GameObject missle;
+
+    public Material missleMaterial;
+
+    public Color ballColor;
+
+    private int barrel;
+
+    protected new void FixedUpdate()
+    {
+        base.FixedUpdate();
+        if (lightShoot)
+        {
+            ShootBall();
+        }
+        if (heavyShoot)
+        {
+            ShootMissle();
+        }
+    }
+
+    void ShootBall()
+    {
+        Vector3 direction = new Vector3(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
+        Gradient g = new Gradient();
+        GradientColorKey[] colors = new GradientColorKey[2];
+        colors[0].color = ballColor;
+        colors[0].time = 0f;
+        colors[1].color = ballColor;
+        colors[1].time = 1f;
+        GradientAlphaKey[] alphas = new GradientAlphaKey[2];
+        alphas[0].alpha = 1f;
+        alphas[0].time = 0f;
+        alphas[1].alpha = 1f;
+        alphas[1].time = 1f;
+        g.SetKeys(colors, alphas);
+        ProjectileParticle(flash, ball, direction, direction, lightBarrel, ballColor, ballColor, g);
+        lightShoot = false;
+    }
+
+    void ShootMissle()
+    {
+        Vector3 direction = new Vector3(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
+        MeshProjectile(explosion, missle, direction, heavyBarrels[barrel], missleMaterial);
+        barrel = barrel == heavyBarrels.Length - 1 ? 0 : barrel + 1;
+        heavyShoot = false;
+    }
 
     void EquipGun(GameObject attachment)
     {
@@ -46,6 +105,7 @@ public class Terrorsaur : BeastWarrior
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
         EquipGun(holster);
+        barrel = 0;
     }
 
     public override void OnAttack(CallbackContext context)
@@ -53,10 +113,10 @@ public class Terrorsaur : BeastWarrior
         switch (weapon)
         {
             case 3:
-                Debug.Log("Light Fire");
+                lightShoot = context.performed;
                 break;
             case 4:
-                Debug.Log("Heavy Fire");
+                heavyShoot = context.performed;
                 break;
         }
     }

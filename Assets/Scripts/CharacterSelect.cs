@@ -62,6 +62,15 @@ public class CharacterSelect : MonoBehaviour
                 activeCharacters.Add(i);
             }
         }
+        string character = PlayerPrefs.GetString("Character");
+        if (!string.IsNullOrEmpty(character))
+        {
+            int index = activeCharacters.FindIndex(c => characterPaths[c] == character);
+            if (index >= 0)
+            {
+                page = index / choices.Length;
+            }
+        }
     }
 
     void Start()
