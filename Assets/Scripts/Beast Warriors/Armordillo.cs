@@ -69,7 +69,7 @@ public class Armordillo : BeastWarrior
     {
         int layerMask = 1 << 3;
         layerMask = ~layerMask;
-        Vector3 direction = new Vector3(Random.Range(-bulletInaccuracy, bulletInaccuracy), Random.Range(-bulletInaccuracy, bulletInaccuracy), 1);
+        Vector3 direction = new(Random.Range(-bulletInaccuracy, bulletInaccuracy), Random.Range(-bulletInaccuracy, bulletInaccuracy), 1);
         RaycastBullet(bullet, direction, layerMask, lightBarrels[barrel]);
         barrel = barrel == (lightBarrels.Length - 1) ? 0 : barrel + 1;
     }
@@ -78,7 +78,8 @@ public class Armordillo : BeastWarrior
     {
         int layerMask = 1 << 3;
         layerMask = ~layerMask;
-        Vector3 direction = new Vector3(Random.Range(-laserInaccuracy, laserInaccuracy), Random.Range(-laserInaccuracy, laserInaccuracy), 1);
+        animator.SetTrigger("Shoot");
+        Vector3 direction = new(Random.Range(-laserInaccuracy, laserInaccuracy), Random.Range(-laserInaccuracy, laserInaccuracy), 1);
         RaycastLaser(laser, direction, layerMask, heavyBarrel, laserColor);
         heavyShoot = false;
     }

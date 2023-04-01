@@ -93,6 +93,32 @@ namespace UMotionEditor
             }
         }
 
+        public static bool Unity2021_2_OrNewer
+        {
+            get
+            {
+                #if UNITY_2021_2_OR_NEWER
+                return true;
+                #else
+                return false;
+                #endif
+            }
+        }
+
+        
+
+        public static bool Unity2022_2_OrNewer
+        {
+            get
+            {
+                #if UNITY_2022_2_OR_NEWER
+                return true;
+                #else
+                return false;
+                #endif
+            }
+        }
+
         public static bool UsesScriptableRenderPipeline
         {
             get

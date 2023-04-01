@@ -1,6 +1,5 @@
 using UnityEngine;
 using static UnityEngine.InputSystem.InputAction;
-using static UnityEngine.ParticleSystem;
 
 public class Terrorsaur : BeastWarrior
 {
@@ -22,9 +21,9 @@ public class Terrorsaur : BeastWarrior
 
     public GameObject missle;
 
-    public Material missleMaterial;
-
     public Color ballColor;
+
+    public Material missleMaterial;
 
     private int barrel;
 
@@ -43,8 +42,9 @@ public class Terrorsaur : BeastWarrior
 
     void ShootBall()
     {
-        Vector3 direction = new Vector3(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
-        Gradient g = new Gradient();
+        animator.SetTrigger("Shoot");
+        Vector3 direction = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
+        Gradient g = new();
         GradientColorKey[] colors = new GradientColorKey[2];
         colors[0].color = ballColor;
         colors[0].time = 0f;
@@ -62,7 +62,7 @@ public class Terrorsaur : BeastWarrior
 
     void ShootMissle()
     {
-        Vector3 direction = new Vector3(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
+        Vector3 direction = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
         MeshProjectile(explosion, missle, direction, heavyBarrels[barrel], missleMaterial);
         barrel = barrel == heavyBarrels.Length - 1 ? 0 : barrel + 1;
         heavyShoot = false;

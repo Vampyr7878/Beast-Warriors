@@ -85,7 +85,7 @@ public class Razorbeast : BeastWarrior
     {
         int layerMask = 1 << 3;
         layerMask = ~layerMask;
-        Vector3 direction = new Vector3(Random.Range(-bulletInaccuracy, bulletInaccuracy), Random.Range(-bulletInaccuracy, bulletInaccuracy), 1);
+        Vector3 direction = new(Random.Range(-bulletInaccuracy, bulletInaccuracy), Random.Range(-bulletInaccuracy, bulletInaccuracy), 1);
         RaycastBullet(bullet, direction, layerMask, lightBarrels[barrel]);
         barrel = barrel == (lightBarrels.Length - 1) ? 0 : barrel + 1;
     }
@@ -94,6 +94,7 @@ public class Razorbeast : BeastWarrior
     {
         int layerMask = 1 << 3;
         layerMask = ~layerMask;
+        animator.SetTrigger("Shoot");
         GameObject s = Instantiate(slug);
         s.transform.position = heavyBarrels[barrel].transform.position;
         s.transform.eulerAngles = new Vector3(0f, transform.eulerAngles.y, 0f);

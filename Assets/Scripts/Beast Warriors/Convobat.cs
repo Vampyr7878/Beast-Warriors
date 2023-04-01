@@ -21,9 +21,9 @@ public class Convobat : BeastWarrior
 
     public LineRenderer laser;
 
-    public GameObject ripple;
-
     public GameObject sonic;
+
+    public GameObject ripple;
 
     public Color laserColor;
 
@@ -48,7 +48,8 @@ public class Convobat : BeastWarrior
     {
         int layerMask = 1 << 3;
         layerMask = ~layerMask;
-        Vector3 direction = new Vector3(Random.Range(-laserInaccuracy, laserInaccuracy), Random.Range(-laserInaccuracy, laserInaccuracy), 1);
+        animator.SetTrigger("Shoot");
+        Vector3 direction = new(Random.Range(-laserInaccuracy, laserInaccuracy), Random.Range(-laserInaccuracy, laserInaccuracy), 1);
         RaycastLaser(laser, direction, layerMask, lightBarrels[0], laserColor);
         RaycastLaser(laser, direction, layerMask, lightBarrels[1], laserColor);
         lightShoot = false;
@@ -56,9 +57,9 @@ public class Convobat : BeastWarrior
 
     void ShootRipple()
     {
-        Vector3 sonicDirection = new Vector3(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y + 180, 0f);
-        Vector3 rippleDirection = new Vector3(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
-        Gradient g = new Gradient();
+        Vector3 sonicDirection = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y + 180, 0f);
+        Vector3 rippleDirection = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
+        Gradient g = new();
         GradientColorKey[] colors = new GradientColorKey[2];
         colors[0].color = rippleColor;
         colors[0].time = 0f;

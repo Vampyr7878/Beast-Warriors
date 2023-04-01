@@ -28,9 +28,12 @@ public class Projectile : MonoBehaviour
             GameObject f = Instantiate(flash);
             f.transform.position = transform.position + transform.forward * flashMultiply;
             f.transform.eulerAngles = new Vector3(-transform.eulerAngles.x, transform.eulerAngles.y, 0f);
-            f.GetComponent<Light>().color = light.color;
-            MainModule m = f.GetComponent<ParticleSystem>().main;
-            m.startColor = new MinMaxGradient(light.color);
+            if (light != null)
+            {
+                f.GetComponent<Light>().color = light.color;
+                MainModule m = f.GetComponent<ParticleSystem>().main;
+                m.startColor = new MinMaxGradient(light.color);
+            }
             Destroy(gameObject);
         }
     }

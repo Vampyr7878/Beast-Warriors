@@ -60,7 +60,8 @@ public class Megaligator : BeastWarrior
     {
         int layerMask = 1 << 3;
         layerMask = ~layerMask;
-        Vector3 direction = new Vector3(Random.Range(-bulletInaccuracy, bulletInaccuracy), Random.Range(-bulletInaccuracy, bulletInaccuracy), 1);
+        animator.SetTrigger("Shoot");
+        Vector3 direction = new(Random.Range(-bulletInaccuracy, bulletInaccuracy), Random.Range(-bulletInaccuracy, bulletInaccuracy), 1);
         RaycastBullet(bullet, direction, layerMask, lightBarrels[barrel]);
         RaycastBullet(bullet, direction, layerMask, lightBarrels[barrel + 2]);
         barrel = barrel == (lightBarrels.Length - 3) ? 0 : barrel + 1;
@@ -68,8 +69,9 @@ public class Megaligator : BeastWarrior
 
     void ShootBall()
     {
-        Vector3 direction = new Vector3(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
-        Gradient g = new Gradient();
+        animator.SetTrigger("Shoot");
+        Vector3 direction = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
+        Gradient g = new();
         GradientColorKey[] colors = new GradientColorKey[2];
         colors[0].color = flashColor;
         colors[0].time = 0f;

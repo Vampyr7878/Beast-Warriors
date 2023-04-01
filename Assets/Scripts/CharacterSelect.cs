@@ -85,9 +85,8 @@ public class CharacterSelect : MonoBehaviour
     {
         if (Mouse.current.leftButton.wasPressedThisFrame)
         {
-            RaycastHit hit;
             Ray ray = mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
-            if (Physics.Raycast(ray, out hit))
+            if (Physics.Raycast(ray, out RaycastHit hit))
             {
                 PlayerPrefs.SetString("Character", hit.collider.GetComponent<Choice>().character);
                 SceneManager.LoadScene("SampleScene");

@@ -9,7 +9,7 @@ public class CustomMenu : MonoBehaviour
     [MenuItem("Beast Warriors/Cleanup SavePrefabs")]
     public static  void CleanupSavePrefabs()
     {
-        DirectoryInfo dir = new DirectoryInfo(@"Assets\Resources\Parts");
+        DirectoryInfo dir = new(@"Assets\Resources\Parts");
         foreach (FileInfo file in dir.GetFiles("*.prefab"))
         {
             string path = file.FullName.Replace("\\", "/");
@@ -23,7 +23,7 @@ public class CustomMenu : MonoBehaviour
     [MenuItem("Beast Warriors/Update Animators")]
     public static void UpdateAnimators()
     {
-        DirectoryInfo dir = new DirectoryInfo(@"Assets\Animations");
+        DirectoryInfo dir = new(@"Assets\Animations");
         AnimatorController controller = (AnimatorController)AssetDatabase.LoadAssetAtPath(@"Assets\Animations\Animator.controller", typeof(AnimatorController));
         foreach (FileInfo file in dir.GetFiles("*.controller", SearchOption.AllDirectories))
         {

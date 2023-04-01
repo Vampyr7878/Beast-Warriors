@@ -74,7 +74,7 @@ public class Character : MonoBehaviour
                     if (child.tag.Contains("Foot"))
                     {
                         child.isBodyPart = false;
-                        GameObject foot = new GameObject(child.tag.Replace(" ", ""));
+                        GameObject foot = new(child.tag.Replace(" ", ""));
                         foot.transform.parent = child.transform.parent;
                         foot.transform.position = child.transform.position;
                         foot.transform.localEulerAngles = new Vector3(0f, -180f, -90f);

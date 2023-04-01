@@ -17,7 +17,39 @@ public class Rattrap : BeastWarrior
 
     public GameObject front;
 
-    public GameObject weaponHold;
+    public GameObject hold;
+
+    public GameObject lightBarrel;
+
+    public GameObject heavyBarrel;
+
+    public GameObject bullet;
+
+    public GameObject thrown;
+
+    public float fireRate;
+
+    public float bulletInaccuracy;
+
+    private float time;
+
+    protected new void FixedUpdate()
+    {
+        base.FixedUpdate();
+        if (lightShoot)
+        {
+            if (time >= fireRate)
+            {
+                ShootMachineGun();
+                time = 0;
+            }
+            time += Time.deltaTime;
+        }
+        if (heavyShoot)
+        {
+            ThrowBomb();
+        }
+    }
 
     void EquipGunFront(GameObject attachment)
     {
@@ -38,6 +70,28 @@ public class Rattrap : BeastWarrior
         bomb.transform.parent = attachment.transform;
         bomb.transform.localPosition = Vector3.zero;
         bomb.transform.localEulerAngles = Vector3.zero;
+    }
+
+    void ShootMachineGun()
+    {
+        int layerMask = 1 << 3;
+        layerMask = ~layerMask;
+        animator.SetTrigger("Shoot");
+        Vector3 direction = new(Random.Range(-bulletInaccuracy, bulletInaccuracy), Random.Range(-bulletInaccuracy, bulletInaccuracy), 1);
+        RaycastBullet(bullet, direction, layerMask, lightBarrel);
+    }
+
+    void ThrowBomb()
+    {
+        animator.SetTrigger("Shoot");
+        Vector3 aim = Quaternion.AngleAxis(-30, cameraAimHelper.right) * cameraAimHelper.forward;
+        Vector3 direction = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y - 180, 0f);
+        GameObject t = Instantiate(thrown);
+        t.transform.position = hold.transform.position;
+        t.transform.eulerAngles = direction;
+        Rigidbody b = t.GetComponent<Rigidbody>();
+        b.AddForce(aim * 500, ForceMode.Impulse);
+        heavyShoot = false;
     }
 
     public override void OnMeleeWeak(CallbackContext context)
@@ -66,18 +120,18 @@ public class Rattrap : BeastWarrior
         animator.SetLayerWeight(1, 1f);
         animator.SetInteger("Weapon", weapon);
         EquipGunFront(front);
-        EquipGunBack(weaponHold);
+        EquipGunBack(hold);
         EquipBomb(left);
     }
 
     public override void OnRangedStrong(CallbackContext context)
     {
         weapon = 4;
-        animator.SetLayerWeight(1, 0f);
+        animator.SetLayerWeight(1, 1f);
         animator.SetInteger("Weapon", weapon);
         EquipGunFront(frontHolster);
         EquipGunBack(backHolster);
-        EquipBomb(weaponHold);
+        EquipBomb(hold);
     }
 
     public override void OnAttack(CallbackContext context)
@@ -85,10 +139,11 @@ public class Rattrap : BeastWarrior
         switch (weapon)
         {
             case 3:
-                Debug.Log("Light Fire");
+                lightShoot = context.performed;
+                time = fireRate;
                 break;
             case 4:
-                Debug.Log("Heavy Fire");
+                heavyShoot = context.performed;
                 break;
         }
     }

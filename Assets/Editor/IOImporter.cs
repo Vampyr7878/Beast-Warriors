@@ -9,17 +9,19 @@ public class IOImporter : UnityEditor.AssetImporters.ScriptedImporter
 {
     public override void OnImportAsset(UnityEditor.AssetImporters.AssetImportContext ctx)
     {
-        List<Part> parts = new List<Part>();
+        List<Part> parts = new();
         string name = "default";
-        using (FileStream file = new FileStream(ctx.assetPath, FileMode.Open))
+        using (FileStream file = new(ctx.assetPath, FileMode.Open))
         {
-            ZipFile zip = new ZipFile(file);
-            zip.Password = "soho0909";
+            ZipFile zip = new ZipFile(file)
+            {
+                Password = "soho0909"
+            };
             foreach (ZipEntry entry in zip)
             {
                 if (entry.Name == "model2.ldr")
                 {
-                    using (StreamReader reader = new StreamReader(zip.GetInputStream(entry)))
+                    using (StreamReader reader = new(zip.GetInputStream(entry)))
                     {
                         string line = reader.ReadLine();
                         line = reader.ReadLine();
@@ -41,9 +43,9 @@ public class IOImporter : UnityEditor.AssetImporters.ScriptedImporter
             }
         }
         GameObject prefab;
-        GameObject main = new GameObject(name);
+        GameObject main = new(name);
         GameObject[] meshes = new GameObject[parts.Count];
-        List<Material> materials = new List<Material>();
+        List<Material> materials = new();
         for (int i = 0; i < parts.Count; i++)
         {
             if (!materials.Exists(m => m.name == parts[i].Color.ToString()))

@@ -130,11 +130,9 @@ public abstract class BeastWarrior : MonoBehaviour
         GameObject e = Instantiate(flash);
         e.transform.position = barrel.transform.position;
         e.transform.eulerAngles = direction;
-        Color light = e.GetComponent<Light>().color;
         GameObject m = Instantiate(projectile);
         m.transform.position = barrel.transform.position;
         m.transform.eulerAngles = direction;
-        m.GetComponent<Light>().color = light;
         m.GetComponentInChildren<MeshRenderer>().material = material;
     }
 

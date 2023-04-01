@@ -82,7 +82,7 @@ public class Insecticon : BeastWarrior
     {
         int layerMask = 1 << 3;
         layerMask = ~layerMask;
-        Vector3 direction = new Vector3(Random.Range(-bulletInaccuracy, bulletInaccuracy), Random.Range(-bulletInaccuracy, bulletInaccuracy), 1);
+        Vector3 direction = new(Random.Range(-bulletInaccuracy, bulletInaccuracy), Random.Range(-bulletInaccuracy, bulletInaccuracy), 1);
         RaycastBullet(bullet, direction, layerMask, lightBarrels[barrel]);
         RaycastBullet(bullet, direction, layerMask, lightBarrels[barrel + 3]);
         barrel = barrel == (lightBarrels.Length - 4) ? 0 : barrel + 1;
@@ -90,7 +90,8 @@ public class Insecticon : BeastWarrior
 
     void ShootBolt()
     {
-        Vector3 direction = new Vector3(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
+        animator.SetTrigger("Shoot");
+        Vector3 direction = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
         ProjectileBolt(flash, bolt, direction, heavyBarrel, boltColor);
         heavyShoot = false;
     }
