@@ -136,6 +136,16 @@ public abstract class BeastWarrior : MonoBehaviour
         m.GetComponentInChildren<MeshRenderer>().material = material;
     }
 
+    protected void ThrownProjectile(GameObject thrown, GameObject projectile, Vector3 direction, Vector3 aim, GameObject hold, int force)
+    {
+        GameObject t = Instantiate(thrown);
+        Instantiate(projectile, t.transform);
+        t.transform.position = hold.transform.position;
+        t.transform.eulerAngles = direction;
+        Rigidbody b = t.GetComponent<Rigidbody>();
+        b.AddForce(aim * force, ForceMode.Impulse);
+    }
+
     public abstract void OnMeleeWeak(CallbackContext context);
 
     public abstract void OnMeleeStrong(CallbackContext context);

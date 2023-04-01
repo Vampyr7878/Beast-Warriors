@@ -21,8 +21,6 @@ public class Rattrap : BeastWarrior
 
     public GameObject lightBarrel;
 
-    public GameObject heavyBarrel;
-
     public GameObject bullet;
 
     public GameObject thrown;
@@ -30,6 +28,10 @@ public class Rattrap : BeastWarrior
     public float fireRate;
 
     public float bulletInaccuracy;
+
+    public int angle;
+
+    public int force;
 
     private float time;
 
@@ -84,13 +86,9 @@ public class Rattrap : BeastWarrior
     void ThrowBomb()
     {
         animator.SetTrigger("Shoot");
-        Vector3 aim = Quaternion.AngleAxis(-30, cameraAimHelper.right) * cameraAimHelper.forward;
         Vector3 direction = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y - 180, 0f);
-        GameObject t = Instantiate(thrown);
-        t.transform.position = hold.transform.position;
-        t.transform.eulerAngles = direction;
-        Rigidbody b = t.GetComponent<Rigidbody>();
-        b.AddForce(aim * 500, ForceMode.Impulse);
+        Vector3 aim = Quaternion.AngleAxis(-angle, cameraAimHelper.right) * cameraAimHelper.forward;
+        ThrownProjectile(thrown, bomb, direction, aim, hold, force);
         heavyShoot = false;
     }
 
