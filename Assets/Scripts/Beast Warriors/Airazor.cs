@@ -3,17 +3,86 @@ using static UnityEngine.InputSystem.InputAction;
 
 public class Airazor : BeastWarrior
 {
-    public GameObject gun;
+    public GameObject cannon;
 
     public GameObject holster;
 
     public GameObject hold;
 
-    void EquipGun(GameObject attachment)
+    public GameObject[] lightBarrels;
+
+    public GameObject heavyBarrel;
+
+    public GameObject bullet;
+
+    public GameObject flash;
+
+    public GameObject ball;
+
+    public Color ballColor;
+
+    public float fireRate;
+
+    public float bulletInaccuracy;
+
+    private float time;
+
+    private int barrel;
+
+    protected new void FixedUpdate()
     {
-        gun.transform.parent = attachment.transform;
-        gun.transform.localPosition = Vector3.zero;
-        gun.transform.localEulerAngles = Vector3.zero;
+        base.FixedUpdate();
+        if (lightShoot)
+        {
+            if (time >= fireRate)
+            {
+                ShootMachineGun();
+                time = 0;
+            }
+            time += Time.deltaTime;
+        }
+        if (heavyShoot)
+        {
+            ShootBall();
+        }
+    }
+
+    void ShootMachineGun()
+    {
+        int layerMask = 1 << 3;
+        layerMask = ~layerMask;
+        animator.SetTrigger("Shoot");
+        Vector3 direction = new(Random.Range(-bulletInaccuracy, bulletInaccuracy), Random.Range(-bulletInaccuracy, bulletInaccuracy), 1);
+        RaycastBullet(bullet, direction, layerMask, lightBarrels[barrel]);
+        RaycastBullet(bullet, direction, layerMask, lightBarrels[barrel + 2]);
+        barrel = barrel == (lightBarrels.Length - 3) ? 0 : barrel + 1;
+    }
+
+    void ShootBall()
+    {
+        animator.SetTrigger("Shoot");
+        Vector3 direction = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
+        Gradient g = new();
+        GradientColorKey[] colors = new GradientColorKey[2];
+        colors[0].color = ballColor;
+        colors[0].time = 0f;
+        colors[1].color = ballColor;
+        colors[1].time = 1f;
+        GradientAlphaKey[] alphas = new GradientAlphaKey[2];
+        alphas[0].alpha = 1f;
+        alphas[0].time = 0f;
+        alphas[1].alpha = 1f;
+        alphas[1].time = 1f;
+        g.SetKeys(colors, alphas);
+        ParticleProjectile(flash, ball, direction, direction, heavyBarrel, ballColor, ballColor, g);
+        heavyShoot = false;
+    }
+
+    void EquipCannon(GameObject attachment)
+    {
+        cannon.transform.parent = attachment.transform;
+        cannon.transform.localPosition = Vector3.zero;
+        cannon.transform.localEulerAngles = Vector3.zero;
     }
 
     public override void OnMeleeWeak(CallbackContext context)
@@ -21,7 +90,7 @@ public class Airazor : BeastWarrior
         weapon = 1;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        EquipGun(holster);
+        EquipCannon(holster);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -29,7 +98,7 @@ public class Airazor : BeastWarrior
         weapon = 2;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        EquipGun(holster);
+        EquipCannon(holster);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -37,7 +106,7 @@ public class Airazor : BeastWarrior
         weapon = 3;
         animator.SetLayerWeight(1, 1f);
         animator.SetInteger("Weapon", weapon);
-        EquipGun(holster);
+        EquipCannon(holster);
     }
 
     public override void OnRangedStrong(CallbackContext context)
@@ -45,7 +114,7 @@ public class Airazor : BeastWarrior
         weapon = 4;
         animator.SetLayerWeight(1, 1f);
         animator.SetInteger("Weapon", weapon);
-        EquipGun(hold);
+        EquipCannon(hold);
     }
 
     public override void OnAttack(CallbackContext context)
@@ -53,10 +122,12 @@ public class Airazor : BeastWarrior
         switch (weapon)
         {
             case 3:
-                Debug.Log("Light Fire");
+                lightShoot = context.performed;
+                time = fireRate;
+                barrel = 0;
                 break;
             case 4:
-                Debug.Log("Heavy Fire");
+                heavyShoot = context.performed;
                 break;
         }
     }

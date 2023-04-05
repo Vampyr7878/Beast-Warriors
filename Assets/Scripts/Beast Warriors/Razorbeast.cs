@@ -60,27 +60,6 @@ public class Razorbeast : BeastWarrior
         }
     }
 
-    void EquipGun(GameObject attachment)
-    {
-        gun.transform.parent = attachment.transform;
-        gun.transform.localPosition = Vector3.zero;
-        gun.transform.localEulerAngles = Vector3.zero;
-    }
-
-    void DeployGuns(bool enable)
-    {
-        if (enable)
-        {
-            rightGun.transform.localEulerAngles = new Vector3(deployAngle, rightGun.transform.localEulerAngles.y, rightGun.transform.localEulerAngles.z);
-            leftGun.transform.localEulerAngles = new Vector3(deployAngle, leftGun.transform.localEulerAngles.y, leftGun.transform.localEulerAngles.z);
-        }
-        else
-        {
-            rightGun.transform.localEulerAngles = new Vector3(foldAngle, rightGun.transform.localEulerAngles.y, rightGun.transform.localEulerAngles.z);
-            leftGun.transform.localEulerAngles = new Vector3(foldAngle, leftGun.transform.localEulerAngles.y, leftGun.transform.localEulerAngles.z);
-        }
-    }
-
     void ShootMachineGun()
     {
         int layerMask = 1 << 3;
@@ -106,6 +85,27 @@ public class Razorbeast : BeastWarrior
         }
         barrel = barrel == (heavyBarrels.Length - 1) ? 0 : barrel + 1;
         heavyShoot = false;
+    }
+
+    void EquipGun(GameObject attachment)
+    {
+        gun.transform.parent = attachment.transform;
+        gun.transform.localPosition = Vector3.zero;
+        gun.transform.localEulerAngles = Vector3.zero;
+    }
+
+    void DeployGuns(bool enable)
+    {
+        if (enable)
+        {
+            rightGun.transform.localEulerAngles = new Vector3(deployAngle, rightGun.transform.localEulerAngles.y, rightGun.transform.localEulerAngles.z);
+            leftGun.transform.localEulerAngles = new Vector3(deployAngle, leftGun.transform.localEulerAngles.y, leftGun.transform.localEulerAngles.z);
+        }
+        else
+        {
+            rightGun.transform.localEulerAngles = new Vector3(foldAngle, rightGun.transform.localEulerAngles.y, rightGun.transform.localEulerAngles.z);
+            leftGun.transform.localEulerAngles = new Vector3(foldAngle, leftGun.transform.localEulerAngles.y, leftGun.transform.localEulerAngles.z);
+        }
     }
 
     public override void OnMeleeWeak(CallbackContext context)

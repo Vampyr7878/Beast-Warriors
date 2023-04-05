@@ -91,7 +91,7 @@ public abstract class BeastWarrior : MonoBehaviour
         }
     }
 
-    protected void ProjectileParticle(GameObject flash, GameObject projectile, Vector3 flashDirection, Vector3 projectileDirection, GameObject barrel, Color flashColor, Color projectileColor, Gradient gradient)
+    protected void ParticleProjectile(GameObject flash, GameObject projectile, Vector3 flashDirection, Vector3 projectileDirection, GameObject barrel, Color flashColor, Color projectileColor, Gradient gradient)
     {
         GameObject f = Instantiate(flash);
         f.transform.position = barrel.transform.position;
@@ -105,24 +105,6 @@ public abstract class BeastWarrior : MonoBehaviour
         p.GetComponent<Light>().color = projectileColor;
         ColorOverLifetimeModule c = p.GetComponent<ParticleSystem>().colorOverLifetime;
         c.color = new MinMaxGradient(gradient);
-    }
-
-    protected void ProjectileBolt(GameObject flash, LineRenderer projectile, Vector3 direction, GameObject barrel, Color color)
-    {
-        GameObject f = Instantiate(flash);
-        f.transform.position = barrel.transform.position;
-        f.transform.eulerAngles = direction;
-        f.GetComponent<Light>().color = color;
-        MainModule m = f.GetComponent<ParticleSystem>().main;
-        m.startColor = new MinMaxGradient(color);
-        LineRenderer b = Instantiate(projectile);
-        b.transform.position = barrel.transform.position;
-        b.transform.eulerAngles = direction;
-        b.SetPosition(0, Vector3.zero);
-        b.startColor = color;
-        b.endColor = color;
-        b.material.SetColor("_Color", color);
-        b.GetComponent<Light>().color = color;
     }
 
     protected void MeshProjectile(GameObject flash, GameObject projectile, Vector3 direction, GameObject barrel, Material material)

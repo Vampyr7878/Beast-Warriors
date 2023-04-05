@@ -3,17 +3,85 @@ using static UnityEngine.InputSystem.InputAction;
 
 public class Powerpinch : BeastWarrior
 {
-    public GameObject gun;
+    public GameObject pincer;
 
     public GameObject holster;
 
     public GameObject hold;
 
-    void EquipGun(GameObject attachment)
+    public GameObject[] lightBarrels;
+
+    public GameObject heavyBarrel;
+
+    public GameObject flash;
+
+    public GameObject bolt;
+
+    public GameObject ball;
+
+    public Color boltColor;
+
+    public Color ballColor;
+
+    protected new void FixedUpdate()
     {
-        gun.transform.parent = attachment.transform;
-        gun.transform.localPosition = Vector3.zero;
-        gun.transform.localEulerAngles = Vector3.zero;
+        base.FixedUpdate();
+        if (lightShoot)
+        {
+            ShootBolt();
+        }
+        if (heavyShoot)
+        {
+            ShootBall();
+        }
+    }
+
+    void ShootBolt()
+    {
+        animator.SetTrigger("Shoot");
+        Vector3 direction = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
+        Gradient g = new();
+        GradientColorKey[] colors = new GradientColorKey[2];
+        colors[0].color = boltColor;
+        colors[0].time = 0f;
+        colors[1].color = boltColor;
+        colors[1].time = 1f;
+        GradientAlphaKey[] alphas = new GradientAlphaKey[2];
+        alphas[0].alpha = 1f;
+        alphas[0].time = 0f;
+        alphas[1].alpha = 1f;
+        alphas[1].time = 1f;
+        g.SetKeys(colors, alphas);
+        ParticleProjectile(flash, bolt, direction, direction, lightBarrels[0], boltColor, boltColor, g);
+        ParticleProjectile(flash, bolt, direction, direction, lightBarrels[1], boltColor, boltColor, g);
+        lightShoot = false;
+    }
+
+    void ShootBall()
+    {
+        animator.SetTrigger("Shoot");
+        Vector3 direction = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
+        Gradient g = new();
+        GradientColorKey[] colors = new GradientColorKey[2];
+        colors[0].color = ballColor;
+        colors[0].time = 0f;
+        colors[1].color = ballColor;
+        colors[1].time = 1f;
+        GradientAlphaKey[] alphas = new GradientAlphaKey[2];
+        alphas[0].alpha = 1f;
+        alphas[0].time = 0f;
+        alphas[1].alpha = 1f;
+        alphas[1].time = 1f;
+        g.SetKeys(colors, alphas);
+        ParticleProjectile(flash, ball, direction, direction, heavyBarrel, ballColor, ballColor, g);
+        heavyShoot = false;
+    }
+
+    void EquipPincer(GameObject attachment)
+    {
+        pincer.transform.parent = attachment.transform;
+        pincer.transform.localPosition = Vector3.zero;
+        pincer.transform.localEulerAngles = Vector3.zero;
     }
 
     public override void OnMeleeWeak(CallbackContext context)
@@ -21,7 +89,7 @@ public class Powerpinch : BeastWarrior
         weapon = 1;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        EquipGun(holster);
+        EquipPincer(holster);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -29,7 +97,7 @@ public class Powerpinch : BeastWarrior
         weapon = 2;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        EquipGun(holster);
+        EquipPincer(hold);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -37,7 +105,7 @@ public class Powerpinch : BeastWarrior
         weapon = 3;
         animator.SetLayerWeight(1, 1f);
         animator.SetInteger("Weapon", weapon);
-        EquipGun(holster);
+        EquipPincer(holster);
     }
 
     public override void OnRangedStrong(CallbackContext context)
@@ -45,7 +113,7 @@ public class Powerpinch : BeastWarrior
         weapon = 4;
         animator.SetLayerWeight(1, 1f);
         animator.SetInteger("Weapon", weapon);
-        EquipGun(hold);
+        EquipPincer(hold);
     }
 
     public override void OnAttack(CallbackContext context)
@@ -53,10 +121,10 @@ public class Powerpinch : BeastWarrior
         switch (weapon)
         {
             case 3:
-                Debug.Log("Light Fire");
+                lightShoot = context.performed;
                 break;
             case 4:
-                Debug.Log("Heavy Fire");
+                heavyShoot = context.performed;
                 break;
         }
     }

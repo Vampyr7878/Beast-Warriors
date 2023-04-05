@@ -5,6 +5,8 @@ public class Megaligator : BeastWarrior
 {
     public GameObject gun;
 
+    public GameObject tail;
+
     public GameObject holster;
 
     public GameObject hold;
@@ -49,13 +51,6 @@ public class Megaligator : BeastWarrior
         }
     }
 
-    void EquipGun(GameObject attachment)
-    {
-        gun.transform.parent = attachment.transform;
-        gun.transform.localPosition = Vector3.zero;
-        gun.transform.localEulerAngles = Vector3.zero;
-    }
-
     void ShootMachineGun()
     {
         int layerMask = 1 << 3;
@@ -83,8 +78,24 @@ public class Megaligator : BeastWarrior
         alphas[1].alpha = 1f;
         alphas[1].time = 1f;
         g.SetKeys(colors, alphas);
-        ProjectileParticle(flash, ball, direction, direction, heavyBarrel, flashColor, ballColor, g);
+        ParticleProjectile(flash, ball, direction, direction, heavyBarrel, flashColor, ballColor, g);
         heavyShoot = false;
+    }
+
+    void EquipGun(GameObject attachment)
+    {
+        gun.transform.parent = attachment.transform;
+        gun.transform.localPosition = Vector3.zero;
+        gun.transform.localEulerAngles = Vector3.zero;
+    }
+
+    void EquipTail(GameObject attachment)
+    {
+        tail.transform.parent = attachment.transform;
+        tail.transform.localPosition = Vector3.zero;
+        tail.transform.localEulerAngles = Vector3.zero;
+        tail.SetActive(attachment == hold);
+        gun.SetActive(attachment == holster);
     }
 
     public override void OnMeleeWeak(CallbackContext context)
@@ -93,6 +104,7 @@ public class Megaligator : BeastWarrior
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
         EquipGun(holster);
+        EquipTail(holster);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -101,6 +113,7 @@ public class Megaligator : BeastWarrior
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
         EquipGun(holster);
+        EquipTail(hold);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -109,6 +122,7 @@ public class Megaligator : BeastWarrior
         animator.SetLayerWeight(1, 1f);
         animator.SetInteger("Weapon", weapon);
         EquipGun(holster);
+        EquipTail(holster);
     }
 
     public override void OnRangedStrong(CallbackContext context)
@@ -117,6 +131,7 @@ public class Megaligator : BeastWarrior
         animator.SetLayerWeight(1, 1f);
         animator.SetInteger("Weapon", weapon);
         EquipGun(hold);
+        EquipTail(holster);
     }
 
     public override void OnAttack(CallbackContext context)

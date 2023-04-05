@@ -73,8 +73,8 @@ public class Convobat : BeastWarrior
         alphas[2].alpha = 0f;
         alphas[2].time = 1f;
         g.SetKeys(colors, alphas);
-        ProjectileParticle(sonic, ripple, sonicDirection, rippleDirection, heavyBarrels[0], rippleColor, rippleColor, g);
-        ProjectileParticle(sonic, ripple, sonicDirection, rippleDirection, heavyBarrels[1], rippleColor, rippleColor, g);
+        ParticleProjectile(sonic, ripple, sonicDirection, rippleDirection, heavyBarrels[0], rippleColor, rippleColor, g);
+        ParticleProjectile(sonic, ripple, sonicDirection, rippleDirection, heavyBarrels[1], rippleColor, rippleColor, g);
         heavyShoot = false;
     }
 

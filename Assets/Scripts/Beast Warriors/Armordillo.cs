@@ -5,7 +5,7 @@ public class Armordillo : BeastWarrior
 {
     public GameObject mace;
 
-    public GameObject gun;
+    public GameObject rifle;
 
     public GameObject maceHolster;
 
@@ -51,20 +51,6 @@ public class Armordillo : BeastWarrior
         }
     }
 
-    void EquipMace(GameObject attachment)
-    {
-        mace.transform.parent = attachment.transform;
-        mace.transform.localPosition = Vector3.zero;
-        mace.transform.localEulerAngles = Vector3.zero;
-    }
-
-    void EquipGun(GameObject attachment)
-    {
-        gun.transform.parent = attachment.transform;
-        gun.transform.localPosition = Vector3.zero;
-        gun.transform.localEulerAngles = Vector3.zero;
-    }
-
     void ShootMachineGun()
     {
         int layerMask = 1 << 3;
@@ -84,13 +70,27 @@ public class Armordillo : BeastWarrior
         heavyShoot = false;
     }
 
+    void EquipMace(GameObject attachment)
+    {
+        mace.transform.parent = attachment.transform;
+        mace.transform.localPosition = Vector3.zero;
+        mace.transform.localEulerAngles = Vector3.zero;
+    }
+
+    void EquipRifle(GameObject attachment)
+    {
+        rifle.transform.parent = attachment.transform;
+        rifle.transform.localPosition = Vector3.zero;
+        rifle.transform.localEulerAngles = Vector3.zero;
+    }
+
     public override void OnMeleeWeak(CallbackContext context)
     {
         weapon = 1;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
         EquipMace(maceHolster);
-        EquipGun(gunHolster);
+        EquipRifle(gunHolster);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -99,7 +99,7 @@ public class Armordillo : BeastWarrior
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
         EquipMace(hold);
-        EquipGun(gunHolster);
+        EquipRifle(gunHolster);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -108,7 +108,7 @@ public class Armordillo : BeastWarrior
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
         EquipMace(maceHolster);
-        EquipGun(gunHolster);
+        EquipRifle(gunHolster);
     }
 
     public override void OnRangedStrong(CallbackContext context)
@@ -117,7 +117,7 @@ public class Armordillo : BeastWarrior
         animator.SetLayerWeight(1, 1f);
         animator.SetInteger("Weapon", weapon);
         EquipMace(maceHolster);
-        EquipGun(hold);
+        EquipRifle(hold);
     }
 
     public override void OnAttack(CallbackContext context)

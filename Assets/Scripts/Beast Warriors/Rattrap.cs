@@ -3,9 +3,9 @@ using static UnityEngine.InputSystem.InputAction;
 
 public class Rattrap : BeastWarrior
 {
-    public GameObject gunFront;
+    public GameObject rifleFront;
 
-    public GameObject gunBack;
+    public GameObject rifleBack;
 
     public GameObject bomb;
 
@@ -53,27 +53,6 @@ public class Rattrap : BeastWarrior
         }
     }
 
-    void EquipGunFront(GameObject attachment)
-    {
-        gunFront.transform.parent = attachment.transform;
-        gunFront.transform.localPosition = Vector3.zero;
-        gunFront.transform.localEulerAngles = Vector3.zero;
-    }
-
-    void EquipGunBack(GameObject attachment)
-    {
-        gunBack.transform.parent = attachment.transform;
-        gunBack.transform.localPosition = Vector3.zero;
-        gunBack.transform.localEulerAngles = Vector3.zero;
-    }
-
-    void EquipBomb(GameObject attachment)
-    {
-        bomb.transform.parent = attachment.transform;
-        bomb.transform.localPosition = Vector3.zero;
-        bomb.transform.localEulerAngles = Vector3.zero;
-    }
-
     void ShootMachineGun()
     {
         int layerMask = 1 << 3;
@@ -92,13 +71,34 @@ public class Rattrap : BeastWarrior
         heavyShoot = false;
     }
 
+    void EquipRifleFront(GameObject attachment)
+    {
+        rifleFront.transform.parent = attachment.transform;
+        rifleFront.transform.localPosition = Vector3.zero;
+        rifleFront.transform.localEulerAngles = Vector3.zero;
+    }
+
+    void EquipRifleBack(GameObject attachment)
+    {
+        rifleBack.transform.parent = attachment.transform;
+        rifleBack.transform.localPosition = Vector3.zero;
+        rifleBack.transform.localEulerAngles = Vector3.zero;
+    }
+
+    void EquipBomb(GameObject attachment)
+    {
+        bomb.transform.parent = attachment.transform;
+        bomb.transform.localPosition = Vector3.zero;
+        bomb.transform.localEulerAngles = Vector3.zero;
+    }
+
     public override void OnMeleeWeak(CallbackContext context)
     {
         weapon = 1;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        EquipGunFront(frontHolster);
-        EquipGunBack(backHolster);
+        EquipRifleFront(frontHolster);
+        EquipRifleBack(backHolster);
         EquipBomb(left);
     }
 
@@ -107,8 +107,8 @@ public class Rattrap : BeastWarrior
         weapon = 2;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        EquipGunFront(frontHolster);
-        EquipGunBack(backHolster);
+        EquipRifleFront(frontHolster);
+        EquipRifleBack(hold);
         EquipBomb(left);
     }
 
@@ -117,8 +117,8 @@ public class Rattrap : BeastWarrior
         weapon = 3;
         animator.SetLayerWeight(1, 1f);
         animator.SetInteger("Weapon", weapon);
-        EquipGunFront(front);
-        EquipGunBack(hold);
+        EquipRifleFront(front);
+        EquipRifleBack(hold);
         EquipBomb(left);
     }
 
@@ -127,8 +127,8 @@ public class Rattrap : BeastWarrior
         weapon = 4;
         animator.SetLayerWeight(1, 1f);
         animator.SetInteger("Weapon", weapon);
-        EquipGunFront(frontHolster);
-        EquipGunBack(backHolster);
+        EquipRifleFront(frontHolster);
+        EquipRifleBack(backHolster);
         EquipBomb(hold);
     }
 

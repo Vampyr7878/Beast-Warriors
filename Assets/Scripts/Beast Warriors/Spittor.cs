@@ -3,17 +3,69 @@ using static UnityEngine.InputSystem.InputAction;
 
 public class Spittor : BeastWarrior
 {
-    public GameObject gun;
+    public GameObject[] lightBarrels;
 
-    public GameObject holster;
+    public GameObject[] heavyBarrels;
 
-    public GameObject hold;
+    public LineRenderer laser;
 
-    void EquipGun(GameObject attachment)
+    public GameObject flash;
+
+    public GameObject ball;
+
+    public Color laserColor;
+
+    public Color flashColor;
+
+    public Color ballColor;
+
+    public float laserInaccuracy;
+
+    private int barrel;
+
+    protected new void FixedUpdate()
     {
-        gun.transform.parent = attachment.transform;
-        gun.transform.localPosition = Vector3.zero;
-        gun.transform.localEulerAngles = Vector3.zero;
+        base.FixedUpdate();
+        if (lightShoot)
+        {
+            ShootLaser();
+        }
+        if (heavyShoot)
+        {
+            ShootBall();
+        }
+    }
+
+    void ShootLaser()
+    {
+        int layerMask = 1 << 3;
+        layerMask = ~layerMask;
+        animator.SetTrigger("Shoot");
+        Vector3 direction = new(Random.Range(-laserInaccuracy, laserInaccuracy), Random.Range(-laserInaccuracy, laserInaccuracy), 1);
+        RaycastLaser(laser, direction, layerMask, lightBarrels[0], laserColor);
+        RaycastLaser(laser, direction, layerMask, lightBarrels[1], laserColor);
+        lightShoot = false;
+    }
+
+    void ShootBall()
+    {
+        animator.SetTrigger("Shoot");
+        Vector3 direction = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
+        Gradient g = new();
+        GradientColorKey[] colors = new GradientColorKey[2];
+        colors[0].color = flashColor;
+        colors[0].time = 0f;
+        colors[1].color = ballColor;
+        colors[1].time = 1f;
+        GradientAlphaKey[] alphas = new GradientAlphaKey[2];
+        alphas[0].alpha = 1f;
+        alphas[0].time = 0f;
+        alphas[1].alpha = 1f;
+        alphas[1].time = 1f;
+        g.SetKeys(colors, alphas);
+        ParticleProjectile(flash, ball, direction, direction, heavyBarrels[barrel], flashColor, ballColor, g);
+        barrel = barrel == (heavyBarrels.Length - 1) ? 0 : barrel + 1;
+        heavyShoot = false;
     }
 
     public override void OnMeleeWeak(CallbackContext context)
@@ -21,7 +73,6 @@ public class Spittor : BeastWarrior
         weapon = 1;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        EquipGun(holster);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -29,7 +80,6 @@ public class Spittor : BeastWarrior
         weapon = 2;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        EquipGun(holster);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -37,15 +87,14 @@ public class Spittor : BeastWarrior
         weapon = 3;
         animator.SetLayerWeight(1, 1f);
         animator.SetInteger("Weapon", weapon);
-        EquipGun(holster);
     }
 
     public override void OnRangedStrong(CallbackContext context)
     {
         weapon = 4;
-        animator.SetLayerWeight(1, 1f);
+        animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        EquipGun(hold);
+        barrel = 0;
     }
 
     public override void OnAttack(CallbackContext context)
@@ -53,10 +102,10 @@ public class Spittor : BeastWarrior
         switch (weapon)
         {
             case 3:
-                Debug.Log("Light Fire");
+                lightShoot = context.performed;
                 break;
             case 4:
-                Debug.Log("Heavy Fire");
+                heavyShoot = context.performed;
                 break;
         }
     }
