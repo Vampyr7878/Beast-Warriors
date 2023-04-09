@@ -59,7 +59,6 @@ public class ClawJaw : BeastWarrior
 
     void ShootDisc()
     {
-        animator.SetTrigger("Shoot");
         Vector3 direction = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
         Gradient g = new();
         GradientColorKey[] colors = new GradientColorKey[2];

@@ -36,7 +36,6 @@ public class Razorclaw : BeastWarrior
     {
         int layerMask = 1 << 3;
         layerMask = ~layerMask;
-        animator.SetTrigger("Shoot");
         Vector3 direction = new(Random.Range(-laserInaccuracy, laserInaccuracy), Random.Range(-laserInaccuracy, laserInaccuracy), 1);
         RaycastLaser(laser, direction, layerMask, lightBarrels[0], laserColor);
         RaycastLaser(laser, direction, layerMask, lightBarrels[1], laserColor);
