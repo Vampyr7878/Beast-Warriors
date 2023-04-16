@@ -82,29 +82,15 @@ public class Megaligator : BeastWarrior
         heavyShoot = false;
     }
 
-    void EquipGun(GameObject attachment)
-    {
-        gun.transform.parent = attachment.transform;
-        gun.transform.localPosition = Vector3.zero;
-        gun.transform.localEulerAngles = Vector3.zero;
-    }
-
-    void EquipTail(GameObject attachment)
-    {
-        tail.transform.parent = attachment.transform;
-        tail.transform.localPosition = Vector3.zero;
-        tail.transform.localEulerAngles = Vector3.zero;
-        tail.SetActive(attachment == hold);
-        gun.SetActive(attachment == holster);
-    }
-
     public override void OnMeleeWeak(CallbackContext context)
     {
         weapon = 1;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        EquipGun(holster);
-        EquipTail(holster);
+        Equip(gun, holster);
+        Equip(tail, holster);
+        tail.SetActive(false);
+        gun.SetActive(true);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -112,8 +98,10 @@ public class Megaligator : BeastWarrior
         weapon = 2;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        EquipGun(holster);
-        EquipTail(hold);
+        Equip(gun, holster);
+        Equip(tail, hold);
+        tail.SetActive(true);
+        gun.SetActive(false);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -121,8 +109,10 @@ public class Megaligator : BeastWarrior
         weapon = 3;
         animator.SetLayerWeight(1, 1f);
         animator.SetInteger("Weapon", weapon);
-        EquipGun(holster);
-        EquipTail(holster);
+        Equip(gun, holster);
+        Equip(tail, holster);
+        tail.SetActive(false);
+        gun.SetActive(true);
     }
 
     public override void OnRangedStrong(CallbackContext context)
@@ -130,8 +120,10 @@ public class Megaligator : BeastWarrior
         weapon = 4;
         animator.SetLayerWeight(1, 1f);
         animator.SetInteger("Weapon", weapon);
-        EquipGun(hold);
-        EquipTail(holster);
+        Equip(gun, hold);
+        Equip(tail, holster);
+        tail.SetActive(false);
+        gun.SetActive(true);
     }
 
     public override void OnAttack(CallbackContext context)

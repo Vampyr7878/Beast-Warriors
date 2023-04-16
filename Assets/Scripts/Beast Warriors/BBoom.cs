@@ -45,7 +45,7 @@ public class BBoom : BeastWarrior
         Vector3 direction = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
         MeshProjectile(explosion, missle, direction, lightBarrels[barrel], missleMaterial);
         MeshProjectile(explosion, missle, direction, lightBarrels[barrel + 2], missleMaterial);
-        barrel = barrel == lightBarrels.Length - 3 ? 0 : barrel + 1;
+        barrel = barrel == (lightBarrels.Length - 3) ? 0 : barrel + 1;
         lightShoot = false;
     }
 
@@ -69,19 +69,12 @@ public class BBoom : BeastWarrior
         heavyShoot = false;
     }
 
-    void EquipRifle(GameObject attachment)
-    {
-        rifle.transform.parent = attachment.transform;
-        rifle.transform.localPosition = Vector3.zero;
-        rifle.transform.localEulerAngles = Vector3.zero;
-    }
-
     public override void OnMeleeWeak(CallbackContext context)
     {
         weapon = 1;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        EquipRifle(holster);
+        Equip(rifle, holster);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -89,7 +82,7 @@ public class BBoom : BeastWarrior
         weapon = 2;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        EquipRifle(holster);
+        Equip(rifle, holster);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -97,7 +90,7 @@ public class BBoom : BeastWarrior
         weapon = 3;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        EquipRifle(holster);
+        Equip(rifle, holster);
         barrel = 0;
     }
 
@@ -106,7 +99,7 @@ public class BBoom : BeastWarrior
         weapon = 4;
         animator.SetLayerWeight(1, 1f);
         animator.SetInteger("Weapon", weapon);
-        EquipRifle(hold);
+        Equip(rifle, hold);
     }
 
     public override void OnAttack(CallbackContext context)

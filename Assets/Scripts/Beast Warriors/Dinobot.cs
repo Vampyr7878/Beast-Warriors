@@ -74,27 +74,13 @@ public class Dinobot : BeastWarrior
         heavyShoot = false;
     }
 
-    void EquipSword(GameObject attachment)
-    {
-        sword.transform.parent = attachment.transform;
-        sword.transform.localPosition = Vector3.zero;
-        sword.transform.localEulerAngles = Vector3.zero;
-    }
-
-    void EquipSlash(GameObject attachment)
-    {
-        slash.transform.parent = attachment.transform;
-        slash.transform.localPosition = Vector3.zero;
-        slash.transform.localEulerAngles = Vector3.zero;
-    }
-
     public override void OnMeleeWeak(CallbackContext context)
     {
         weapon = 1;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        EquipSword(swordHolster);
-        EquipSlash(slashHolster);
+        Equip(sword, swordHolster);
+        Equip(slash, slashHolster);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -102,8 +88,8 @@ public class Dinobot : BeastWarrior
         weapon = 2;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        EquipSword(rightHold);
-        EquipSlash(leftHold);
+        Equip(sword, rightHold);
+        Equip(slash, leftHold);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -111,8 +97,8 @@ public class Dinobot : BeastWarrior
         weapon = 3;
         animator.SetLayerWeight(1, 1f);
         animator.SetInteger("Weapon", weapon);
-        EquipSword(slashHolster);
-        EquipSlash(leftHold);
+        Equip(sword, slashHolster);
+        Equip(slash, leftHold);
     }
 
     public override void OnRangedStrong(CallbackContext context)
@@ -120,8 +106,8 @@ public class Dinobot : BeastWarrior
         weapon = 4;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        EquipSword(swordHolster);
-        EquipSlash(slashHolster);
+        Equip(sword, swordHolster);
+        Equip(slash, slashHolster);
     }
 
     public override void OnAttack(CallbackContext context)

@@ -57,7 +57,7 @@ public class Scorponok : BeastWarrior
     {
         Vector3 direction = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
         MeshProjectile(explosion, missle, direction, heavyBarrels[barrel], missleMaterial);
-        barrel = barrel == heavyBarrels.Length - 1 ? 0 : barrel + 1;
+        barrel = barrel == (heavyBarrels.Length - 1) ? 0 : barrel + 1;
         heavyShoot = false;
     }
 

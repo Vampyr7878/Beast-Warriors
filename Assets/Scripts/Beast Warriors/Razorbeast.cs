@@ -87,34 +87,14 @@ public class Razorbeast : BeastWarrior
         heavyShoot = false;
     }
 
-    void EquipGun(GameObject attachment)
-    {
-        gun.transform.parent = attachment.transform;
-        gun.transform.localPosition = Vector3.zero;
-        gun.transform.localEulerAngles = Vector3.zero;
-    }
-
-    void DeployGuns(bool enable)
-    {
-        if (enable)
-        {
-            rightGun.transform.localEulerAngles = new Vector3(deployAngle, rightGun.transform.localEulerAngles.y, rightGun.transform.localEulerAngles.z);
-            leftGun.transform.localEulerAngles = new Vector3(deployAngle, leftGun.transform.localEulerAngles.y, leftGun.transform.localEulerAngles.z);
-        }
-        else
-        {
-            rightGun.transform.localEulerAngles = new Vector3(foldAngle, rightGun.transform.localEulerAngles.y, rightGun.transform.localEulerAngles.z);
-            leftGun.transform.localEulerAngles = new Vector3(foldAngle, leftGun.transform.localEulerAngles.y, leftGun.transform.localEulerAngles.z);
-        }
-    }
-
     public override void OnMeleeWeak(CallbackContext context)
     {
         weapon = 1;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        EquipGun(holster);
-        DeployGuns(false);
+        Equip(gun, holster);
+        Deploy(rightGun, foldAngle, 0f, 0f);
+        Deploy(leftGun, foldAngle, 0f, 0f);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -122,8 +102,9 @@ public class Razorbeast : BeastWarrior
         weapon = 2;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        EquipGun(holster);
-        DeployGuns(false);
+        Equip(gun, holster);
+        Deploy(rightGun, foldAngle, 0f, 0f);
+        Deploy(leftGun, foldAngle, 0f, 0f);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -131,8 +112,9 @@ public class Razorbeast : BeastWarrior
         weapon = 3;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        EquipGun(holster);
-        DeployGuns(true);
+        Equip(gun, holster);
+        Deploy(rightGun, deployAngle, 0f, 0f);
+        Deploy(leftGun, deployAngle, 0f, 0f);
     }
 
     public override void OnRangedStrong(CallbackContext context)
@@ -140,8 +122,9 @@ public class Razorbeast : BeastWarrior
         weapon = 4;
         animator.SetLayerWeight(1, 1f);
         animator.SetInteger("Weapon", weapon);
-        EquipGun(hold);
-        DeployGuns(false);
+        Equip(gun, hold);
+        Deploy(rightGun, foldAngle, 0f, 0f);
+        Deploy(leftGun, foldAngle, 0f, 0f);
         barrel = 0;
     }
 

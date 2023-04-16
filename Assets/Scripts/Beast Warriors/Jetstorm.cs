@@ -80,30 +80,15 @@ public class Jetstorm : BeastWarrior
         heavyShoot = false;
     }
 
-    void DeployGuns(bool enable)
-    {
-        if (enable)
-        {
-            rightGun.transform.localEulerAngles = new Vector3(rightGun.transform.localEulerAngles.x, deployAngle, rightGun.transform.localEulerAngles.z);
-            rightGunBarrel.transform.localEulerAngles = new Vector3(foldAngle, rightGunBarrel.transform.localEulerAngles.y, rightGunBarrel.transform.localEulerAngles.z);
-            leftGun.transform.localEulerAngles = new Vector3(leftGun.transform.localEulerAngles.x, -deployAngle, leftGun.transform.localEulerAngles.z);
-            leftGunBarrel.transform.localEulerAngles = new Vector3(-foldAngle, leftGunBarrel.transform.localEulerAngles.y, leftGunBarrel.transform.localEulerAngles.z);
-        }
-        else
-        {
-            rightGun.transform.localEulerAngles = new Vector3(rightGun.transform.localEulerAngles.x, foldAngle, rightGun.transform.localEulerAngles.z);
-            rightGunBarrel.transform.localEulerAngles = new Vector3(deployAngle, rightGunBarrel.transform.localEulerAngles.y, rightGunBarrel.transform.localEulerAngles.z);
-            leftGun.transform.localEulerAngles = new Vector3(leftGun.transform.localEulerAngles.x, -foldAngle, leftGun.transform.localEulerAngles.z);
-            leftGunBarrel.transform.localEulerAngles = new Vector3(-deployAngle, leftGunBarrel.transform.localEulerAngles.y, leftGunBarrel.transform.localEulerAngles.z);
-        }
-    }
-
     public override void OnMeleeWeak(CallbackContext context)
     {
         weapon = 1;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        DeployGuns(false);
+        Deploy(rightGun, 0f, foldAngle, 0f);
+        Deploy(rightGunBarrel, deployAngle, 0f, 0f);
+        Deploy(leftGun, 0f, -foldAngle, 0f);
+        Deploy(leftGunBarrel, -deployAngle, 0f, 0f);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -111,7 +96,10 @@ public class Jetstorm : BeastWarrior
         weapon = 2;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        DeployGuns(false);
+        Deploy(rightGun, 0f, foldAngle, 0f);
+        Deploy(rightGunBarrel, deployAngle, 0f, 0f);
+        Deploy(leftGun, 0f, -foldAngle, 0f);
+        Deploy(leftGunBarrel, -deployAngle, 0f, 0f);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -119,7 +107,10 @@ public class Jetstorm : BeastWarrior
         weapon = 3;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        DeployGuns(true);
+        Deploy(rightGun, 0f, deployAngle, 0f);
+        Deploy(rightGunBarrel, foldAngle, 0f, 0f);
+        Deploy(leftGun, 0f, -deployAngle, 0f);
+        Deploy(leftGunBarrel, -foldAngle, 0f, 0f);
     }
 
     public override void OnRangedStrong(CallbackContext context)
@@ -127,7 +118,10 @@ public class Jetstorm : BeastWarrior
         weapon = 4;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        DeployGuns(false);
+        Deploy(rightGun, 0f, foldAngle, 0f);
+        Deploy(rightGunBarrel, deployAngle, 0f, 0f);
+        Deploy(leftGun, 0f, -foldAngle, 0f);
+        Deploy(leftGunBarrel, -deployAngle, 0f, 0f);
     }
 
     public override void OnAttack(CallbackContext context)

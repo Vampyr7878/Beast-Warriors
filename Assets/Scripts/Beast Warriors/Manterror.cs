@@ -78,26 +78,13 @@ public class Manterror : BeastWarrior
         heavyShoot = false;
     }
 
-    void DeployLaunchers(bool enable)
-    {
-        if (enable)
-        {
-            rightLauncher.transform.localEulerAngles = new Vector3(rightLauncher.transform.localEulerAngles.x, 0f, 180 + deployAngle);
-            leftLauncher.transform.localEulerAngles = new Vector3(leftLauncher.transform.localEulerAngles.x, 0f, deployAngle);
-        }
-        else
-        {
-            rightLauncher.transform.localEulerAngles = new Vector3(rightLauncher.transform.localEulerAngles.x, 0f, 180 + foldAngle);
-            leftLauncher.transform.localEulerAngles = new Vector3(leftLauncher.transform.localEulerAngles.x, 0f, foldAngle);
-        }
-    }
-
     public override void OnMeleeWeak(CallbackContext context)
     {
         weapon = 1;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        DeployLaunchers(false);
+        Deploy(rightLauncher, 0f, foldAngle, 0f);
+        Deploy(leftLauncher, 0f, -foldAngle, 0f);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -105,7 +92,8 @@ public class Manterror : BeastWarrior
         weapon = 2;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        DeployLaunchers(true);
+        Deploy(rightLauncher, 0f, deployAngle, 0f);
+        Deploy(leftLauncher, 0f, -deployAngle, 0f);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -113,7 +101,8 @@ public class Manterror : BeastWarrior
         weapon = 3;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        DeployLaunchers(false);
+        Deploy(rightLauncher, 0f, foldAngle, 0f);
+        Deploy(leftLauncher, 0f, -foldAngle, 0f);
     }
 
     public override void OnRangedStrong(CallbackContext context)
@@ -121,7 +110,8 @@ public class Manterror : BeastWarrior
         weapon = 4;
         animator.SetLayerWeight(1, 1f);
         animator.SetInteger("Weapon", weapon);
-        DeployLaunchers(true);
+        Deploy(rightLauncher, 0f, deployAngle, 0f);
+        Deploy(leftLauncher, 0f, -deployAngle, 0f);
     }
 
     public override void OnAttack(CallbackContext context)

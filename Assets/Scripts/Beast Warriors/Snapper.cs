@@ -61,7 +61,7 @@ public class Snapper : BeastWarrior
         animator.SetTrigger("Shoot");
         Vector3 direction = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
         MeshProjectile(explosion, missle, direction, heavyBarrels[barrel], missleMaterial);
-        barrel = barrel == heavyBarrels.Length - 1 ? 0 : barrel + 1;
+        barrel = barrel == (heavyBarrels.Length - 1) ? 0 : barrel + 1;
         heavyShoot = false;
     }
 
@@ -70,14 +70,7 @@ public class Snapper : BeastWarrior
         weapon = 1;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        EquipCannon(holster);
-    }
-
-    void EquipCannon(GameObject attachment)
-    {
-        cannon.transform.parent = attachment.transform;
-        cannon.transform.localPosition = Vector3.zero;
-        cannon.transform.localEulerAngles = Vector3.zero;
+        Equip(cannon, holster);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -85,7 +78,7 @@ public class Snapper : BeastWarrior
         weapon = 2;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        EquipCannon(holster);
+        Equip(cannon, holster);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -93,7 +86,7 @@ public class Snapper : BeastWarrior
         weapon = 3;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        EquipCannon(holster);
+        Equip(cannon, holster);
     }
 
     public override void OnRangedStrong(CallbackContext context)
@@ -101,7 +94,7 @@ public class Snapper : BeastWarrior
         weapon = 4;
         animator.SetLayerWeight(1, 1f);
         animator.SetInteger("Weapon", weapon);
-        EquipCannon(hold);
+        Equip(cannon, hold);
         barrel = 0;
     }
 

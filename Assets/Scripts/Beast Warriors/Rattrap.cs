@@ -67,29 +67,8 @@ public class Rattrap : BeastWarrior
         animator.SetTrigger("Shoot");
         Vector3 direction = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y - 180, 0f);
         Vector3 aim = Quaternion.AngleAxis(-angle, cameraAimHelper.right) * cameraAimHelper.forward;
-        ThrownProjectile(thrown, bomb, direction, aim, hold, force);
+        ThrownProjectile(thrown, bomb, direction, aim, transform.forward, hold, force);
         heavyShoot = false;
-    }
-
-    void EquipRifleFront(GameObject attachment)
-    {
-        rifleFront.transform.parent = attachment.transform;
-        rifleFront.transform.localPosition = Vector3.zero;
-        rifleFront.transform.localEulerAngles = Vector3.zero;
-    }
-
-    void EquipRifleBack(GameObject attachment)
-    {
-        rifleBack.transform.parent = attachment.transform;
-        rifleBack.transform.localPosition = Vector3.zero;
-        rifleBack.transform.localEulerAngles = Vector3.zero;
-    }
-
-    void EquipBomb(GameObject attachment)
-    {
-        bomb.transform.parent = attachment.transform;
-        bomb.transform.localPosition = Vector3.zero;
-        bomb.transform.localEulerAngles = Vector3.zero;
     }
 
     public override void OnMeleeWeak(CallbackContext context)
@@ -97,9 +76,9 @@ public class Rattrap : BeastWarrior
         weapon = 1;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        EquipRifleFront(frontHolster);
-        EquipRifleBack(backHolster);
-        EquipBomb(left);
+        Equip(rifleFront, frontHolster);
+        Equip(rifleBack, backHolster);
+        Equip(bomb, left);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -107,9 +86,9 @@ public class Rattrap : BeastWarrior
         weapon = 2;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        EquipRifleFront(frontHolster);
-        EquipRifleBack(hold);
-        EquipBomb(left);
+        Equip(rifleFront, frontHolster);
+        Equip(rifleBack, hold);
+        Equip(bomb, left);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -117,9 +96,9 @@ public class Rattrap : BeastWarrior
         weapon = 3;
         animator.SetLayerWeight(1, 1f);
         animator.SetInteger("Weapon", weapon);
-        EquipRifleFront(front);
-        EquipRifleBack(hold);
-        EquipBomb(left);
+        Equip(rifleFront, front);
+        Equip(rifleBack, hold);
+        Equip(bomb, left);
     }
 
     public override void OnRangedStrong(CallbackContext context)
@@ -127,9 +106,9 @@ public class Rattrap : BeastWarrior
         weapon = 4;
         animator.SetLayerWeight(1, 1f);
         animator.SetInteger("Weapon", weapon);
-        EquipRifleFront(frontHolster);
-        EquipRifleBack(backHolster);
-        EquipBomb(hold);
+        Equip(rifleFront, frontHolster);
+        Equip(rifleBack, backHolster);
+        Equip(bomb, hold);
     }
 
     public override void OnAttack(CallbackContext context)

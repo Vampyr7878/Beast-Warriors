@@ -76,19 +76,12 @@ public class ClawJaw : BeastWarrior
         heavyShoot = false;
     }
 
-    void EquipClaw(GameObject attachment)
-    {
-        claw.transform.parent = attachment.transform;
-        claw.transform.localPosition = Vector3.zero;
-        claw.transform.localEulerAngles = Vector3.zero;
-    }
-
     public override void OnMeleeWeak(CallbackContext context)
     {
         weapon = 1;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        EquipClaw(holster);
+        Equip(claw, holster);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -96,7 +89,7 @@ public class ClawJaw : BeastWarrior
         weapon = 2;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        EquipClaw(hold);
+        Equip(claw, hold);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -104,7 +97,7 @@ public class ClawJaw : BeastWarrior
         weapon = 3;
         animator.SetLayerWeight(1, 1f);
         animator.SetInteger("Weapon", weapon);
-        EquipClaw(holster);
+        Equip(claw, holster);
     }
 
     public override void OnRangedStrong(CallbackContext context)
@@ -112,7 +105,7 @@ public class ClawJaw : BeastWarrior
         weapon = 4;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        EquipClaw(holster);
+        Equip(claw, holster);
     }
 
     public override void OnAttack(CallbackContext context)

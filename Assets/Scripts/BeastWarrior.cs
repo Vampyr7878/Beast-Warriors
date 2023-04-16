@@ -118,14 +118,33 @@ public abstract class BeastWarrior : MonoBehaviour
         m.GetComponentInChildren<MeshRenderer>().material = material;
     }
 
-    protected void ThrownProjectile(GameObject thrown, GameObject projectile, Vector3 direction, Vector3 aim, GameObject hold, int force)
+    protected void ThrownProjectile(GameObject thrown, GameObject projectile, Vector3 direction, Vector3 aim, Vector3 forward, GameObject hold, int force, bool spin = false)
     {
         GameObject t = Instantiate(thrown);
         Instantiate(projectile, t.transform);
         t.transform.position = hold.transform.position;
         t.transform.eulerAngles = direction;
+        Thrown s = t.GetComponent<Thrown>();
+        s.spin = spin;
+        s.forward = forward;
+        BoxCollider tc = t.GetComponent<BoxCollider>();
+        BoxCollider pc = projectile.GetComponent<BoxCollider>();
+        tc.center = pc.center;
+        tc.size = pc.size;
         Rigidbody b = t.GetComponent<Rigidbody>();
         b.AddForce(aim * force, ForceMode.Impulse);
+    }
+
+    protected void Equip(GameObject weapon, GameObject attachment)
+    {
+        weapon.transform.parent = attachment.transform;
+        weapon.transform.localPosition = Vector3.zero;
+        weapon.transform.localEulerAngles = Vector3.zero;
+    }
+
+    protected void Deploy(GameObject weapon, float xAngle, float yAngle, float zAngle)
+    {
+        weapon.transform.localEulerAngles = new Vector3(xAngle, yAngle, zAngle);
     }
 
     public abstract void OnMeleeWeak(CallbackContext context);

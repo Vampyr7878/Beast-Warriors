@@ -37,8 +37,8 @@ public class Cybershark : BeastWarrior
 
     new void Awake()
     {
-        foldAngle = 90;
-        deployAngle = 180;
+        foldAngle = -90;
+        deployAngle = 0;
         base.Awake();
     }
 
@@ -82,40 +82,14 @@ public class Cybershark : BeastWarrior
         heavyShoot = false;
     }
 
-    void EquipHead(GameObject attachment)
-    {
-        head.transform.parent = attachment.transform;
-        head.transform.localPosition = Vector3.zero;
-        head.transform.localEulerAngles = Vector3.zero;
-    }
-
-    void EquipTail(GameObject attachment)
-    {
-        tail.transform.parent = attachment.transform;
-        tail.transform.localPosition = Vector3.zero;
-        tail.transform.localEulerAngles = Vector3.zero;
-    }
-
-    void DeployCannon(bool enable)
-    {
-        if (enable)
-        {
-            chestCannon.transform.localEulerAngles = new Vector3(deployAngle, chestCannon.transform.localEulerAngles.y, chestCannon.transform.localEulerAngles.z);
-        }
-        else
-        {
-            chestCannon.transform.localEulerAngles = new Vector3(foldAngle, chestCannon.transform.localEulerAngles.y, chestCannon.transform.localEulerAngles.z);
-        }
-    }
-
     public override void OnMeleeWeak(CallbackContext context)
     {
         weapon = 1;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        EquipHead(hold);
-        EquipTail(tailHolster);
-        DeployCannon(false);
+        Equip(head, hold);
+        Equip(tail, tailHolster);
+        Deploy(chestCannon, foldAngle, 0f, 0f);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -123,9 +97,9 @@ public class Cybershark : BeastWarrior
         weapon = 2;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        EquipHead(headHolster);
-        EquipTail(hold);
-        DeployCannon(false);
+        Equip(head, headHolster);
+        Equip(tail, hold);
+        Deploy(chestCannon, foldAngle, 0f, 0f);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -133,9 +107,9 @@ public class Cybershark : BeastWarrior
         weapon = 3;
         animator.SetLayerWeight(1, 1f);
         animator.SetInteger("Weapon", weapon);
-        EquipHead(headHolster);
-        EquipTail(hold);
-        DeployCannon(false);
+        Equip(head, headHolster);
+        Equip(tail, hold);
+        Deploy(chestCannon, foldAngle, 0f, 0f);
     }
 
     public override void OnRangedStrong(CallbackContext context)
@@ -143,9 +117,9 @@ public class Cybershark : BeastWarrior
         weapon = 4;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        EquipHead(hold);
-        EquipTail(tailHolster);
-        DeployCannon(true);
+        Equip(head, hold);
+        Equip(tail, tailHolster);
+        Deploy(chestCannon, deployAngle, 0f, 0f);
     }
 
     public override void OnAttack(CallbackContext context)

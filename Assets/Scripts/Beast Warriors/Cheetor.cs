@@ -74,27 +74,13 @@ public class Cheetor : BeastWarrior
         heavyShoot = false;
     }
 
-    void EquipRifle(GameObject attachment)
-    {
-        rifle.transform.parent = attachment.transform;
-        rifle.transform.localPosition = Vector3.zero;
-        rifle.transform.localEulerAngles = Vector3.zero;
-    }
-
-    void EquipCannon(GameObject attachment)
-    {
-        cannon.transform.parent = attachment.transform;
-        cannon.transform.localPosition = Vector3.zero;
-        cannon.transform.localEulerAngles = Vector3.zero;
-    }
-
     public override void OnMeleeWeak(CallbackContext context)
     {
         weapon = 1;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        EquipRifle(rifleHolster);
-        EquipCannon(cannonHolster);
+        Equip(rifle, rifleHolster);
+        Equip(cannon, cannonHolster);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -102,8 +88,8 @@ public class Cheetor : BeastWarrior
         weapon = 2;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        EquipRifle(rifleHolster);
-        EquipCannon(cannonHolster);
+        Equip(rifle, rifleHolster);
+        Equip(cannon, cannonHolster);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -111,8 +97,8 @@ public class Cheetor : BeastWarrior
         weapon = 3;
         animator.SetLayerWeight(1, 1f);
         animator.SetInteger("Weapon", weapon);
-        EquipRifle(hold);
-        EquipCannon(cannonHolster);
+        Equip(rifle, hold);
+        Equip(cannon, cannonHolster);
     }
 
     public override void OnRangedStrong(CallbackContext context)
@@ -120,8 +106,8 @@ public class Cheetor : BeastWarrior
         weapon = 4;
         animator.SetLayerWeight(1, 1f);
         animator.SetInteger("Weapon", weapon);
-        EquipRifle(rifleHolster);
-        EquipCannon(hold);
+        Equip(rifle, rifleHolster);
+        Equip(cannon, hold);
     }
 
     public override void OnAttack(CallbackContext context)

@@ -3,6 +3,8 @@ using static UnityEngine.InputSystem.InputAction;
 
 public class PolarClaw : BeastWarrior
 {
+    public GameObject claw;
+
     public GameObject[] lightBarrels;
 
     public GameObject[] heavyBarrels;
@@ -21,9 +23,20 @@ public class PolarClaw : BeastWarrior
 
     public float bulletInaccuracy;
 
+    private float foldAngle;
+
+    private float deployAngle;
+
     private float time;
 
     private int barrel;
+
+    new void Awake()
+    {
+        foldAngle = 0;
+        deployAngle = -130;
+        base.Awake();
+    }
 
     protected new void FixedUpdate()
     {
@@ -78,6 +91,7 @@ public class PolarClaw : BeastWarrior
         weapon = 1;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
+        Deploy(claw, foldAngle, 0f, 0f);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -85,6 +99,7 @@ public class PolarClaw : BeastWarrior
         weapon = 2;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
+        Deploy(claw, deployAngle, 0f, 0f);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -92,6 +107,7 @@ public class PolarClaw : BeastWarrior
         weapon = 3;
         animator.SetLayerWeight(1, 1f);
         animator.SetInteger("Weapon", weapon);
+        Deploy(claw, foldAngle, 0f, 0f);
     }
 
     public override void OnRangedStrong(CallbackContext context)
@@ -99,6 +115,7 @@ public class PolarClaw : BeastWarrior
         weapon = 4;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
+        Deploy(claw, foldAngle, 0f, 0f);
         barrel = 0;
     }
 

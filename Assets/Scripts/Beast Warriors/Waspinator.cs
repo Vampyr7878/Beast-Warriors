@@ -56,19 +56,12 @@ public class Waspinator : BeastWarrior
         heavyShoot = false;
     }
 
-    void EquipLauncher(GameObject attachment)
-    {
-        launcher.transform.parent = attachment.transform;
-        launcher.transform.localPosition = Vector3.zero;
-        launcher.transform.localEulerAngles = Vector3.zero;
-    }
-
     public override void OnMeleeWeak(CallbackContext context)
     {
         weapon = 1;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        EquipLauncher(holster);
+        Equip(launcher, holster);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -76,7 +69,7 @@ public class Waspinator : BeastWarrior
         weapon = 2;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        EquipLauncher(holster);
+        Equip(launcher, holster);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -84,7 +77,7 @@ public class Waspinator : BeastWarrior
         weapon = 3;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        EquipLauncher(holster);
+        Equip(launcher, holster);
     }
 
     public override void OnRangedStrong(CallbackContext context)
@@ -92,7 +85,7 @@ public class Waspinator : BeastWarrior
         weapon = 4;
         animator.SetLayerWeight(1, 1f);
         animator.SetInteger("Weapon", weapon);
-        EquipLauncher(hold);
+        Equip(launcher, hold);
     }
 
     public override void OnAttack(CallbackContext context)

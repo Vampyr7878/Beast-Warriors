@@ -70,27 +70,13 @@ public class Armordillo : BeastWarrior
         heavyShoot = false;
     }
 
-    void EquipMace(GameObject attachment)
-    {
-        mace.transform.parent = attachment.transform;
-        mace.transform.localPosition = Vector3.zero;
-        mace.transform.localEulerAngles = Vector3.zero;
-    }
-
-    void EquipRifle(GameObject attachment)
-    {
-        rifle.transform.parent = attachment.transform;
-        rifle.transform.localPosition = Vector3.zero;
-        rifle.transform.localEulerAngles = Vector3.zero;
-    }
-
     public override void OnMeleeWeak(CallbackContext context)
     {
         weapon = 1;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        EquipMace(maceHolster);
-        EquipRifle(gunHolster);
+        Equip(mace, maceHolster);
+        Equip(rifle, gunHolster);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -98,8 +84,8 @@ public class Armordillo : BeastWarrior
         weapon = 2;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        EquipMace(hold);
-        EquipRifle(gunHolster);
+        Equip(mace, hold);
+        Equip(rifle, gunHolster);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -107,8 +93,8 @@ public class Armordillo : BeastWarrior
         weapon = 3;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        EquipMace(maceHolster);
-        EquipRifle(gunHolster);
+        Equip(mace, maceHolster);
+        Equip(rifle, gunHolster);
     }
 
     public override void OnRangedStrong(CallbackContext context)
@@ -116,13 +102,13 @@ public class Armordillo : BeastWarrior
         weapon = 4;
         animator.SetLayerWeight(1, 1f);
         animator.SetInteger("Weapon", weapon);
-        EquipMace(maceHolster);
-        EquipRifle(hold);
+        Equip(mace, maceHolster);
+        Equip(rifle, hold);
     }
 
     public override void OnAttack(CallbackContext context)
     {
-        switch(weapon)
+        switch (weapon)
         {
             case 3:
                 lightShoot = context.performed;

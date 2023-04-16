@@ -71,27 +71,13 @@ public class Wolfang : BeastWarrior
         heavyShoot = false;
     }
 
-    void EquipShield(GameObject attachment)
-    {
-        shield.transform.parent = attachment.transform;
-        shield.transform.localPosition = Vector3.zero;
-        shield.transform.localEulerAngles = Vector3.zero;
-    }
-
-    void EquipGun(GameObject attachment)
-    {
-        gun.transform.parent = attachment.transform;
-        gun.transform.localPosition = Vector3.zero;
-        gun.transform.localEulerAngles = Vector3.zero;
-    }
-
     public override void OnMeleeWeak(CallbackContext context)
     {
         weapon = 1;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        EquipShield(shieldHlster);
-        EquipGun(gunHolster);
+        Equip(shield, shieldHlster);
+        Equip(gun, gunHolster);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -99,8 +85,8 @@ public class Wolfang : BeastWarrior
         weapon = 2;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        EquipShield(leftHold);
-        EquipGun(gunHolster);
+        Equip(shield, leftHold);
+        Equip(gun, gunHolster);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -108,8 +94,8 @@ public class Wolfang : BeastWarrior
         weapon = 3;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        EquipShield(shieldHlster);
-        EquipGun(gunHolster);
+        Equip(shield, shieldHlster);
+        Equip(gun, gunHolster);
     }
 
     public override void OnRangedStrong(CallbackContext context)
@@ -117,8 +103,8 @@ public class Wolfang : BeastWarrior
         weapon = 4;
         animator.SetLayerWeight(1, 1f);
         animator.SetInteger("Weapon", weapon);
-        EquipShield(shieldHlster);
-        EquipGun(rightHold);
+        Equip(shield, shieldHlster);
+        Equip(gun, rightHold);
     }
 
     public override void OnAttack(CallbackContext context)

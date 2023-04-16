@@ -76,19 +76,12 @@ public class Snarl : BeastWarrior
         heavyShoot = false;
     }
 
-    void EquipGun(GameObject attachment)
-    {
-        gun.transform.parent = attachment.transform;
-        gun.transform.localPosition = Vector3.zero;
-        gun.transform.localEulerAngles = Vector3.zero;
-    }
-
     public override void OnMeleeWeak(CallbackContext context)
     {
         weapon = 1;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        EquipGun(holster);
+        Equip(gun, holster);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -96,7 +89,7 @@ public class Snarl : BeastWarrior
         weapon = 2;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        EquipGun(holster);
+        Equip(gun, holster);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -104,7 +97,7 @@ public class Snarl : BeastWarrior
         weapon = 3;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        EquipGun(holster);
+        Equip(gun, holster);
     }
 
     public override void OnRangedStrong(CallbackContext context)
@@ -112,7 +105,7 @@ public class Snarl : BeastWarrior
         weapon = 4;
         animator.SetLayerWeight(1, 1f);
         animator.SetInteger("Weapon", weapon);
-        EquipGun(hold);
+        Equip(gun, hold);
     }
 
     public override void OnAttack(CallbackContext context)

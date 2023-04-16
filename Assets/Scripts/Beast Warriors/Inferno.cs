@@ -80,35 +80,21 @@ public class Inferno : BeastWarrior
         heavyShoot = false;
     }
 
-    void EquipFlamethrower(GameObject attachment)
-    {
-        flamethrower.transform.parent = attachment.transform;
-        flamethrower.transform.localPosition = Vector3.zero;
-        flamethrower.transform.localEulerAngles = Vector3.zero;
-    }
-
-    void EquipLauncher(GameObject attachment)
-    {
-        launcher.transform.parent = attachment.transform;
-        launcher.transform.localPosition = Vector3.zero;
-        launcher.transform.localEulerAngles = Vector3.zero;
-    }
-
     public override void OnMeleeWeak(CallbackContext context)
     {
         weapon = 1;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        EquipFlamethrower(flamethrowerHolster);
-        EquipLauncher(launcherHolster);
+        Equip(flamethrower, flamethrowerHolster);
+        Equip(launcher, launcherHolster);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
     {
         weapon = 2;
         animator.SetLayerWeight(1, 0f);
-        EquipFlamethrower(hold);
-        EquipLauncher(launcherHolster);
+        Equip(flamethrower, hold);
+        Equip(launcher, launcherHolster);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -116,8 +102,8 @@ public class Inferno : BeastWarrior
         weapon = 3;
         animator.SetLayerWeight(1, 1f);
         animator.SetInteger("Weapon", weapon);
-        EquipFlamethrower(flamethrowerHolster);
-        EquipLauncher(hold);
+        Equip(flamethrower, flamethrowerHolster);
+        Equip(launcher, hold);
     }
 
     public override void OnRangedStrong(CallbackContext context)
@@ -125,8 +111,8 @@ public class Inferno : BeastWarrior
         weapon = 4;
         animator.SetLayerWeight(1, 1f);
         animator.SetInteger("Weapon", weapon);
-        EquipFlamethrower(hold);
-        EquipLauncher(launcherHolster);
+        Equip(flamethrower, hold);
+        Equip(launcher, launcherHolster);
     }
 
     public override void OnAttack(CallbackContext context)

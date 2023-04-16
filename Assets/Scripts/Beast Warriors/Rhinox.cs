@@ -97,42 +97,15 @@ public class Rhinox : BeastWarrior
         barrel = barrel == (heavyBarrels.Length - 1) ? 0 : barrel + 1;
     }
 
-    void EquipSword(GameObject attachment)
-    {
-        sword.transform.parent = attachment.transform;
-        sword.transform.localPosition = Vector3.zero;
-        sword.transform.localEulerAngles = Vector3.zero;
-    }
-
-    void EquipGun(GameObject attachment)
-    {
-        gun.transform.parent = attachment.transform;
-        gun.transform.localPosition = Vector3.zero;
-        gun.transform.localEulerAngles = Vector3.zero;
-    }
-
-    void DeployBlasters(bool enable)
-    {
-        if (enable)
-        {
-            rightBlaster.transform.localEulerAngles = new Vector3(rightBlaster.transform.localEulerAngles.x, deployAngle, rightBlaster.transform.localEulerAngles.z);
-            leftBlaster.transform.localEulerAngles = new Vector3(rightBlaster.transform.localEulerAngles.x, deployAngle, leftBlaster.transform.localEulerAngles.z);
-        }
-        else
-        {
-            rightBlaster.transform.localEulerAngles = new Vector3(rightBlaster.transform.localEulerAngles.x, foldAngle, rightBlaster.transform.localEulerAngles.z);
-            leftBlaster.transform.localEulerAngles = new Vector3(-rightBlaster.transform.localEulerAngles.x, foldAngle, leftBlaster.transform.localEulerAngles.z);
-        }
-    }
-
     public override void OnMeleeWeak(CallbackContext context)
     {
         weapon = 1;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        EquipSword(swordHolster);
-        EquipGun(gunHolster);
-        DeployBlasters(false);
+        Equip(sword, swordHolster);
+        Equip(gun, gunHolster);
+        Deploy(rightBlaster, 0f, foldAngle, 0f);
+        Deploy(leftBlaster, 0f, foldAngle, 0f);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -140,9 +113,10 @@ public class Rhinox : BeastWarrior
         weapon = 2;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        EquipSword(hold);
-        EquipGun(gunHolster);
-        DeployBlasters(false);
+        Equip(sword, hold);
+        Equip(gun, gunHolster);
+        Deploy(rightBlaster, 0f, foldAngle, 0f);
+        Deploy(leftBlaster, 0f, foldAngle, 0f);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -150,9 +124,10 @@ public class Rhinox : BeastWarrior
         weapon = 3;
         animator.SetLayerWeight(1, 1f);
         animator.SetInteger("Weapon", weapon);
-        EquipSword(swordHolster);
-        EquipGun(gunHolster);
-        DeployBlasters(true);
+        Equip(sword, swordHolster);
+        Equip(gun, gunHolster);
+        Deploy(rightBlaster, 0f, deployAngle, 0f);
+        Deploy(leftBlaster, 0f, deployAngle, 0f);
     }
 
     public override void OnRangedStrong(CallbackContext context)
@@ -160,9 +135,10 @@ public class Rhinox : BeastWarrior
         weapon = 4;
         animator.SetLayerWeight(1, 1f);
         animator.SetInteger("Weapon", weapon);
-        EquipSword(swordHolster);
-        EquipGun(hold);
-        DeployBlasters(false);
+        Equip(sword, swordHolster);
+        Equip(gun, hold);
+        Deploy(rightBlaster, 0f, foldAngle, 0f);
+        Deploy(leftBlaster, 0f, foldAngle, 0f);
     }
 
     public override void OnAttack(CallbackContext context)

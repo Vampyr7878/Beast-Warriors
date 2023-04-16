@@ -87,35 +87,14 @@ public class Insecticon : BeastWarrior
         heavyShoot = false;
     }
 
-    void EquipRightSickle(GameObject attachment)
-    {
-        rightSickle.transform.parent = attachment.transform;
-        rightSickle.transform.localPosition = Vector3.zero;
-        rightSickle.transform.localEulerAngles = Vector3.zero;
-    }
-
-    void EquipLftSickle(GameObject attachment)
-    {
-        leftSickle.transform.parent = attachment.transform;
-        leftSickle.transform.localPosition = Vector3.zero;
-        leftSickle.transform.localEulerAngles = Vector3.zero;
-    }
-
-    void EquipCrossbow(GameObject attachment)
-    {
-        crossbow.transform.parent = attachment.transform;
-        crossbow.transform.localPosition = Vector3.zero;
-        crossbow.transform.localEulerAngles = Vector3.zero;
-    }
-
     public override void OnMeleeWeak(CallbackContext context)
     {
         weapon = 1;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        EquipRightSickle(right);
-        EquipLftSickle(left);
-        EquipCrossbow(holster);
+        Equip(rightSickle, right);
+        Equip(leftSickle, left);
+        Equip(crossbow, holster);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -123,9 +102,9 @@ public class Insecticon : BeastWarrior
         weapon = 2;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        EquipRightSickle(rightHold);
-        EquipLftSickle(leftHold);
-        EquipCrossbow(holster);
+        Equip(rightSickle, rightHold);
+        Equip(leftSickle, leftHold);
+        Equip(crossbow, holster);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -133,9 +112,9 @@ public class Insecticon : BeastWarrior
         weapon = 3;
         animator.SetLayerWeight(1, 1f);
         animator.SetInteger("Weapon", weapon);
-        EquipRightSickle(right);
-        EquipLftSickle(left);
-        EquipCrossbow(holster);
+        Equip(rightSickle, right);
+        Equip(leftSickle, left);
+        Equip(crossbow, holster);
     }
 
     public override void OnRangedStrong(CallbackContext context)
@@ -143,9 +122,9 @@ public class Insecticon : BeastWarrior
         weapon = 4;
         animator.SetLayerWeight(1, 1f);
         animator.SetInteger("Weapon", weapon);
-        EquipRightSickle(right);
-        EquipLftSickle(left);
-        EquipCrossbow(rightHold);
+        Equip(rightSickle, right);
+        Equip(leftSickle, left);
+        Equip(crossbow, rightHold);
     }
 
     public override void OnAttack(CallbackContext context)

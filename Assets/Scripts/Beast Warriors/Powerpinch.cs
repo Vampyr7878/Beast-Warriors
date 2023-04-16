@@ -77,19 +77,12 @@ public class Powerpinch : BeastWarrior
         heavyShoot = false;
     }
 
-    void EquipPincer(GameObject attachment)
-    {
-        pincer.transform.parent = attachment.transform;
-        pincer.transform.localPosition = Vector3.zero;
-        pincer.transform.localEulerAngles = Vector3.zero;
-    }
-
     public override void OnMeleeWeak(CallbackContext context)
     {
         weapon = 1;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        EquipPincer(holster);
+        Equip(pincer, holster);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -97,7 +90,7 @@ public class Powerpinch : BeastWarrior
         weapon = 2;
         animator.SetLayerWeight(1, 0f);
         animator.SetInteger("Weapon", weapon);
-        EquipPincer(hold);
+        Equip(pincer, hold);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -105,7 +98,7 @@ public class Powerpinch : BeastWarrior
         weapon = 3;
         animator.SetLayerWeight(1, 1f);
         animator.SetInteger("Weapon", weapon);
-        EquipPincer(holster);
+        Equip(pincer, holster);
     }
 
     public override void OnRangedStrong(CallbackContext context)
@@ -113,7 +106,7 @@ public class Powerpinch : BeastWarrior
         weapon = 4;
         animator.SetLayerWeight(1, 1f);
         animator.SetInteger("Weapon", weapon);
-        EquipPincer(hold);
+        Equip(pincer, hold);
     }
 
     public override void OnAttack(CallbackContext context)
