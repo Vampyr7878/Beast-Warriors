@@ -42,6 +42,10 @@ public class Character : MonoBehaviour
 
     void Awake()
     {
+        foreach(var bone in skeleton)
+        {
+            bone.GetComponent<MeshRenderer>().enabled = false;
+        }
         cameraAngle = characterCamera.transform.rotation.eulerAngles.x;
         isMoving = false;
         isJumping = false;

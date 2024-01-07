@@ -1,0 +1,126 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5657330320450076566
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2698880543430373739}
+  - component: {fileID: 2180830054019161781}
+  m_Layer: 0
+  m_Name: Thermal Sword
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2698880543430373739
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5657330320450076566}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2388954860445102305}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &2180830054019161781
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5657330320450076566}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Size: {x: 3, y: 0.4, z: 0.3}
+  m_Center: {x: -1.1, y: 0.05, z: 0}
+--- !u!1001 &9034470429130241749
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 2698880543430373739}
+    m_Modifications:
+    - target: {fileID: -6361814968583054007, guid: b06544d7865c35349a0f2c7873f5508f, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: -3855091036048465577, guid: b06544d7865c35349a0f2c7873f5508f, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: -3641807817533402063, guid: b06544d7865c35349a0f2c7873f5508f, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: -2573904816894785996, guid: b06544d7865c35349a0f2c7873f5508f, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -2573904816894785996, guid: b06544d7865c35349a0f2c7873f5508f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: -2573904816894785996, guid: b06544d7865c35349a0f2c7873f5508f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -4.497
+      objectReference: {fileID: 0}
+    - target: {fileID: -2573904816894785996, guid: b06544d7865c35349a0f2c7873f5508f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: -2573904816894785996, guid: b06544d7865c35349a0f2c7873f5508f, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: -2573904816894785996, guid: b06544d7865c35349a0f2c7873f5508f, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -2573904816894785996, guid: b06544d7865c35349a0f2c7873f5508f, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: -2573904816894785996, guid: b06544d7865c35349a0f2c7873f5508f, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -2573904816894785996, guid: b06544d7865c35349a0f2c7873f5508f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -2573904816894785996, guid: b06544d7865c35349a0f2c7873f5508f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -2573904816894785996, guid: b06544d7865c35349a0f2c7873f5508f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1043855929339752691, guid: b06544d7865c35349a0f2c7873f5508f, type: 3}
+      propertyPath: m_Name
+      value: Thermal Sword
+      objectReference: {fileID: 0}
+    - target: {fileID: 7480687231625320667, guid: b06544d7865c35349a0f2c7873f5508f, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: -7445775647299589713, guid: b06544d7865c35349a0f2c7873f5508f, type: 3}
+--- !u!4 &2388954860445102305 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -2573904816894785996, guid: b06544d7865c35349a0f2c7873f5508f, type: 3}
+  m_PrefabInstance: {fileID: 9034470429130241749}
+  m_PrefabAsset: {fileID: 0}

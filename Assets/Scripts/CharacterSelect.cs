@@ -111,12 +111,19 @@ public class CharacterSelect : MonoBehaviour
             }
             else
             {
-                choices[i].SetActive(true);
-                choices[i].GetComponentInChildren<TextMeshPro>().text = characterNames[activeCharacters[i + page * choices.Length]];
-                choices[i].GetComponent<Choice>().character = characterPaths[activeCharacters[i + page * choices.Length]];
-                GameObject prefab = Resources.Load<GameObject>("Beast Warriors/" + characterPaths[activeCharacters[i + page * choices.Length]]);
-                instances[i] = Instantiate(prefab, choices[i].transform);
-                instances[i].GetComponent<BeastWarrior>().enabled = false;
+                try
+                {
+                    choices[i].SetActive(true);
+                    choices[i].GetComponentInChildren<TextMeshPro>().text = characterNames[activeCharacters[i + page * choices.Length]];
+                    choices[i].GetComponent<Choice>().character = characterPaths[activeCharacters[i + page * choices.Length]];
+                    GameObject prefab = Resources.Load<GameObject>("Beast Warriors/" + characterPaths[activeCharacters[i + page * choices.Length]]);
+                    instances[i] = Instantiate(prefab, choices[i].transform);
+                    instances[i].GetComponent<BeastWarrior>().enabled = false;
+                }
+                catch
+                {
+                    choices[i].SetActive(false);
+                }
             }
         }
     }
