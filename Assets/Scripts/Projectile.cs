@@ -16,7 +16,7 @@ public class Projectile : MonoBehaviour
     void Start()
     {
         body = GetComponent<Rigidbody>();
-        body.velocity = -transform.forward * speed;
+        body.linearVelocity = -transform.forward * speed;
         light = GetComponent<Light>();
     }
 
@@ -24,7 +24,7 @@ public class Projectile : MonoBehaviour
     {
         if (other.gameObject.name != "Character" && !other.isTrigger)
         {
-            body.velocity = Vector3.zero;
+            body.linearVelocity = Vector3.zero;
             GameObject f = Instantiate(flash);
             f.transform.position = transform.position + transform.forward * flashMultiply;
             f.transform.eulerAngles = new Vector3(-transform.eulerAngles.x, transform.eulerAngles.y, 0f);

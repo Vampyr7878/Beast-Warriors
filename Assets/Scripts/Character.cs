@@ -8,7 +8,11 @@ public class Character : MonoBehaviour
 {
     public Camera characterCamera;
 
+    public Animator mainAnimator;
+
     public List<Transform> skeleton;
+
+    public List<Transform> robot;
 
     public LayerMask mask;
 
@@ -28,7 +32,7 @@ public class Character : MonoBehaviour
 
     Rigidbody body;
 
-    Animator animator;
+    Animator characterAnimator;
 
     Vector3 movement;
 
@@ -52,11 +56,11 @@ public class Character : MonoBehaviour
         bodyParts = new Transform[skeleton.Count];
         terrainCollsion = new List<Collision>();
         string character = PlayerPrefs.GetString("Character");
-        GameObject prefab = Resources.Load<GameObject>("Beast Warriors/" + character);
+        GameObject prefab = Resources.Load<GameObject>($"Beast Warriors/{character}");
         GameObject instance = Instantiate(prefab, transform);
         RuntimeAnimatorController controller = instance.GetComponent<Animator>().runtimeAnimatorController;
-        animator = GetComponentInChildren<Animator>();
-        animator.runtimeAnimatorController = controller;
+        characterAnimator = GetComponentInChildren<Animator>();
+        characterAnimator.runtimeAnimatorController = controller;
         warrior = instance.GetComponent<BeastWarrior>();
         PlayerPrefs.SetString("Character", character);
     }
@@ -114,25 +118,25 @@ public class Character : MonoBehaviour
 
     void Update()
     {
-        animator.SetBool("Moving", isMoving);
-        animator.SetBool("Jumping", isJumping);
-        animator.SetBool("Forward", move.y >= 0f);
-        animator.SetFloat("Blend", move.x);
+        mainAnimator.SetBool("Moving", isMoving);
+        mainAnimator.SetBool("Jumping", isJumping);
+        mainAnimator.SetBool("Forward", move.y >= 0f);
+        mainAnimator.SetFloat("Blend", move.x);
     }
 
     void FixedUpdate()
     {
         if (terrainCollsion.Count > 0)
         {
-            if (animator.GetCurrentAnimatorStateInfo(0).IsTag("Jump"))
+            if (mainAnimator.GetCurrentAnimatorStateInfo(0).IsTag("Jump"))
             {
                 isJumping = false;
             }
-            float y = !isMoving && !isJumping ? 0f : body.velocity.y;
-            movement = transform.right * -move.x * speed + transform.up * y + transform.forward * -move.y * speed;
-            body.velocity = movement;
+            float y = !isMoving && !isJumping ? 0f : body.linearVelocity.y;
+            movement = -move.x * speed * transform.right + transform.up * y + -move.y * speed * transform.forward;
+            body.linearVelocity = movement;
         }
-        if (body.velocity.y < 0)
+        if (body.linearVelocity.y < 0)
         {   
             body.AddForce(Physics.gravity * 4, ForceMode.Acceleration);
         }
@@ -144,7 +148,23 @@ public class Character : MonoBehaviour
         Vector3 rotation = characterCamera.transform.rotation.eulerAngles;
         float angle = Mathf.Clamp(rotation.x - look.y, cameraAngle - cameraRange, cameraAngle + cameraRange);
         characterCamera.transform.eulerAngles = new Vector3(angle, rotation.y, rotation.z);
-        skeleton[2].eulerAngles = new Vector3(angle - cameraAngle, skeleton[2].eulerAngles.y, skeleton[2].eulerAngles.z);
+        skeleton[(int)BodyPart.Part.Body].localPosition = new Vector3(-robot[(int)BodyPart.Part.Body].localPosition.x * 350,
+            robot[(int)BodyPart.Part.Body].localPosition.y * 400, robot[(int)BodyPart.Part.Body].localPosition.z * 300);
+        skeleton[(int)BodyPart.Part.Head].eulerAngles = new Vector3(angle - cameraAngle, skeleton[2].eulerAngles.y, skeleton[2].eulerAngles.z);
+        skeleton[(int)BodyPart.Part.RightShoulder].localRotation = robot[(int)BodyPart.Part.RightShoulder].localRotation;
+        skeleton[(int)BodyPart.Part.RightElbow].localRotation = robot[(int)BodyPart.Part.RightElbow].localRotation;
+        skeleton[(int)BodyPart.Part.RightHand].localRotation = robot[(int)BodyPart.Part.RightHand].localRotation;
+        skeleton[(int)BodyPart.Part.LeftShoulder].localRotation = robot[(int)BodyPart.Part.LeftShoulder].localRotation;
+        skeleton[(int)BodyPart.Part.LeftElbow].localRotation = robot[(int)BodyPart.Part.LeftElbow].localRotation;
+        skeleton[(int)BodyPart.Part.LeftHand].localRotation = robot[(int)BodyPart.Part.LeftHand].localRotation;
+        skeleton[(int)BodyPart.Part.RightHip].localRotation = robot[(int)BodyPart.Part.RightHip].localRotation;
+        skeleton[(int)BodyPart.Part.RightKnee].localRotation = robot[(int)BodyPart.Part.RightKnee].localRotation;
+        skeleton[(int)BodyPart.Part.RightFoot].localRotation = robot[(int)BodyPart.Part.RightFoot].localRotation;
+        skeleton[(int)BodyPart.Part.LeftHip].localRotation = robot[(int)BodyPart.Part.LeftHip].localRotation;
+        skeleton[(int)BodyPart.Part.LeftKnee].localRotation = robot[(int)BodyPart.Part.LeftKnee].localRotation;
+        skeleton[(int)BodyPart.Part.LeftFoot].localRotation = robot[(int)BodyPart.Part.LeftFoot].localRotation;
+        skeleton[(int)BodyPart.Part.RightClaw].localRotation = robot[(int)BodyPart.Part.RightElbow].localRotation;
+        skeleton[(int)BodyPart.Part.LeftClaw].localRotation = robot[(int)BodyPart.Part.LeftElbow].localRotation;
         MoveParts();
     }
 
@@ -154,9 +174,36 @@ public class Character : MonoBehaviour
         {
             if (bodyParts[i] != null)
             {
-                bodyParts[i].transform.position = skeleton[i].position;
-                bodyParts[i].transform.rotation = skeleton[i].rotation;
+                bodyParts[i].transform.SetPositionAndRotation(skeleton[i].position, skeleton[i].rotation);
+                CompensateLimb(i, "Right Arm", 90f, 0f, 0f);
+                CompensateLimb(i, "Right Elbow", 0f, -90f, 90f);
+                CompensateLimb(i, "Right Forearm", 90f, 0f, 0f);
+                CompensateLimb(i, "Right Hand", 0f, 90f, 90f);
+                CompensateLimb(i, "Left Arm", 90f, 0f, 0f);
+                CompensateLimb(i, "Left Elbow", 0f, -90f, 90f);
+                CompensateLimb(i, "Left Forearm", 90f, 0f, 0f);
+                CompensateLimb(i, "Left Hand", 0f, 90f, 90f);
+                CompensateLimb(i, "Right Leg", 90f, 0f, -90f);
+                CompensateLimb(i, "Right Lower", 90f, 0f, 90f);
+                CompensateLimb(i, "Right Foot", 0f, -90f, 25f);
+                CompensateLimb(i, "Left Leg", 90f, 0f, 90f);
+                CompensateLimb(i, "Left Lower", 90f, 0f, -90f);
+                CompensateLimb(i, "Left Foot", 0f, -90f, 25f);
+                CompensateLimb(i, "Right Long", 90f, 0f, 180f);
+                CompensateLimb(i, "Right Claw", 0f, -90f, 90f);
+                CompensateLimb(i, "Right Hook", 90f, 0f, 0f);
+                CompensateLimb(i, "Left Long", 90f, 0f, 180f);
+                CompensateLimb(i, "Left Claw", 0f, -90f, 90f);
+                CompensateLimb(i, "Left Hook", 90f, 0f, 0f);
             }
+        }
+    }
+
+    void CompensateLimb(int index, string tag, float x, float y, float z)
+    {
+        if (bodyParts[index].CompareTag(tag))
+        {
+            bodyParts[index].transform.localRotation *= Quaternion.Euler(x, y, z);
         }
     }
 
@@ -175,9 +222,9 @@ public class Character : MonoBehaviour
     {
         if (terrainCollsion.Count > 0)
         {
+            mainAnimator.SetTrigger("Jump");
             body.AddForce(Vector3.up * jump, ForceMode.Impulse);
             isJumping = true;
-            animator.SetTrigger("Jump");
         }
     }
 

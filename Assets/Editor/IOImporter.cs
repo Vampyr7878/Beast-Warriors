@@ -13,7 +13,7 @@ public class IOImporter : UnityEditor.AssetImporters.ScriptedImporter
         string name = "default";
         using (FileStream file = new(ctx.assetPath, FileMode.Open))
         {
-            ZipFile zip = new ZipFile(file)
+            ZipFile zip = new(file)
             {
                 Password = "soho0909"
             };
@@ -21,23 +21,21 @@ public class IOImporter : UnityEditor.AssetImporters.ScriptedImporter
             {
                 if (entry.Name == "model2.ldr")
                 {
-                    using (StreamReader reader = new(zip.GetInputStream(entry)))
+                    using StreamReader reader = new(zip.GetInputStream(entry));
+                    string line = reader.ReadLine();
+                    line = reader.ReadLine();
+                    line = reader.ReadLine();
+                    name = line.Substring(9);
+                    string[] words;
+                    do
                     {
-                        string line = reader.ReadLine();
                         line = reader.ReadLine();
-                        line = reader.ReadLine();
-                        name = line.Substring(9);
-                        string[] words;
-                        do
+                        words = line.Split(' ');
+                        if (words[0] == "1")
                         {
-                            line = reader.ReadLine();
-                            words = line.Split(' ');
-                            if (words[0] == "1")
-                            {
-                                parts.Add(new Part(words));
-                            }
-                        } while (line != "0 NOFILE") ;
-                    }
+                            parts.Add(new Part(words));
+                        }
+                    } while (line != "0 NOFILE");
                     break;
                 }
             }
@@ -50,14 +48,14 @@ public class IOImporter : UnityEditor.AssetImporters.ScriptedImporter
         {
             if (!materials.Exists(m => m.name == parts[i].Color.ToString()))
             {
-                materials.Add(new Material(Resources.Load<Material>("Materials/" + parts[i].Color.ToString())));
+                materials.Add(new Material(Resources.Load<Material>($"Materials/{parts[i].Color}")));
             }
         }
         for (int i = 0; i < parts.Count; i++)
         {
             try
             {
-                prefab = Resources.Load<GameObject>("Parts/" + parts[i].Name);
+                prefab = Resources.Load<GameObject>($"Parts/{parts[i].Name}");
                 meshes[i] = Instantiate(prefab, main.transform);
                 meshes[i].transform.position = new Vector3(-parts[i].Matrix.m03, parts[i].Matrix.m13, -parts[i].Matrix.m23);
                 meshes[i].transform.Rotate(-parts[i].Matrix.rotation.eulerAngles.x, parts[i].Matrix.rotation.eulerAngles.y, -parts[i].Matrix.rotation.eulerAngles.z);

@@ -13,7 +13,7 @@ public class CustomMenu : MonoBehaviour
         foreach (FileInfo file in dir.GetFiles("*.prefab"))
         {
             string path = file.FullName.Replace("\\", "/");
-            path = "Assets" +  path.Replace(Application.dataPath, "");
+            path = $"Assets{path.Replace(Application.dataPath, "")}";
             GameObject prefab = (GameObject)AssetDatabase.LoadAssetAtPath(path, typeof(GameObject));
             SavePrefab save = prefab.GetComponent<SavePrefab>();
             DestroyImmediate(save, true);

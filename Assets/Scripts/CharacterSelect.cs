@@ -33,7 +33,7 @@ public class CharacterSelect : MonoBehaviour
     void Awake()
     {
         page = 0;
-        dbPath = "URI=file:" + Application.streamingAssetsPath + "/database.sqlite";
+        dbPath = $"URI=file:{Application.streamingAssetsPath}/database.sqlite";
         connection = new SqliteConnection(dbPath);
         characterNames = new List<string>();
         characterPaths = new List<string>();
@@ -116,7 +116,7 @@ public class CharacterSelect : MonoBehaviour
                     choices[i].SetActive(true);
                     choices[i].GetComponentInChildren<TextMeshPro>().text = characterNames[activeCharacters[i + page * choices.Length]];
                     choices[i].GetComponent<Choice>().character = characterPaths[activeCharacters[i + page * choices.Length]];
-                    GameObject prefab = Resources.Load<GameObject>("Beast Warriors/" + characterPaths[activeCharacters[i + page * choices.Length]]);
+                    GameObject prefab = Resources.Load<GameObject>($"Beast Warriors/{characterPaths[activeCharacters[i + page * choices.Length]]}");
                     instances[i] = Instantiate(prefab, choices[i].transform);
                     instances[i].GetComponent<BeastWarrior>().enabled = false;
                 }

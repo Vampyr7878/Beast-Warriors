@@ -29,7 +29,7 @@ public class Thrown : MonoBehaviour
     {
         if (other.gameObject.name != "Character" && !other.isTrigger)
         {
-            body.velocity = Vector3.zero;
+            body.linearVelocity = Vector3.zero;
             spin = false;
             GameObject f = Instantiate(flash);
             f.transform.position = transform.position - GetComponent<BoxCollider>().center + forward * flashMultiply;

@@ -7,18 +7,18 @@ public class Bone : MonoBehaviour
     
     void Start()
     {
-        Mesh mesh = new Mesh();
+        Mesh mesh = new();
         mesh.name = "Cube";
         Vector3[] vertices = new Vector3[]
         {
-            new Vector3 (-5.0f, -5.0f, -5.0f),
-            new Vector3 ( 5.0f, -5.0f, -5.0f),
-            new Vector3 (-5.0f,  5.0f, -5.0f),
-            new Vector3 ( 5.0f,  5.0f, -5.0f),
-            new Vector3 (-5.0f, -5.0f,  5.0f),
-            new Vector3 ( 5.0f, -5.0f,  5.0f),
-            new Vector3 (-5.0f,  5.0f,  5.0f),
-            new Vector3 ( 5.0f,  5.0f,  5.0f)
+            new(-5.0f, -5.0f, -5.0f),
+            new ( 5.0f, -5.0f, -5.0f),
+            new (-5.0f,  5.0f, -5.0f),
+            new ( 5.0f,  5.0f, -5.0f),
+            new (-5.0f, -5.0f,  5.0f),
+            new ( 5.0f, -5.0f,  5.0f),
+            new (-5.0f,  5.0f,  5.0f),
+            new ( 5.0f,  5.0f,  5.0f)
         };
         mesh.vertices = vertices;
         int[] triangles = new int[] 
