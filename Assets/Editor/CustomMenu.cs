@@ -33,10 +33,10 @@ public class CustomMenu : MonoBehaviour
                 path = "Assets" + path.Replace(Application.dataPath, "");
                 AnimatorController animator = (AnimatorController)AssetDatabase.LoadAssetAtPath(path, typeof(AnimatorController));
                 animator.RemoveLayer(0);
-                animator.AddLayer(controller.layers[0]);
-                AnimatorControllerLayer[] layers = animator.layers;
-                Array.Reverse(layers);
-                animator.layers = layers;
+                //animator.AddLayer(controller.layers[0]);
+                //AnimatorControllerLayer[] layers = animator.layers;
+                //Array.Reverse(layers);
+                //animator.layers = layers;
             }
         }
     }

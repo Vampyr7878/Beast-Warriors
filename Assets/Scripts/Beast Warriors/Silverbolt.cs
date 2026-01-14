@@ -80,10 +80,11 @@ public class Silverbolt : BeastWarrior
     public override void OnMeleeWeak(CallbackContext context)
     {
         weapon = 1;
-        animator.SetLayerWeight(1, 0f);
+        animator.enabled = false;
         animator.SetInteger("Weapon", weapon);
         Equip(rightBlade, rightHolster);
         Equip(leftBlade, leftHolster);
+        character.OverrideArm("None");
         Deploy(rightCannons, 0f, foldAngle, 0f);
         Deploy(leftCannons, 0f, -foldAngle, 0f);
     }
@@ -91,10 +92,11 @@ public class Silverbolt : BeastWarrior
     public override void OnMeleeStrong(CallbackContext context)
     {
         weapon = 2;
-        animator.SetLayerWeight(1, 0f);
+        animator.enabled = false;
         animator.SetInteger("Weapon", weapon);
         Equip(rightBlade, rightHold);
         Equip(leftBlade, leftHold);
+        character.OverrideArm("None");
         Deploy(rightCannons, 0f, foldAngle, 0f);
         Deploy(leftCannons, 0f, -foldAngle, 0f);
     }
@@ -102,10 +104,11 @@ public class Silverbolt : BeastWarrior
     public override void OnRangedWeak(CallbackContext context)
     {
         weapon = 3;
-        animator.SetLayerWeight(1, 1f);
+        animator.enabled = true;
         animator.SetInteger("Weapon", weapon);
         Equip(rightBlade, rightHold);
         Equip(leftBlade, leftHolster);
+        character.OverrideArm("Right");
         Deploy(rightCannons, 0f, foldAngle, 0f);
         Deploy(leftCannons, 0f, -foldAngle, 0f);
     }
@@ -113,10 +116,11 @@ public class Silverbolt : BeastWarrior
     public override void OnRangedStrong(CallbackContext context)
     {
         weapon = 4;
-        animator.SetLayerWeight(1, 0f);
+        animator.enabled = false;
         animator.SetInteger("Weapon", weapon);
         Equip(rightBlade, rightHolster);
         Equip(leftBlade, leftHolster);
+        character.OverrideArm("None");
         Deploy(rightCannons, 0f, deployAngle, 0f);
         Deploy(leftCannons, 0f, -deployAngle, 0f);
         barrel = 0;

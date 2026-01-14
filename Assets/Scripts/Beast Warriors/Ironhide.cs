@@ -101,10 +101,11 @@ public class Ironhide : BeastWarrior
     public override void OnMeleeWeak(CallbackContext context)
     {
         weapon = 1;
-        animator.SetLayerWeight(1, 0f);
+        animator.enabled = false;
         animator.SetInteger("Weapon", weapon);
         Equip(rightClub, rightHolster);
         Equip(leftClub, leftHolster);
+        character.OverrideArm("None");
         Deploy(rightBlade, 0f, deployAngle, 80f);
         Deploy(leftBlade, 0f, -deployAngle, -80f);
     }
@@ -112,10 +113,11 @@ public class Ironhide : BeastWarrior
     public override void OnMeleeStrong(CallbackContext context)
     {
         weapon = 2;
-        animator.SetLayerWeight(1, 0f);
+        animator.enabled = false;
         animator.SetInteger("Weapon", weapon);
         Equip(rightClub, rightHold);
         Equip(leftClub, leftHold);
+        character.OverrideArm("None");
         Deploy(rightBlade, 0f, foldAngle, 80f);
         Deploy(leftBlade, 0f, -foldAngle, -80f);
     }
@@ -123,10 +125,11 @@ public class Ironhide : BeastWarrior
     public override void OnRangedWeak(CallbackContext context)
     {
         weapon = 3;
-        animator.SetLayerWeight(1, 0f);
+        animator.enabled = false;
         animator.SetInteger("Weapon", weapon);
         Equip(rightClub, rightHolster);
         Equip(leftClub, leftHolster);
+        character.OverrideArm("None");
         Deploy(rightBlade, 0f, foldAngle, 80f);
         Deploy(leftBlade, 0f, -foldAngle, -80f);
         barrel = 0;
@@ -135,10 +138,11 @@ public class Ironhide : BeastWarrior
     public override void OnRangedStrong(CallbackContext context)
     {
         weapon = 4;
-        animator.SetLayerWeight(1, 1f);
+        animator.enabled = true;
         animator.SetInteger("Weapon", weapon);
         Equip(rightClub, rightHolster);
         Equip(leftClub, leftHolster);
+        character.OverrideArm("Both");
         Deploy(rightBlade, 0f, foldAngle, 80f);
         Deploy(leftBlade, 0f, -foldAngle, -80f);
     }

@@ -85,45 +85,49 @@ public class Megaligator : BeastWarrior
     public override void OnMeleeWeak(CallbackContext context)
     {
         weapon = 1;
-        animator.SetLayerWeight(1, 0f);
+        animator.enabled = false;
         animator.SetInteger("Weapon", weapon);
-        Equip(gun, holster);
-        Equip(tail, holster);
         tail.SetActive(false);
         gun.SetActive(true);
+        Equip(gun, holster);
+        Equip(tail, holster);
+        character.OverrideArm("None");
     }
 
     public override void OnMeleeStrong(CallbackContext context)
     {
         weapon = 2;
-        animator.SetLayerWeight(1, 0f);
+        animator.enabled = false;
         animator.SetInteger("Weapon", weapon);
-        Equip(gun, holster);
-        Equip(tail, hold);
         tail.SetActive(true);
         gun.SetActive(false);
+        Equip(gun, holster);
+        Equip(tail, hold);
+        character.OverrideArm("None");
     }
 
     public override void OnRangedWeak(CallbackContext context)
     {
         weapon = 3;
-        animator.SetLayerWeight(1, 1f);
+        animator.enabled = true;
         animator.SetInteger("Weapon", weapon);
-        Equip(gun, holster);
-        Equip(tail, holster);
         tail.SetActive(false);
         gun.SetActive(true);
+        Equip(gun, holster);
+        Equip(tail, holster);
+        character.OverrideArm("Both");
     }
 
     public override void OnRangedStrong(CallbackContext context)
     {
         weapon = 4;
-        animator.SetLayerWeight(1, 1f);
+        animator.enabled = true;
         animator.SetInteger("Weapon", weapon);
-        Equip(gun, hold);
-        Equip(tail, holster);
         tail.SetActive(false);
         gun.SetActive(true);
+        Equip(gun, hold);
+        Equip(tail, holster);
+        character.OverrideArm("Right");
     }
 
     public override void OnAttack(CallbackContext context)

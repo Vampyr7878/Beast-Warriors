@@ -44,6 +44,10 @@ public class Character : MonoBehaviour
 
     bool isJumping;
 
+    bool overrideRightArm;
+
+    bool overrideLeftArm;
+
     void Awake()
     {
         foreach(var bone in skeleton)
@@ -137,13 +141,13 @@ public class Character : MonoBehaviour
             body.linearVelocity = movement;
         }
         if (body.linearVelocity.y < 0)
-        {   
+        {
             body.AddForce(Physics.gravity * 4, ForceMode.Acceleration);
         }
         else
         {
             body.AddForce(Physics.gravity, ForceMode.Acceleration);
-        }    
+        }
         transform.Rotate(0f, look.x, 0f);
         Vector3 rotation = characterCamera.transform.rotation.eulerAngles;
         float angle = Mathf.Clamp(rotation.x - look.y, cameraAngle - cameraRange, cameraAngle + cameraRange);
@@ -151,20 +155,26 @@ public class Character : MonoBehaviour
         skeleton[(int)BodyPart.Part.Body].localPosition = new Vector3(-robot[(int)BodyPart.Part.Body].localPosition.x * 350,
             robot[(int)BodyPart.Part.Body].localPosition.y * 400, robot[(int)BodyPart.Part.Body].localPosition.z * 300);
         skeleton[(int)BodyPart.Part.Head].eulerAngles = new Vector3(angle - cameraAngle, skeleton[2].eulerAngles.y, skeleton[2].eulerAngles.z);
-        skeleton[(int)BodyPart.Part.RightShoulder].localRotation = robot[(int)BodyPart.Part.RightShoulder].localRotation;
-        skeleton[(int)BodyPart.Part.RightElbow].localRotation = robot[(int)BodyPart.Part.RightElbow].localRotation;
-        skeleton[(int)BodyPart.Part.RightHand].localRotation = robot[(int)BodyPart.Part.RightHand].localRotation;
-        skeleton[(int)BodyPart.Part.LeftShoulder].localRotation = robot[(int)BodyPart.Part.LeftShoulder].localRotation;
-        skeleton[(int)BodyPart.Part.LeftElbow].localRotation = robot[(int)BodyPart.Part.LeftElbow].localRotation;
-        skeleton[(int)BodyPart.Part.LeftHand].localRotation = robot[(int)BodyPart.Part.LeftHand].localRotation;
         skeleton[(int)BodyPart.Part.RightHip].localRotation = robot[(int)BodyPart.Part.RightHip].localRotation;
         skeleton[(int)BodyPart.Part.RightKnee].localRotation = robot[(int)BodyPart.Part.RightKnee].localRotation;
         skeleton[(int)BodyPart.Part.RightFoot].localRotation = robot[(int)BodyPart.Part.RightFoot].localRotation;
         skeleton[(int)BodyPart.Part.LeftHip].localRotation = robot[(int)BodyPart.Part.LeftHip].localRotation;
         skeleton[(int)BodyPart.Part.LeftKnee].localRotation = robot[(int)BodyPart.Part.LeftKnee].localRotation;
         skeleton[(int)BodyPart.Part.LeftFoot].localRotation = robot[(int)BodyPart.Part.LeftFoot].localRotation;
-        skeleton[(int)BodyPart.Part.RightClaw].localRotation = robot[(int)BodyPart.Part.RightElbow].localRotation;
-        skeleton[(int)BodyPart.Part.LeftClaw].localRotation = robot[(int)BodyPart.Part.LeftElbow].localRotation;
+        if (!overrideRightArm)
+        {
+            skeleton[(int)BodyPart.Part.RightShoulder].localRotation = robot[(int)BodyPart.Part.RightShoulder].localRotation;
+            skeleton[(int)BodyPart.Part.RightElbow].localRotation = robot[(int)BodyPart.Part.RightElbow].localRotation;
+            skeleton[(int)BodyPart.Part.RightHand].localRotation = robot[(int)BodyPart.Part.RightHand].localRotation;
+            skeleton[(int)BodyPart.Part.RightClaw].localRotation = robot[(int)BodyPart.Part.RightElbow].localRotation;
+        }
+        if (!overrideLeftArm)
+        {
+            skeleton[(int)BodyPart.Part.LeftShoulder].localRotation = robot[(int)BodyPart.Part.LeftShoulder].localRotation;
+            skeleton[(int)BodyPart.Part.LeftElbow].localRotation = robot[(int)BodyPart.Part.LeftElbow].localRotation;
+            skeleton[(int)BodyPart.Part.LeftHand].localRotation = robot[(int)BodyPart.Part.LeftHand].localRotation;
+            skeleton[(int)BodyPart.Part.LeftClaw].localRotation = robot[(int)BodyPart.Part.LeftElbow].localRotation;
+        }
         MoveParts();
     }
 
@@ -207,6 +217,30 @@ public class Character : MonoBehaviour
         }
     }
 
+    public void OverrideArm(string arm)
+    {
+        switch (arm)
+        {
+            case "Right":
+                overrideRightArm = true;
+                overrideLeftArm = false;
+                break;
+            case "Left":
+                overrideRightArm = false;
+                overrideLeftArm = true;
+                break;
+            case "Both":
+                overrideRightArm = true;
+                overrideLeftArm = true;
+                break;
+            case "None":
+            default:
+                overrideRightArm = false;
+                overrideLeftArm = false;
+                break;
+        }
+    }
+
     public void OnMove(CallbackContext context)
     {
         isMoving = !context.canceled;
@@ -230,7 +264,10 @@ public class Character : MonoBehaviour
 
     public void OnExit(CallbackContext context)
     {
-        SceneManager.LoadScene("CharacterSelect");
+        if (context.performed)
+        {
+            SceneManager.LoadScene("CharacterSelect");
+        }
     }
 
     void OnCollisionEnter(Collision collision)

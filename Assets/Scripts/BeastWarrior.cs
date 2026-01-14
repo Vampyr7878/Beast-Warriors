@@ -4,6 +4,8 @@ using static UnityEngine.ParticleSystem;
 
 public abstract class BeastWarrior : MonoBehaviour
 {
+    protected Character character;
+
     protected Camera characterCamera;
 
     protected Transform cameraAimHelper;
@@ -32,9 +34,11 @@ public abstract class BeastWarrior : MonoBehaviour
 
     protected void Start()
     {
-        animator = transform.parent.GetComponentInChildren<Animator>();
+        character = transform.parent.gameObject.GetComponent<Character>();
         characterCamera = transform.parent.GetComponent<Character>().characterCamera;
         cameraAimHelper = characterCamera.GetComponentsInChildren<Transform>()[1];
+        animator = transform.parent.GetComponentInChildren<Animator>();
+        animator.enabled = false;
     }
 
     protected void FixedUpdate()

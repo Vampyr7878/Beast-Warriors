@@ -76,32 +76,36 @@ public class Quickstrike : BeastWarrior
     public override void OnMeleeWeak(CallbackContext context)
     {
         weapon = 1;
-        animator.SetLayerWeight(1, 0f);
+        animator.enabled = false;
         animator.SetInteger("Weapon", weapon);
+        character.OverrideArm("None");
         Deploy(cobraHead, 0f, foldAngle, 90f);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
     {
         weapon = 2;
-        animator.SetLayerWeight(1, 0f);
+        animator.enabled = false;
         animator.SetInteger("Weapon", weapon);
+        character.OverrideArm("None");
         Deploy(cobraHead, 0f, foldAngle, 90f);
     }
 
     public override void OnRangedWeak(CallbackContext context)
     {
         weapon = 3;
-        animator.SetLayerWeight(1, 0f);
+        animator.enabled = false;
         animator.SetInteger("Weapon", weapon);
+        character.OverrideArm("None");
         Deploy(cobraHead, 0f, foldAngle, 90f);
     }
 
     public override void OnRangedStrong(CallbackContext context)
     {
         weapon = 4;
-        animator.SetLayerWeight(1, 1f);
+        animator.enabled = true;
         animator.SetInteger("Weapon", weapon);
+        character.OverrideArm("Right");
         Deploy(cobraHead, 0f, deployAngle, 90f);
     }
 

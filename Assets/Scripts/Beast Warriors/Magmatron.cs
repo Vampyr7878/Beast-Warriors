@@ -42,6 +42,7 @@ public class Magmatron : BeastWarrior
 
     void ShootBolt()
     {
+        animator.SetTrigger("Shoot");
         Vector3 direction = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
         Gradient g = new();
         GradientColorKey[] colors = new GradientColorKey[2];
@@ -61,6 +62,7 @@ public class Magmatron : BeastWarrior
 
     void ShootMissle()
     {
+        animator.SetTrigger("Shoot");
         Vector3 direction = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
         MeshProjectile(explosion, missle, direction, heavyBarrels[barrel], missleMaterial);
         barrel = barrel == (heavyBarrels.Length - 1) ? 0 : barrel + 1;
@@ -70,33 +72,37 @@ public class Magmatron : BeastWarrior
     public override void OnMeleeWeak(CallbackContext context)
     {
         weapon = 1;
-        animator.SetLayerWeight(1, 0f);
+        animator.enabled = false;
         animator.SetInteger("Weapon", weapon);
         Equip(sword, holster);
+        character.OverrideArm("None");
     }
 
     public override void OnMeleeStrong(CallbackContext context)
     {
         weapon = 2;
-        animator.SetLayerWeight(1, 0f);
+        animator.enabled = false;
         animator.SetInteger("Weapon", weapon);
         Equip(sword, hold);
+        character.OverrideArm("None");
     }
 
     public override void OnRangedWeak(CallbackContext context)
     {
         weapon = 3;
-        animator.SetLayerWeight(1, 1f);
+        animator.enabled = true;
         animator.SetInteger("Weapon", weapon);
         Equip(sword, hold);
+        character.OverrideArm("Right");
     }
 
     public override void OnRangedStrong(CallbackContext context)
     {
         weapon = 4;
-        animator.SetLayerWeight(1, 1f);
+        animator.enabled = true;
         animator.SetInteger("Weapon", weapon);
         Equip(sword, holster);
+        character.OverrideArm("Left");
         barrel = 0;
     }
 

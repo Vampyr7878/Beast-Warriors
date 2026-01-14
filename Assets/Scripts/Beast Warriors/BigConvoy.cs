@@ -86,9 +86,10 @@ public class BigConvoy : BeastWarrior
     public override void OnMeleeWeak(CallbackContext context)
     {
         weapon = 1;
-        animator.SetLayerWeight(1, 0f);
+        animator.enabled = false;
         animator.SetInteger("Weapon", weapon);
         Equip(cannon, holster);
+        character.OverrideArm("None");
         Deploy(rightBaton, 0, 90, foldAngle);
         Deploy(leftBaton, 0, -90, -foldAngle);
     }
@@ -96,9 +97,10 @@ public class BigConvoy : BeastWarrior
     public override void OnMeleeStrong(CallbackContext context)
     {
         weapon = 2;
-        animator.SetLayerWeight(1, 0f);
+        animator.enabled = false;
         animator.SetInteger("Weapon", weapon);
         Equip(cannon, holster);
+        character.OverrideArm("None");
         Deploy(rightBaton, 0, 90, -deployAngle);
         Deploy(leftBaton, 0, -90, deployAngle);
     }
@@ -106,9 +108,10 @@ public class BigConvoy : BeastWarrior
     public override void OnRangedWeak(CallbackContext context)
     {
         weapon = 3;
-        animator.SetLayerWeight(1, 0f);
+        animator.enabled = false;
         animator.SetInteger("Weapon", weapon);
         Equip(cannon, holster);
+        character.OverrideArm("None");
         Deploy(rightBaton, 0, 90, foldAngle);
         Deploy(leftBaton, 0, -90, -foldAngle);
         barrel = 0;
@@ -117,9 +120,10 @@ public class BigConvoy : BeastWarrior
     public override void OnRangedStrong(CallbackContext context)
     {
         weapon = 4;
-        animator.SetLayerWeight(1, 1f);
+        animator.enabled = true;
         animator.SetInteger("Weapon", weapon);
         Equip(cannon, hold);
+        character.OverrideArm("Right");
         Deploy(rightBaton, 0, 90, foldAngle);
         Deploy(leftBaton, 0, -90, -foldAngle);
     }

@@ -101,40 +101,44 @@ public class Cicadacon : BeastWarrior
     public override void OnMeleeWeak(CallbackContext context)
     {
         weapon = 1;
-        animator.SetLayerWeight(1, 0f);
+        animator.enabled = false;
         animator.SetInteger("Weapon", weapon);
         Equip(rightSword, rightHolster);
         Equip(leftSword, leftHolster);
+        character.OverrideArm("None");
         Deploy(cannon, foldAngle, 0f, 0f);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
     {
         weapon = 2;
-        animator.SetLayerWeight(1, 0f);
+        animator.enabled = false;
         animator.SetInteger("Weapon", weapon);
         Equip(rightSword, rightHold);
         Equip(leftSword, leftHold);
+        character.OverrideArm("None");
         Deploy(cannon, foldAngle, 0f, 0f);
     }
 
     public override void OnRangedWeak(CallbackContext context)
     {
         weapon = 3;
-        animator.SetLayerWeight(1, 1f);
+        animator.enabled = true;
         animator.SetInteger("Weapon", weapon);
         Equip(rightSword, rightHolster);
         Equip(leftSword, leftHolster);
+        character.OverrideArm("Both");
         Deploy(cannon, foldAngle, 0f, 0f);
     }
 
     public override void OnRangedStrong(CallbackContext context)
     {
         weapon = 4;
-        animator.SetLayerWeight(1, 0f);
+        animator.enabled = false;
         animator.SetInteger("Weapon", weapon);
         Equip(rightSword, rightHolster);
         Equip(leftSword, leftHolster);
+        character.OverrideArm("None");
         Deploy(cannon, deployAngle, 0f, 0f);
     }
 

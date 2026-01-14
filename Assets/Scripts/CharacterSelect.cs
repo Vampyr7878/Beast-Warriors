@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Data;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Animations;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.HID;
 using UnityEngine.SceneManagement;
+using static UnityEngine.InputSystem.InputAction;
 
 public class CharacterSelect : MonoBehaviour
 {
@@ -15,7 +18,7 @@ public class CharacterSelect : MonoBehaviour
     GameObject[] instances;
 
     SqliteConnection connection;
-    
+
     string dbPath;
 
     List<string> characterNames;
@@ -30,9 +33,12 @@ public class CharacterSelect : MonoBehaviour
 
     int pages;
 
+    int selected;
+
     void Awake()
     {
         page = 0;
+        selected = 0;
         dbPath = $"URI=file:{Application.streamingAssetsPath}/database.sqlite";
         connection = new SqliteConnection(dbPath);
         characterNames = new List<string>();
@@ -128,6 +134,21 @@ public class CharacterSelect : MonoBehaviour
         }
     }
 
+    void UpdateSelection()
+    {
+        for (int i = 0; i < choices.Length; i++)
+        {
+            if (i == selected)
+            {
+                choices[i].GetComponent<Choice>().EnableOutline(true);
+            }
+            else
+            {
+                choices[i].GetComponent<Choice>().EnableOutline(false);
+            }
+        }
+    }
+
     public void PreviousButton()
     {
         int value = page == 0 ? page = 0 : page - 1;
@@ -135,6 +156,8 @@ public class CharacterSelect : MonoBehaviour
         {
             page = value;
             LoadCharacters();
+            selected = 2;
+            UpdateSelection();
         }
     }
 
@@ -145,6 +168,8 @@ public class CharacterSelect : MonoBehaviour
         {
             page = value;
             LoadCharacters();
+            selected = 0;
+            UpdateSelection();
         }
     }
 
@@ -155,5 +180,59 @@ public class CharacterSelect : MonoBehaviour
 #else
         Application.Quit();
 #endif
+    }
+
+    public void OnExit(CallbackContext context)
+    {
+        if (context.performed)
+        {
+            ExitButton();
+        }
+    }
+
+    public void OnPrevious(CallbackContext context)
+    {
+        if (context.performed)
+        {
+            PreviousButton();
+        }
+    }
+
+    public void OnNext(CallbackContext context)
+    {
+        if (context.performed)
+        {
+            NextButton();
+        }
+    }
+
+    public void OnMove(CallbackContext context)
+    {
+        if (context.performed)
+        {
+            float value = context.ReadValue<float>();
+            if (value < 0f)
+            {
+                selected = selected == 0 ? 0 : selected - 1;
+            }
+            else if (value > 0f)
+            {
+                if (choices[2].activeSelf)
+                {
+                    selected = selected == 2 ? 2 : selected + 1;
+                }
+                else if (choices[1].activeSelf)
+                {
+                    selected = selected == 1 ? 1 : selected + 1;
+                }
+            }
+            UpdateSelection();
+        }
+    }
+
+    public void OnSelect(CallbackContext context)
+    {
+        PlayerPrefs.SetString("Character", choices[selected].GetComponent<Choice>().character);
+        SceneManager.LoadScene("SampleScene");
     }
 }

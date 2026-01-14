@@ -105,11 +105,12 @@ public class Galvatron : BeastWarrior
     public override void OnMeleeWeak(CallbackContext context)
     {
         weapon = 1;
-        animator.SetLayerWeight(1, 0f);
+        animator.enabled = false;
         animator.SetInteger("Weapon", weapon);
         Equip(rightAxe, rightHold);
         Equip(leftAxe, leftHold);
         Equip(claw, clawHolster);
+        character.OverrideArm("None");
         Deploy(rightBlaster, 0f, foldAngle, 90f);
         Deploy(leftBlaster, 0f, -foldAngle, -90f);
     }
@@ -117,11 +118,12 @@ public class Galvatron : BeastWarrior
     public override void OnMeleeStrong(CallbackContext context)
     {
         weapon = 2;
-        animator.SetLayerWeight(1, 0f);
+        animator.enabled = false;
         animator.SetInteger("Weapon", weapon);
         Equip(rightAxe, rightHolster);
         Equip(leftAxe, leftHolster);
         Equip(claw, rightHold);
+        character.OverrideArm("None");
         Deploy(rightBlaster, 0f, foldAngle, 90f);
         Deploy(leftBlaster, 0f, -foldAngle, -90f);
     }
@@ -129,11 +131,12 @@ public class Galvatron : BeastWarrior
     public override void OnRangedWeak(CallbackContext context)
     {
         weapon = 3;
-        animator.SetLayerWeight(1, 1f);
+        animator.enabled = true;
         animator.SetInteger("Weapon", weapon);
         Equip(rightAxe, rightHold);
         Equip(leftAxe, leftHold);
         Equip(claw, clawHolster);
+        character.OverrideArm("Both");
         Deploy(rightBlaster, 0f, deployAngle, 90f);
         Deploy(leftBlaster, 0f, -deployAngle, -90f);
     }
@@ -141,11 +144,12 @@ public class Galvatron : BeastWarrior
     public override void OnRangedStrong(CallbackContext context)
     {
         weapon = 4;
-        animator.SetLayerWeight(1, 1f);
+        animator.enabled = true;
         animator.SetInteger("Weapon", weapon);
         Equip(rightAxe, rightHolster);
         Equip(leftAxe, leftHolster);
         Equip(claw, rightHold);
+        character.OverrideArm("Right");
         Deploy(rightBlaster, 0f, foldAngle, 90f);
         Deploy(leftBlaster, 0f, -foldAngle, -90f);
     }

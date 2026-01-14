@@ -80,41 +80,45 @@ public class Thrustor : BeastWarrior
     public override void OnMeleeWeak(CallbackContext context)
     {
         weapon = 1;
-        animator.SetLayerWeight(1, 0f);
+        animator.enabled = false;
         animator.SetInteger("Weapon", weapon);
         Equip(sword, rightHold);
         Equip(missle, missleHolster);
         Equip(slash, slashHolster);
+        character.OverrideArm("None");
     }
 
     public override void OnMeleeStrong(CallbackContext context)
     {
         weapon = 2;
-        animator.SetLayerWeight(1, 0f);
+        animator.enabled = false;
         animator.SetInteger("Weapon", weapon);
         Equip(sword, swordHolster);
         Equip(missle, rightHold);
         Equip(slash, leftHold);
+        character.OverrideArm("None");
     }
 
     public override void OnRangedWeak(CallbackContext context)
     {
         weapon = 3;
-        animator.SetLayerWeight(1, 1f);
+        animator.enabled = true;
         animator.SetInteger("Weapon", weapon);
         Equip(sword, swordHolster);
         Equip(missle, slashHolster);
         Equip(slash, leftHold);
+        character.OverrideArm("Left");
     }
 
     public override void OnRangedStrong(CallbackContext context)
     {
         weapon = 4;
-        animator.SetLayerWeight(1, 0f);
+        animator.enabled = false;
         animator.SetInteger("Weapon", weapon);
         Equip(sword, swordHolster);
         Equip(missle, missleHolster);
         Equip(slash, slashHolster);
+        character.OverrideArm("None");
     }
 
     public override void OnAttack(CallbackContext context)

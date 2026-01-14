@@ -63,36 +63,40 @@ public class Hellscream : BeastWarrior
     public override void OnMeleeWeak(CallbackContext context)
     {
         weapon = 1;
-        animator.SetLayerWeight(1, 0f);
+        animator.enabled = false;
         animator.SetInteger("Weapon", weapon);
         Equip(head, hold);
+        character.OverrideArm("None");
         Deploy(chestCannon, foldAngle, 0f, 0f);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
     {
         weapon = 2;
-        animator.SetLayerWeight(1, 0f);
+        animator.enabled = false;
         animator.SetInteger("Weapon", weapon);
         Equip(head, holster);
+        character.OverrideArm("None");
         Deploy(chestCannon, foldAngle, 0f, 0f);
     }
 
     public override void OnRangedWeak(CallbackContext context)
     {
         weapon = 3;
-        animator.SetLayerWeight(1, 0f);
+        animator.enabled = false;
         animator.SetInteger("Weapon", weapon);
         Equip(head, hold);
+        character.OverrideArm("None");
         Deploy(chestCannon, deployAngle, 0f, 0f);
     }
 
     public override void OnRangedStrong(CallbackContext context)
     {
         weapon = 4;
-        animator.SetLayerWeight(1, 1f);
+        animator.enabled = true;
         animator.SetInteger("Weapon", weapon);
         Equip(head, holster);
+        character.OverrideArm("Left");
         Deploy(chestCannon, foldAngle, 0f, 0f);
     }
 

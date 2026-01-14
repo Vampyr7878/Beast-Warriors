@@ -98,10 +98,11 @@ public class LioConvoy : BeastWarrior
     public override void OnMeleeWeak(CallbackContext context)
     {
         weapon = 1;
-        animator.SetLayerWeight(1, 0f);
+        animator.enabled = false;
         animator.SetInteger("Weapon", weapon);
         Equip(rightBlaster, rightHolster);
         Equip(leftBlaster, leftHolster);
+        character.OverrideArm("None");
         Deploy(rightClaw, 0f, foldAngle, 90f);
         Deploy(leftClaw, 0f, -foldAngle, -90f);
     }
@@ -109,10 +110,11 @@ public class LioConvoy : BeastWarrior
     public override void OnMeleeStrong(CallbackContext context)
     {
         weapon = 2;
-        animator.SetLayerWeight(1, 0f);
+        animator.enabled = false;
         animator.SetInteger("Weapon", weapon);
         Equip(rightBlaster, rightHolster);
         Equip(leftBlaster, leftHolster);
+        character.OverrideArm("None");
         Deploy(rightClaw, 0f, deployAngle, 90f);
         Deploy(leftClaw, 0f, -deployAngle, -90f);
     }
@@ -120,10 +122,11 @@ public class LioConvoy : BeastWarrior
     public override void OnRangedWeak(CallbackContext context)
     {
         weapon = 3;
-        animator.SetLayerWeight(1, 1f);
+        animator.enabled = true;
         animator.SetInteger("Weapon", weapon);
         Equip(rightBlaster, rightHolster);
         Equip(leftBlaster, leftHolster);
+        character.OverrideArm("Both");
         Deploy(rightClaw, 0f, foldAngle, 90f);
         Deploy(leftClaw, 0f, -foldAngle, -90f);
     }
@@ -131,10 +134,11 @@ public class LioConvoy : BeastWarrior
     public override void OnRangedStrong(CallbackContext context)
     {
         weapon = 4;
-        animator.SetLayerWeight(1, 1f);
+        animator.enabled = true;
         animator.SetInteger("Weapon", weapon);
         Equip(rightBlaster, rightHold);
         Equip(leftBlaster, leftHold);
+        character.OverrideArm("Both");
         Deploy(rightClaw, 0f, foldAngle, 90f);
         Deploy(leftClaw, 0f, -foldAngle, -90f);
     }

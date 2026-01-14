@@ -93,11 +93,12 @@ public class OptimusPrimal : BeastWarrior
     public override void OnMeleeWeak(CallbackContext context)
     {
         weapon = 1;
-        animator.SetLayerWeight(1, 0f);
+        animator.enabled = false;
         animator.SetInteger("Weapon", weapon);
         Equip(flail, rightHold);
         Equip(rightSword, rightHolster);
         Equip(leftSword, leftHolster);
+        character.OverrideArm("None");
         Deploy(rightCannon, foldAngle, 0f, 0f);
         Deploy(leftCannon, foldAngle, 0f, 0f);
     }
@@ -105,11 +106,12 @@ public class OptimusPrimal : BeastWarrior
     public override void OnMeleeStrong(CallbackContext context)
     {
         weapon = 2;
-        animator.SetLayerWeight(1, 0f);
+        animator.enabled = false;
         animator.SetInteger("Weapon", weapon);
         Equip(flail, flailHolster);
         Equip(rightSword, rightHold);
         Equip(leftSword, leftHold);
+        character.OverrideArm("None");
         Deploy(rightCannon, foldAngle, 0f, 0f);
         Deploy(leftCannon, foldAngle, 0f, 0f);
     }
@@ -117,11 +119,12 @@ public class OptimusPrimal : BeastWarrior
     public override void OnRangedWeak(CallbackContext context)
     {
         weapon = 3;
-        animator.SetLayerWeight(1, 1f);
+        animator.enabled = true;
         animator.SetInteger("Weapon", weapon);
         Equip(flail, flailHolster);
         Equip(rightSword, rightHolster);
         Equip(leftSword, leftHolster);
+        character.OverrideArm("Left");
         Deploy(rightCannon, foldAngle, 0f, 0f);
         Deploy(leftCannon, foldAngle, 0f, 0f);
     }
@@ -129,11 +132,12 @@ public class OptimusPrimal : BeastWarrior
     public override void OnRangedStrong(CallbackContext context)
     {
         weapon = 4;
-        animator.SetLayerWeight(1, 0f);
+        animator.enabled = false;
         animator.SetInteger("Weapon", weapon);
         Equip(flail, flailHolster);
         Equip(rightSword, rightHolster);
         Equip(leftSword, leftHolster);
+        character.OverrideArm("None");
         Deploy(rightCannon, deployAngle, 0f, 0f);
         Deploy(leftCannon, deployAngle, 0f, 0f);
         barrel = 0;

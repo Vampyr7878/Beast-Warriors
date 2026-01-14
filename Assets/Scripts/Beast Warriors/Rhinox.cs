@@ -100,10 +100,11 @@ public class Rhinox : BeastWarrior
     public override void OnMeleeWeak(CallbackContext context)
     {
         weapon = 1;
-        animator.SetLayerWeight(1, 0f);
+        animator.enabled = false;
         animator.SetInteger("Weapon", weapon);
         Equip(sword, swordHolster);
         Equip(gun, gunHolster);
+        character.OverrideArm("None");
         Deploy(rightBlaster, 0f, foldAngle, 0f);
         Deploy(leftBlaster, 0f, foldAngle, 0f);
     }
@@ -111,10 +112,11 @@ public class Rhinox : BeastWarrior
     public override void OnMeleeStrong(CallbackContext context)
     {
         weapon = 2;
-        animator.SetLayerWeight(1, 0f);
+        animator.enabled = false;
         animator.SetInteger("Weapon", weapon);
         Equip(sword, hold);
         Equip(gun, gunHolster);
+        character.OverrideArm("None");
         Deploy(rightBlaster, 0f, foldAngle, 0f);
         Deploy(leftBlaster, 0f, foldAngle, 0f);
     }
@@ -122,10 +124,11 @@ public class Rhinox : BeastWarrior
     public override void OnRangedWeak(CallbackContext context)
     {
         weapon = 3;
-        animator.SetLayerWeight(1, 1f);
+        animator.enabled = true;
         animator.SetInteger("Weapon", weapon);
         Equip(sword, swordHolster);
         Equip(gun, gunHolster);
+        character.OverrideArm("Both");
         Deploy(rightBlaster, 0f, deployAngle, 0f);
         Deploy(leftBlaster, 0f, deployAngle, 0f);
     }
@@ -133,10 +136,11 @@ public class Rhinox : BeastWarrior
     public override void OnRangedStrong(CallbackContext context)
     {
         weapon = 4;
-        animator.SetLayerWeight(1, 1f);
+        animator.enabled = true;
         animator.SetInteger("Weapon", weapon);
         Equip(sword, swordHolster);
         Equip(gun, hold);
+        character.OverrideArm("Right");
         Deploy(rightBlaster, 0f, foldAngle, 0f);
         Deploy(leftBlaster, 0f, foldAngle, 0f);
     }

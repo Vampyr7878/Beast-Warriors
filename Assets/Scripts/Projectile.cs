@@ -22,7 +22,7 @@ public class Projectile : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.name != "Character" && !other.isTrigger)
+        if (body != null && other.gameObject.name != "Character" && !other.isTrigger)
         {
             body.linearVelocity = Vector3.zero;
             GameObject f = Instantiate(flash);
