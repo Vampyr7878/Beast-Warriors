@@ -27,8 +27,6 @@ public class Quickstrike : BeastWarrior
 
     private float time;
 
-    private int barrel;
-
     new void Awake()
     {
         foldAngle = 90;
@@ -43,42 +41,24 @@ public class Quickstrike : BeastWarrior
         {
             if (time >= fireRate)
             {
-                ShootMachineGun();
+                ShootMachineGun(WeaponArm.None, bullet, lightBarrels, bulletInaccuracy);
                 time = 0;
             }
             time += Time.deltaTime;
         }
         if (heavyShoot)
         {
-            ShootLaser();
+            heavyShoot = ShootLaser(WeaponArm.Right, laser, heavyBarrel, laserColor, laserInaccuracy);
         }
-    }
-
-    void ShootMachineGun()
-    {
-        int layerMask = 1 << 3;
-        layerMask = ~layerMask;
-        Vector3 direction = new(Random.Range(-bulletInaccuracy, bulletInaccuracy), Random.Range(-bulletInaccuracy, bulletInaccuracy), 1);
-        RaycastBullet(bullet, direction, layerMask, lightBarrels[barrel]);
-        barrel = barrel == (lightBarrels.Length - 1) ? 0 : barrel + 1;
-    }
-
-    void ShootLaser()
-    {
-        int layerMask = 1 << 3;
-        layerMask = ~layerMask;
-        animator.SetTrigger("Shoot");
-        Vector3 direction = new(Random.Range(-laserInaccuracy, laserInaccuracy), Random.Range(-laserInaccuracy, laserInaccuracy), 1);
-        RaycastLaser(laser, direction, layerMask, heavyBarrel, laserColor);
-        heavyShoot = false;
     }
 
     public override void OnMeleeWeak(CallbackContext context)
     {
         weapon = 1;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
         Deploy(cobraHead, 0f, foldAngle, 90f);
     }
 
@@ -86,8 +66,9 @@ public class Quickstrike : BeastWarrior
     {
         weapon = 2;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
         Deploy(cobraHead, 0f, foldAngle, 90f);
     }
 
@@ -95,8 +76,9 @@ public class Quickstrike : BeastWarrior
     {
         weapon = 3;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
         Deploy(cobraHead, 0f, foldAngle, 90f);
     }
 
@@ -104,8 +86,9 @@ public class Quickstrike : BeastWarrior
     {
         weapon = 4;
         animator.enabled = true;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.Diagonal);
         animator.SetInteger("Weapon", weapon);
-        character.OverrideArm("Right");
+        character.OverrideArm(WeaponArm.Right);
         Deploy(cobraHead, 0f, deployAngle, 90f);
     }
 

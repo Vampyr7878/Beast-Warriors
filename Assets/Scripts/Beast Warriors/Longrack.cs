@@ -19,7 +19,7 @@ public class Longrack : BeastWarrior
 
     public LineRenderer laser;
 
-    public GameObject explosion;
+    public GameObject blast;
 
     public GameObject missle;
 
@@ -33,8 +33,6 @@ public class Longrack : BeastWarrior
 
     private float deployAngle;
 
-    private int barrel;
-
     new void Awake()
     {
         foldAngle = 0;
@@ -47,39 +45,22 @@ public class Longrack : BeastWarrior
         base.FixedUpdate();
         if (lightShoot)
         {
-            ShootLaser();
+            lightShoot = ShootLaser(WeaponArm.Left, laser, lightBarrel, laserColor, laserInaccuracy);
         }
         if (heavyShoot)
         {
-            ShootMissle();
+            heavyShoot = ShootBolt(WeaponArm.None, blast, missle, heavyBarrels, missleMaterial, Color.clear);
         }
-    }
-
-    void ShootLaser()
-    {
-        int layerMask = 1 << 3;
-        layerMask = ~layerMask;
-        animator.SetTrigger("Shoot");
-        Vector3 direction = new(Random.Range(-laserInaccuracy, laserInaccuracy), Random.Range(-laserInaccuracy, laserInaccuracy), 1);
-        RaycastLaser(laser, direction, layerMask, lightBarrel, laserColor);
-        lightShoot = false;
-    }
-
-    void ShootMissle()
-    {
-        Vector3 direction = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
-        MeshProjectile(explosion, missle, direction, heavyBarrels[barrel], missleMaterial);
-        barrel = barrel == (heavyBarrels.Length - 1) ? 0 : barrel + 1;
-        heavyShoot = false;
     }
 
     public override void OnMeleeWeak(CallbackContext context)
     {
         weapon = 1;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         Equip(knife, holster);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
         Deploy(rightGun, foldAngle, 180f, 0f);
         Deploy(leftGun, foldAngle, 180f, 0f);
     }
@@ -88,9 +69,10 @@ public class Longrack : BeastWarrior
     {
         weapon = 2;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         Equip(knife, hold);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
         Deploy(rightGun, foldAngle, 180f, 0f);
         Deploy(leftGun, foldAngle, 180f, 0f);
     }
@@ -99,9 +81,10 @@ public class Longrack : BeastWarrior
     {
         weapon = 3;
         animator.enabled = true;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.Bend);
         animator.SetInteger("Weapon", weapon);
         Equip(knife, holster);
-        character.OverrideArm("Left");
+        character.OverrideArm(WeaponArm.Left);
         Deploy(rightGun, foldAngle, 180f, 0f);
         Deploy(leftGun, foldAngle, 180f, 0f);
     }
@@ -110,9 +93,10 @@ public class Longrack : BeastWarrior
     {
         weapon = 4;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         Equip(knife, holster);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
         Deploy(rightGun, deployAngle, 180f, 0f);
         Deploy(leftGun, deployAngle, 180f, 0f);
         barrel = 0;

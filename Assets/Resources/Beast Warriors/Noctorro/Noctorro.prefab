@@ -5092,7 +5092,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6039139322843643914}
-  - component: {fileID: 6039139322843643915}
   - component: {fileID: 9204129604037992475}
   m_Layer: 0
   m_Name: Noctorro
@@ -5117,28 +5116,6 @@ Transform:
   - {fileID: 1183000310233331176}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &6039139322843643915
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6039139322843643956}
-  m_Enabled: 0
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: b9df76fe68227f643807e89fca596d82, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &9204129604037992475
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5160,6 +5137,7 @@ MonoBehaviour:
   bullet: {fileID: 3474837066459004095, guid: 0dea4693c7d850e48b7253a911891254, type: 3}
   flash: {fileID: 6304360778048044942, guid: b4ecd4512de45ef47b17645b22d5ccf4, type: 3}
   bolt: {fileID: 7169620736205658760, guid: 205133862f0e7664f98afb3ed37abacb, type: 3}
+  boltMaterial: {fileID: 2100000, guid: 8f820246ec185114d905d1fe95336d0b, type: 2}
   boltColor: {r: 0.78431374, g: 0.09803922, b: 0.03137255, a: 1}
   fireRate: 0.1
   bulletInaccuracy: 0.1

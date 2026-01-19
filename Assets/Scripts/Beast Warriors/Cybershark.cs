@@ -23,7 +23,7 @@ public class Cybershark : BeastWarrior
 
     public GameObject ball;
 
-    public GameObject explosion;
+    public GameObject blast;
 
     public GameObject missle;
 
@@ -47,49 +47,23 @@ public class Cybershark : BeastWarrior
         base.FixedUpdate();
         if (lightShoot)
         {
-            ShootBall();
+            lightShoot = ShootBall(WeaponArm.Right, flash, ball, lightBarrel, ballColor, ballColor);
         }
         if (heavyShoot)
         {
-            ShootMissle();
+            heavyShoot = ShootBolt(WeaponArm.None, blast, missle, heavyBarrel, missleMaterial, Color.clear);
         }
-    }
-
-    void ShootBall()
-    {
-        animator.SetTrigger("Shoot");
-        Vector3 direction = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
-        Gradient g = new();
-        GradientColorKey[] colors = new GradientColorKey[2];
-        colors[0].color = ballColor;
-        colors[0].time = 0f;
-        colors[1].color = ballColor;
-        colors[1].time = 1f;
-        GradientAlphaKey[] alphas = new GradientAlphaKey[2];
-        alphas[0].alpha = 1f;
-        alphas[0].time = 0f;
-        alphas[1].alpha = 1f;
-        alphas[1].time = 1f;
-        g.SetKeys(colors, alphas);
-        ParticleProjectile(flash, ball, direction, direction, lightBarrel, ballColor, ballColor, g);
-        lightShoot = false;
-    }
-
-    void ShootMissle()
-    {
-        Vector3 direction = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
-        MeshProjectile(explosion, missle, direction, heavyBarrel, missleMaterial);
-        heavyShoot = false;
     }
 
     public override void OnMeleeWeak(CallbackContext context)
     {
         weapon = 1;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         Equip(head, hold);
         Equip(tail, tailHolster);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
         Deploy(chestCannon, foldAngle, 0f, 0f);
     }
 
@@ -97,10 +71,11 @@ public class Cybershark : BeastWarrior
     {
         weapon = 2;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         Equip(head, headHolster);
         Equip(tail, hold);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
         Deploy(chestCannon, foldAngle, 0f, 0f);
     }
 
@@ -108,10 +83,11 @@ public class Cybershark : BeastWarrior
     {
         weapon = 3;
         animator.enabled = true;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.Bend);
         animator.SetInteger("Weapon", weapon);
         Equip(head, headHolster);
         Equip(tail, hold);
-        character.OverrideArm("Right");
+        character.OverrideArm(WeaponArm.Right);
         Deploy(chestCannon, foldAngle, 0f, 0f);
     }
 
@@ -119,10 +95,11 @@ public class Cybershark : BeastWarrior
     {
         weapon = 4;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         Equip(head, hold);
         Equip(tail, tailHolster);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
         Deploy(chestCannon, deployAngle, 0f, 0f);
     }
 

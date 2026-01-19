@@ -15,9 +15,15 @@ public class Hellscream : BeastWarrior
 
     public GameObject heavyBarrel;
 
-    public GameObject explosion;
+    public GameObject blast;
 
     public GameObject missle;
+
+    public GameObject flash;
+
+    public GameObject ball;
+
+    public Color ballColor;
 
     public Material missleMaterial;
 
@@ -37,36 +43,22 @@ public class Hellscream : BeastWarrior
         base.FixedUpdate();
         if (lightShoot)
         {
-            ShootLightMissle();
+            lightShoot = ShootBolt(WeaponArm.None, blast, missle, lightBarrel, missleMaterial, Color.clear);
         }
         if (heavyShoot)
         {
-            ShootHeavyMissle();
+            heavyShoot = ShootBall(WeaponArm.Left, flash, ball, heavyBarrel, ballColor, ballColor);
         }
-    }
-
-    void ShootLightMissle()
-    {
-        Vector3 direction = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
-        MeshProjectile(explosion, missle, direction, lightBarrel, missleMaterial);
-        lightShoot = false;
-    }
-
-    void ShootHeavyMissle()
-    {
-        animator.SetTrigger("Shoot");
-        Vector3 direction = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
-        MeshProjectile(explosion, missle, direction, heavyBarrel, missleMaterial);
-        heavyShoot = false;
     }
 
     public override void OnMeleeWeak(CallbackContext context)
     {
         weapon = 1;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         Equip(head, hold);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
         Deploy(chestCannon, foldAngle, 0f, 0f);
     }
 
@@ -74,9 +66,10 @@ public class Hellscream : BeastWarrior
     {
         weapon = 2;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         Equip(head, holster);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
         Deploy(chestCannon, foldAngle, 0f, 0f);
     }
 
@@ -84,9 +77,10 @@ public class Hellscream : BeastWarrior
     {
         weapon = 3;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         Equip(head, hold);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
         Deploy(chestCannon, deployAngle, 0f, 0f);
     }
 
@@ -94,9 +88,10 @@ public class Hellscream : BeastWarrior
     {
         weapon = 4;
         animator.enabled = true;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.Bend);
         animator.SetInteger("Weapon", weapon);
         Equip(head, holster);
-        character.OverrideArm("Left");
+        character.OverrideArm(WeaponArm.Left);
         Deploy(chestCannon, foldAngle, 0f, 0f);
     }
 

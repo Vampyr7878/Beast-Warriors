@@ -29,8 +29,6 @@ public class PolarClaw : BeastWarrior
 
     private float time;
 
-    private int barrel;
-
     new void Awake()
     {
         foldAngle = 0;
@@ -45,53 +43,24 @@ public class PolarClaw : BeastWarrior
         {
             if (time >= fireRate)
             {
-                ShootMachineGun();
+                ShootMachineGun(WeaponArm.Both, bullet, lightBarrels, bulletInaccuracy);
                 time = 0;
             }
             time += Time.deltaTime;
         }
         if (heavyShoot)
         {
-            ShootBall();
+            heavyShoot = ShootBall(WeaponArm.None, flash, ball, heavyBarrels, flashColor, ballColor);
         }
-    }
-
-    void ShootMachineGun()
-    {
-        int layerMask = 1 << 3;
-        layerMask = ~layerMask;
-        animator.SetTrigger("Shoot");
-        Vector3 direction = new(Random.Range(-bulletInaccuracy, bulletInaccuracy), Random.Range(-bulletInaccuracy, bulletInaccuracy), 1);
-        RaycastBullet(bullet, direction, layerMask, lightBarrels[0]);
-        RaycastBullet(bullet, direction, layerMask, lightBarrels[1]);
-    }
-
-    void ShootBall()
-    {
-        Vector3 direction = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
-        Gradient g = new();
-        GradientColorKey[] colors = new GradientColorKey[2];
-        colors[0].color = flashColor;
-        colors[0].time = 0f;
-        colors[1].color = ballColor;
-        colors[1].time = 1f;
-        GradientAlphaKey[] alphas = new GradientAlphaKey[2];
-        alphas[0].alpha = 1f;
-        alphas[0].time = 0f;
-        alphas[1].alpha = 1f;
-        alphas[1].time = 1f;
-        g.SetKeys(colors, alphas);
-        ParticleProjectile(flash, ball, direction, direction, heavyBarrels[barrel], flashColor, ballColor, g);
-        barrel = barrel == (heavyBarrels.Length - 1) ? 0 : barrel + 1;
-        heavyShoot = false;
     }
 
     public override void OnMeleeWeak(CallbackContext context)
     {
         weapon = 1;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
         Deploy(claw, foldAngle, 0f, 0f);
     }
 
@@ -99,8 +68,9 @@ public class PolarClaw : BeastWarrior
     {
         weapon = 2;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
         Deploy(claw, deployAngle, 0f, 0f);
     }
 
@@ -108,8 +78,9 @@ public class PolarClaw : BeastWarrior
     {
         weapon = 3;
         animator.enabled = true;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.Bend);
         animator.SetInteger("Weapon", weapon);
-        character.OverrideArm("Both");
+        character.OverrideArm(WeaponArm.Both);
         Deploy(claw, foldAngle, 0f, 0f);
     }
 
@@ -117,8 +88,9 @@ public class PolarClaw : BeastWarrior
     {
         weapon = 4;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
         Deploy(claw, foldAngle, 0f, 0f);
         barrel = 0;
     }
@@ -130,6 +102,9 @@ public class PolarClaw : BeastWarrior
             case 3:
                 lightShoot = context.performed;
                 time = fireRate;
+                barrel = 0;
+                right = true;
+                left = false;
                 break;
             case 4:
                 heavyShoot = context.performed;

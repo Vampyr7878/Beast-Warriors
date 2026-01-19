@@ -1,3 +1,4 @@
+using System.Threading;
 using UnityEngine;
 using static UnityEngine.InputSystem.InputAction;
 
@@ -15,9 +16,17 @@ public class Dirgegun : BeastWarrior
 
     public GameObject heavyBarrel;
 
-    public GameObject explosion;
+    public GameObject flash;
+
+    public GameObject bolt;
+
+    public GameObject blast;
 
     public GameObject missle;
+
+    public Material boltMaterial;
+
+    public Color boltColor;
 
     public Material missleMaterial;
 
@@ -37,36 +46,22 @@ public class Dirgegun : BeastWarrior
         base.FixedUpdate();
         if (lightShoot)
         {
-            ShootLightMissle();
+            lightShoot = ShootBolt(WeaponArm.None, flash, bolt, lightBarrel, boltMaterial, boltColor);
         }
         if (heavyShoot)
         {
-            ShootHeavyMissle();
+            heavyShoot = ShootBolt(WeaponArm.Right, blast, missle, heavyBarrel, missleMaterial, Color.clear);
         }
-    }
-
-    void ShootLightMissle()
-    {
-        Vector3 direction = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
-        MeshProjectile(explosion, missle, direction, lightBarrel, missleMaterial);
-        lightShoot = false;
-    }
-
-    void ShootHeavyMissle()
-    {
-        animator.SetTrigger("Shoot");
-        Vector3 direction = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
-        MeshProjectile(explosion, missle, direction, heavyBarrel, missleMaterial);
-        heavyShoot = false;
     }
 
     public override void OnMeleeWeak(CallbackContext context)
     {
         weapon = 1;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         Equip(launcher, holster);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
         Deploy(backLauncher, foldAngle, 0f, -180f);
     }
 
@@ -74,9 +69,10 @@ public class Dirgegun : BeastWarrior
     {
         weapon = 2;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         Equip(launcher, holster);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
         Deploy(backLauncher, foldAngle, 0f, -180f);
     }
 
@@ -84,9 +80,10 @@ public class Dirgegun : BeastWarrior
     {
         weapon = 3;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         Equip(launcher, holster);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
         Deploy(backLauncher, deployAngle, 0f, -180f);
     }
 
@@ -94,9 +91,10 @@ public class Dirgegun : BeastWarrior
     {
         weapon = 4;
         animator.enabled = true;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.Bend);
         animator.SetInteger("Weapon", weapon);
         Equip(launcher, hold);
-        character.OverrideArm("Right");
+        character.OverrideArm(WeaponArm.Right);
         Deploy(backLauncher, foldAngle, 0f, -180f);
     }
 

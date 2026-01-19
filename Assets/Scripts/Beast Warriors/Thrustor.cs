@@ -29,6 +29,8 @@ public class Thrustor : BeastWarrior
 
     public LineRenderer laser;
 
+    public Material boltMaterial;
+
     public Color boltColor;
 
     public Color laserColor;
@@ -40,85 +42,60 @@ public class Thrustor : BeastWarrior
         base.FixedUpdate();
         if (lightShoot)
         {
-            ShootBolt();
+            lightShoot = ShootBolt(WeaponArm.Left, flash, bolt, lightBarrel, boltMaterial, boltColor);
         }
         if (heavyShoot)
         {
-            ShootLaser();
+            heavyShoot = ShootLaser(WeaponArm.None, laser, heavyBarrel, laserColor, laserInaccuracy);
         }
-    }
-
-    void ShootBolt()
-    {
-        animator.SetTrigger("Shoot");
-        Vector3 direction = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
-        Gradient g = new();
-        GradientColorKey[] colors = new GradientColorKey[2];
-        colors[0].color = boltColor;
-        colors[0].time = 0f;
-        colors[1].color = boltColor;
-        colors[1].time = 1f;
-        GradientAlphaKey[] alphas = new GradientAlphaKey[2];
-        alphas[0].alpha = 1f;
-        alphas[0].time = 0f;
-        alphas[1].alpha = 1f;
-        alphas[1].time = 1f;
-        g.SetKeys(colors, alphas);
-        ParticleProjectile(flash, bolt, direction, direction, lightBarrel, boltColor, boltColor, g);
-        lightShoot = false;
-    }
-
-    void ShootLaser()
-    {
-        int layerMask = 1 << 3;
-        layerMask = ~layerMask;
-        Vector3 direction = new(Random.Range(-laserInaccuracy, laserInaccuracy), Random.Range(-laserInaccuracy, laserInaccuracy), 1);
-        RaycastLaser(laser, direction, layerMask, heavyBarrel, laserColor);
-        heavyShoot = false;
     }
 
     public override void OnMeleeWeak(CallbackContext context)
     {
         weapon = 1;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         Equip(sword, rightHold);
         Equip(missle, missleHolster);
         Equip(slash, slashHolster);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
     {
         weapon = 2;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         Equip(sword, swordHolster);
         Equip(missle, rightHold);
         Equip(slash, leftHold);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
     }
 
     public override void OnRangedWeak(CallbackContext context)
     {
         weapon = 3;
         animator.enabled = true;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.Straight);
         animator.SetInteger("Weapon", weapon);
         Equip(sword, swordHolster);
         Equip(missle, slashHolster);
         Equip(slash, leftHold);
-        character.OverrideArm("Left");
+        character.OverrideArm(WeaponArm.Left);
     }
 
     public override void OnRangedStrong(CallbackContext context)
     {
         weapon = 4;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         Equip(sword, swordHolster);
         Equip(missle, missleHolster);
         Equip(slash, slashHolster);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
     }
 
     public override void OnAttack(CallbackContext context)

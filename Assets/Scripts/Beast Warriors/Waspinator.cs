@@ -15,7 +15,7 @@ public class Waspinator : BeastWarrior
 
     public LineRenderer laser;
 
-    public GameObject explosion;
+    public GameObject blast;
 
     public GameObject missle;
 
@@ -30,66 +30,52 @@ public class Waspinator : BeastWarrior
         base.FixedUpdate();
         if (lightShoot)
         {
-            ShootLaser();
+            lightShoot = ShootLaser(WeaponArm.None, laser, lightBarrels, laserColor, laserInaccuracy, 2);
         }
         if (heavyShoot)
         {
-            ShootMissle();
+            heavyShoot = ShootBolt(WeaponArm.Right, blast, missle, heavyBarrel, missleMaterial, Color.clear);
         }
-    }
-
-    void ShootLaser()
-    {
-        int layerMask = 1 << 3;
-        layerMask = ~layerMask;
-        Vector3 direction = new(Random.Range(-laserInaccuracy, laserInaccuracy), Random.Range(-laserInaccuracy, laserInaccuracy), 1);
-        RaycastLaser(laser, direction, layerMask, lightBarrels[0], laserColor);
-        RaycastLaser(laser, direction, layerMask, lightBarrels[1], laserColor);
-        lightShoot = false;
-    }
-
-    void ShootMissle()
-    {
-        animator.SetTrigger("Shoot");
-        Vector3 direction = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
-        MeshProjectile(explosion, missle, direction, heavyBarrel, missleMaterial);
-        heavyShoot = false;
     }
 
     public override void OnMeleeWeak(CallbackContext context)
     {
         weapon = 1;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         Equip(launcher, holster);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
     {
         weapon = 2;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         Equip(launcher, holster);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
     }
 
     public override void OnRangedWeak(CallbackContext context)
     {
         weapon = 3;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         Equip(launcher, holster);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
     }
 
     public override void OnRangedStrong(CallbackContext context)
     {
         weapon = 4;
         animator.enabled = true;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.Bend);
         animator.SetInteger("Weapon", weapon);
         Equip(launcher, hold);
-        character.OverrideArm("Right");
+        character.OverrideArm(WeaponArm.Right);
     }
 
     public override void OnAttack(CallbackContext context)

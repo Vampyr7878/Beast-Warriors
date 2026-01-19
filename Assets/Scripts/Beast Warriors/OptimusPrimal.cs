@@ -29,7 +29,7 @@ public class OptimusPrimal : BeastWarrior
 
     public GameObject bullet;
 
-    public GameObject explosion;
+    public GameObject blast;
 
     public GameObject missle;
 
@@ -45,8 +45,6 @@ public class OptimusPrimal : BeastWarrior
 
     private float time;
 
-    private int barrel;
-
     new void Awake()
     {
         foldAngle = 0;
@@ -61,44 +59,27 @@ public class OptimusPrimal : BeastWarrior
         {
             if (time >= fireRate)
             {
-                ShootMachineGun();
+                ShootMachineGun(WeaponArm.Left, bullet, lightBarrels, bulletInaccuracy);
                 time = 0;
             }
             time += Time.deltaTime;
         }
         if (heavyShoot)
         {
-            ShootMissle();
+            heavyShoot = ShootBolt(WeaponArm.None, blast, missle, heavyBarrels, missleMaterial, Color.clear);
         }
-    }
-
-    void ShootMachineGun()
-    {
-        int layerMask = 1 << 3;
-        layerMask = ~layerMask;
-        animator.SetTrigger("Shoot");
-        Vector3 direction = new(Random.Range(-bulletInaccuracy, bulletInaccuracy), Random.Range(-bulletInaccuracy, bulletInaccuracy), 1);
-        RaycastBullet(bullet, direction, layerMask, lightBarrels[barrel]);
-        barrel = barrel == (lightBarrels.Length - 1) ? 0 : barrel + 1;
-    }
-
-    void ShootMissle()
-    {
-        Vector3 direction = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
-        MeshProjectile(explosion, missle, direction, heavyBarrels[barrel], missleMaterial);
-        barrel = barrel == (heavyBarrels.Length - 1) ? 0 : barrel + 1;
-        heavyShoot = false;
     }
 
     public override void OnMeleeWeak(CallbackContext context)
     {
         weapon = 1;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         Equip(flail, rightHold);
         Equip(rightSword, rightHolster);
         Equip(leftSword, leftHolster);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
         Deploy(rightCannon, foldAngle, 0f, 0f);
         Deploy(leftCannon, foldAngle, 0f, 0f);
     }
@@ -107,11 +88,12 @@ public class OptimusPrimal : BeastWarrior
     {
         weapon = 2;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         Equip(flail, flailHolster);
         Equip(rightSword, rightHold);
         Equip(leftSword, leftHold);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
         Deploy(rightCannon, foldAngle, 0f, 0f);
         Deploy(leftCannon, foldAngle, 0f, 0f);
     }
@@ -120,11 +102,12 @@ public class OptimusPrimal : BeastWarrior
     {
         weapon = 3;
         animator.enabled = true;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.Bend);
         animator.SetInteger("Weapon", weapon);
         Equip(flail, flailHolster);
         Equip(rightSword, rightHolster);
         Equip(leftSword, leftHolster);
-        character.OverrideArm("Left");
+        character.OverrideArm(WeaponArm.Left);
         Deploy(rightCannon, foldAngle, 0f, 0f);
         Deploy(leftCannon, foldAngle, 0f, 0f);
     }
@@ -133,11 +116,12 @@ public class OptimusPrimal : BeastWarrior
     {
         weapon = 4;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         Equip(flail, flailHolster);
         Equip(rightSword, rightHolster);
         Equip(leftSword, leftHolster);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
         Deploy(rightCannon, deployAngle, 0f, 0f);
         Deploy(leftCannon, deployAngle, 0f, 0f);
         barrel = 0;

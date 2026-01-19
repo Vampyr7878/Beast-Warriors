@@ -21,6 +21,8 @@ public class Jetstorm : BeastWarrior
 
     public LineRenderer laser;
 
+    public Material boltMaterial;
+
     public Color boltColor;
 
     public Color laserColor;
@@ -43,49 +45,21 @@ public class Jetstorm : BeastWarrior
         base.FixedUpdate();
         if (lightShoot)
         {
-            ShootBolt();
+            lightShoot = ShootBolt(WeaponArm.None, flash, bolt, lightBarrels, boltMaterial, boltColor);
         }
         if (heavyShoot)
         {
-            ShootLaser();
+            heavyShoot = ShootLaser(WeaponArm.None, laser, heavyBarrel, laserColor, laserInaccuracy);
         }
-    }
-
-    void ShootBolt()
-    {
-        Vector3 direction = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
-        Gradient g = new();
-        GradientColorKey[] colors = new GradientColorKey[2];
-        colors[0].color = boltColor;
-        colors[0].time = 0f;
-        colors[1].color = boltColor;
-        colors[1].time = 1f;
-        GradientAlphaKey[] alphas = new GradientAlphaKey[2];
-        alphas[0].alpha = 1f;
-        alphas[0].time = 0f;
-        alphas[1].alpha = 1f;
-        alphas[1].time = 1f;
-        g.SetKeys(colors, alphas);
-        ParticleProjectile(flash, bolt, direction, direction, lightBarrels[0], boltColor, boltColor, g);
-        ParticleProjectile(flash, bolt, direction, direction, lightBarrels[1], boltColor, boltColor, g);
-        lightShoot = false;
-    }
-
-    void ShootLaser()
-    {
-        int layerMask = 1 << 3;
-        layerMask = ~layerMask;
-        Vector3 direction = new(Random.Range(-laserInaccuracy, laserInaccuracy), Random.Range(-laserInaccuracy, laserInaccuracy), 1);
-        RaycastLaser(laser, direction, layerMask, heavyBarrel, laserColor);
-        heavyShoot = false;
     }
 
     public override void OnMeleeWeak(CallbackContext context)
     {
         weapon = 1;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
         Deploy(rightGun, 0f, foldAngle, 0f);
         Deploy(rightGunBarrel, deployAngle, 0f, 0f);
         Deploy(leftGun, 0f, -foldAngle, 0f);
@@ -96,8 +70,9 @@ public class Jetstorm : BeastWarrior
     {
         weapon = 2;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
         Deploy(rightGun, 0f, foldAngle, 0f);
         Deploy(rightGunBarrel, deployAngle, 0f, 0f);
         Deploy(leftGun, 0f, -foldAngle, 0f);
@@ -108,20 +83,23 @@ public class Jetstorm : BeastWarrior
     {
         weapon = 3;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
         Deploy(rightGun, 0f, deployAngle, 0f);
         Deploy(rightGunBarrel, foldAngle, 0f, 0f);
         Deploy(leftGun, 0f, -deployAngle, 0f);
         Deploy(leftGunBarrel, -foldAngle, 0f, 0f);
+        barrel = 0;
     }
 
     public override void OnRangedStrong(CallbackContext context)
     {
         weapon = 4;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
         Deploy(rightGun, 0f, foldAngle, 0f);
         Deploy(rightGunBarrel, deployAngle, 0f, 0f);
         Deploy(leftGun, 0f, -foldAngle, 0f);

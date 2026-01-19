@@ -23,7 +23,7 @@ public class Silverbolt : BeastWarrior
 
     public GameObject thrown;
 
-    public GameObject explosion;
+    public GameObject blast;
 
     public GameObject missle;
 
@@ -33,14 +33,15 @@ public class Silverbolt : BeastWarrior
 
     public int force;
 
+    private GameObject[] holds;
+
     private float foldAngle;
 
     private float deployAngle;
 
-    private int barrel;
-
     new void Awake()
     {
+        holds = new GameObject[2] { rightHold, leftHold };
         foldAngle = 180;
         deployAngle = 90;
         base.Awake();
@@ -51,40 +52,23 @@ public class Silverbolt : BeastWarrior
         base.FixedUpdate();
         if (lightShoot)
         {
-            ThrowBlade();
+            lightShoot = Throw(WeaponArm.Both, thrown, rightBlade, holds, 180f, 90f, angle, force, true);
         }
         if (heavyShoot)
         {
-            ShootMissle();
+            heavyShoot = ShootBolt(WeaponArm.None, blast, missle, heavyBarrels, missleMaterial, Color.clear);
         }
-    }
-
-    void ThrowBlade()
-    {
-        animator.SetTrigger("Shoot");
-        Vector3 direction = new(-cameraAimHelper.eulerAngles.x + 180, transform.eulerAngles.y + 90, 0f);
-        Vector3 aim = Quaternion.AngleAxis(-angle, cameraAimHelper.right) * cameraAimHelper.forward;
-        ThrownProjectile(thrown, rightBlade, direction, aim, transform.forward, rightHold, force, true);
-        lightShoot = false;
-    }
-
-    void ShootMissle()
-    {
-        Vector3 direction = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
-        MeshProjectile(explosion, missle, direction, heavyBarrels[barrel], missleMaterial);
-        MeshProjectile(explosion, missle, direction, heavyBarrels[barrel + 3], missleMaterial);
-        barrel = barrel == (heavyBarrels.Length - 4) ? 0 : barrel + 1;
-        heavyShoot = false;
     }
 
     public override void OnMeleeWeak(CallbackContext context)
     {
         weapon = 1;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         Equip(rightBlade, rightHolster);
         Equip(leftBlade, leftHolster);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
         Deploy(rightCannons, 0f, foldAngle, 0f);
         Deploy(leftCannons, 0f, -foldAngle, 0f);
     }
@@ -93,10 +77,11 @@ public class Silverbolt : BeastWarrior
     {
         weapon = 2;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         Equip(rightBlade, rightHold);
         Equip(leftBlade, leftHold);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
         Deploy(rightCannons, 0f, foldAngle, 0f);
         Deploy(leftCannons, 0f, -foldAngle, 0f);
     }
@@ -105,22 +90,26 @@ public class Silverbolt : BeastWarrior
     {
         weapon = 3;
         animator.enabled = true;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.Throw);
         animator.SetInteger("Weapon", weapon);
         Equip(rightBlade, rightHold);
-        Equip(leftBlade, leftHolster);
-        character.OverrideArm("Right");
+        Equip(leftBlade, leftHold);
+        character.OverrideArm(WeaponArm.Both);
         Deploy(rightCannons, 0f, foldAngle, 0f);
         Deploy(leftCannons, 0f, -foldAngle, 0f);
+        right = true;
+        left = false;
     }
 
     public override void OnRangedStrong(CallbackContext context)
     {
         weapon = 4;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         Equip(rightBlade, rightHolster);
         Equip(leftBlade, leftHolster);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
         Deploy(rightCannons, 0f, deployAngle, 0f);
         Deploy(leftCannons, 0f, -deployAngle, 0f);
         barrel = 0;

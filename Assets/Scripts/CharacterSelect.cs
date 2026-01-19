@@ -15,25 +15,25 @@ public class CharacterSelect : MonoBehaviour
 
     public GameObject[] choices;
 
-    GameObject[] instances;
+    private GameObject[] instances;
 
-    SqliteConnection connection;
+    private SqliteConnection connection;
 
-    string dbPath;
+    private string dbPath;
 
-    List<string> characterNames;
+    private List<string> characterNames;
 
-    List<string> characterPaths;
+    private List<string> characterPaths;
 
-    List<bool> characterEnabled;
+    private List<bool> characterEnabled;
 
-    List<int> activeCharacters;
+    private List<int> activeCharacters;
 
-    int page;
+    private int page;
 
-    int pages;
+    private int pages;
 
-    int selected;
+    private int selected;
 
     void Awake()
     {
@@ -75,6 +75,8 @@ public class CharacterSelect : MonoBehaviour
             if (index >= 0)
             {
                 page = index / choices.Length;
+                selected = index % 3;
+                UpdateSelection();
             }
         }
     }

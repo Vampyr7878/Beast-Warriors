@@ -9,7 +9,7 @@ public class Choice : MonoBehaviour
     void FixedUpdate()
     {
 
-        GetComponentInChildren<Animator>().transform.Rotate(0f, -1f, 0f);
+        GetComponentInChildren<BeastWarrior>().transform.Rotate(0f, -1f, 0f);
     }
 
     public void EnableOutline(bool enabled)

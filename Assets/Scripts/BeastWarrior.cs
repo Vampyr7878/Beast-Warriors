@@ -4,6 +4,23 @@ using static UnityEngine.ParticleSystem;
 
 public abstract class BeastWarrior : MonoBehaviour
 {
+    public enum WeaponMode
+    {
+        None,
+        Bend,
+        Straight,
+        Throw,
+        Diagonal
+    }
+
+    public enum WeaponArm
+    {
+        None,
+        Right,
+        Left,
+        Both
+    }
+
     protected Character character;
 
     protected Camera characterCamera;
@@ -19,6 +36,12 @@ public abstract class BeastWarrior : MonoBehaviour
     protected bool lightShoot;
 
     protected bool heavyShoot;
+
+    protected int barrel;
+
+    protected bool right;
+
+    protected bool left;
 
     protected void Awake()
     {
@@ -111,7 +134,7 @@ public abstract class BeastWarrior : MonoBehaviour
         c.color = new MinMaxGradient(gradient);
     }
 
-    protected void MeshProjectile(GameObject flash, GameObject projectile, Vector3 direction, GameObject barrel, Material material)
+    protected void MeshProjectile(GameObject flash, GameObject projectile, Vector3 direction, GameObject barrel, Color flashColor, Material material)
     {
         GameObject e = Instantiate(flash);
         e.transform.position = barrel.transform.position;
@@ -120,9 +143,16 @@ public abstract class BeastWarrior : MonoBehaviour
         m.transform.position = barrel.transform.position;
         m.transform.eulerAngles = direction;
         m.GetComponentInChildren<MeshRenderer>().material = material;
+        if (flashColor != Color.clear)
+        {
+            e.GetComponent<Light>().color = flashColor;
+            MainModule p = e.GetComponent<ParticleSystem>().main;
+            p.startColor = new MinMaxGradient(flashColor);
+            m.GetComponent<Light>().color = flashColor;
+        }
     }
 
-    protected void ThrownProjectile(GameObject thrown, GameObject projectile, Vector3 direction, Vector3 aim, Vector3 forward, GameObject hold, int force, bool spin = false)
+    protected void ThrownProjectile(GameObject thrown, GameObject projectile, Vector3 direction, Vector3 aim, Vector3 forward, GameObject hold, int force, bool spin)
     {
         GameObject t = Instantiate(thrown);
         Instantiate(projectile, t.transform);
@@ -137,6 +167,408 @@ public abstract class BeastWarrior : MonoBehaviour
         tc.size = pc.size;
         Rigidbody b = t.GetComponent<Rigidbody>();
         b.AddForce(aim * force, ForceMode.Impulse);
+    }
+
+    protected void InitThrower(GameObject thrower, Color[] flameColors)
+    {
+        Gradient g = new();
+        GradientColorKey[] colors = new GradientColorKey[3];
+        colors[0].color = flameColors[0];
+        colors[0].time = 0f;
+        colors[1].color = flameColors[1];
+        colors[1].time = 0.5f;
+        colors[2].color = flameColors[2];
+        colors[2].time = 1f;
+        GradientAlphaKey[] alphas = new GradientAlphaKey[3];
+        alphas[0].alpha = 1f;
+        alphas[0].time = 0f;
+        alphas[1].alpha = 1f;
+        colors[1].time = 0.5f;
+        alphas[2].alpha = 0f;
+        alphas[2].time = 1f;
+        g.SetKeys(colors, alphas);
+        ParticleSystem p = thrower.GetComponent<ParticleSystem>();
+        ColorOverLifetimeModule c = p.GetComponent<ParticleSystem>().colorOverLifetime;
+        c.color = new MinMaxGradient(g);
+        var lights = thrower.GetComponentsInChildren<Light>();
+        lights[0].color = flameColors[0];
+        lights[1].color = flameColors[2];
+    }
+
+    protected void ShootMachineGun(WeaponArm arm, GameObject bullet, GameObject[] barrels, float bulletInaccuracy, int shots = 1)
+    {
+        int layerMask = 1 << 3;
+        layerMask = ~layerMask;
+        switch (arm)
+        {
+            case WeaponArm.Both:
+                animator.SetBool("Right", right);
+                animator.SetBool("Left", left);
+                animator.SetTrigger("Shoot");
+                break;
+            case WeaponArm.Right:
+                animator.SetBool("Right", true);
+                animator.SetBool("Left", false);
+                animator.SetTrigger("Shoot");
+                break;
+            case WeaponArm.Left:
+                animator.SetBool("Right", false);
+                animator.SetBool("Left", true);
+                animator.SetTrigger("Shoot");
+                break;
+        }
+        Vector3 direction;
+        for (int i = 0; i < shots; i++)
+        {
+            direction = new(Random.Range(-bulletInaccuracy, bulletInaccuracy), Random.Range(-bulletInaccuracy, bulletInaccuracy), 1);
+            RaycastBullet(bullet, direction, layerMask, barrels[barrel + i * barrels.Length / 2]);
+        }
+        barrel = barrel == barrels.Length / shots - 1 ? 0 : barrel + 1;
+        if (arm == WeaponArm.Both)
+        {
+            right = !right;
+            left = !left;
+        }
+    }
+
+    protected void ShootMachineGun(WeaponArm arm, GameObject bullet, GameObject barrel, float bulletInaccuracy)
+    {
+        int layerMask = 1 << 3;
+        layerMask = ~layerMask;
+        switch (arm)
+        {
+            case WeaponArm.Right:
+                animator.SetBool("Right", true);
+                animator.SetBool("Left", false);
+                animator.SetTrigger("Shoot");
+                break;
+            case WeaponArm.Left:
+                animator.SetBool("Right", false);
+                animator.SetBool("Left", true);
+                animator.SetTrigger("Shoot");
+                break;
+        }
+        Vector3 direction = new(Random.Range(-bulletInaccuracy, bulletInaccuracy), Random.Range(-bulletInaccuracy, bulletInaccuracy), 1);
+        RaycastBullet(bullet, direction, layerMask, barrel);
+    }
+
+    protected bool ShootBall(WeaponArm arm, GameObject flash, GameObject ball, GameObject[] barrels, Color flashColor, Color ballColor)
+    {
+        switch (arm)
+        {
+            case WeaponArm.Both:
+                animator.SetBool("Right", right);
+                animator.SetBool("Left", left);
+                animator.SetTrigger("Shoot");
+                break;
+            case WeaponArm.Right:
+                animator.SetBool("Right", true);
+                animator.SetBool("Left", false);
+                animator.SetTrigger("Shoot");
+                break;
+            case WeaponArm.Left:
+                animator.SetBool("Right", false);
+                animator.SetBool("Left", true);
+                animator.SetTrigger("Shoot");
+                break;
+        }
+        Vector3 flashDirection = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y + 180, 0f);
+        Vector3 projectileDirection = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
+        Gradient g = new();
+        GradientColorKey[] colors = new GradientColorKey[2];
+        colors[0].color = flashColor;
+        colors[0].time = 0f;
+        colors[1].color = ballColor;
+        colors[1].time = 1f;
+        GradientAlphaKey[] alphas = new GradientAlphaKey[2];
+        alphas[0].alpha = 1f;
+        alphas[0].time = 0f;
+        alphas[1].alpha = 1f;
+        alphas[1].time = 1f;
+        g.SetKeys(colors, alphas);
+        ParticleProjectile(flash, ball, flashDirection, projectileDirection, barrels[barrel], flashColor, ballColor, g);
+        barrel = barrel == barrels.Length - 1 ? 0 : barrel + 1;
+        if (arm == WeaponArm.Both)
+        {
+            right = !right;
+            left = !left;
+        }
+        return false;
+    }
+
+    protected bool ShootBall(WeaponArm arm, GameObject flash, GameObject ball, GameObject barrel, Color flashColor, Color ballColor)
+    {
+        switch (arm)
+        {
+            case WeaponArm.Right:
+                animator.SetBool("Right", true);
+                animator.SetBool("Left", false);
+                animator.SetTrigger("Shoot");
+                break;
+            case WeaponArm.Left:
+                animator.SetBool("Right", false);
+                animator.SetBool("Left", true);
+                animator.SetTrigger("Shoot");
+                break;
+        }
+        Vector3 flashDirection = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y + 180, 0f);
+        Vector3 projectileDirection = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
+        Gradient g = new();
+        GradientColorKey[] colors = new GradientColorKey[2];
+        colors[0].color = flashColor;
+        colors[0].time = 0f;
+        colors[1].color = ballColor;
+        colors[1].time = 1f;
+        GradientAlphaKey[] alphas = new GradientAlphaKey[2];
+        alphas[0].alpha = 1f;
+        alphas[0].time = 0f;
+        alphas[1].alpha = 1f;
+        alphas[1].time = 1f;
+        g.SetKeys(colors, alphas);
+        ParticleProjectile(flash, ball, flashDirection, projectileDirection, barrel, flashColor, ballColor, g);
+        return false;
+    }
+
+    protected bool ShootLaser(WeaponArm arm, LineRenderer laser, GameObject[] barrels, Color laserColor, float laserInaccuracy, int shots = 1)
+    {
+        int layerMask = 1 << 3;
+        layerMask = ~layerMask;
+        switch (arm)
+        {
+            case WeaponArm.Both:
+                animator.SetBool("Right", right);
+                animator.SetBool("Left", left);
+                animator.SetTrigger("Shoot");
+                break;
+            case WeaponArm.Right:
+                animator.SetBool("Right", true);
+                animator.SetBool("Left", false);
+                animator.SetTrigger("Shoot");
+                break;
+            case WeaponArm.Left:
+                animator.SetBool("Right", false);
+                animator.SetBool("Left", true);
+                animator.SetTrigger("Shoot");
+                break;
+        }
+        Vector3 direction;
+        for (int i = 0; i < shots; i++)
+        {
+            direction = new(Random.Range(-laserInaccuracy, laserInaccuracy), Random.Range(-laserInaccuracy, laserInaccuracy), 1);
+            RaycastLaser(laser, direction, layerMask, barrels[barrel + i * barrels.Length / 2], laserColor);
+        }
+        barrel = barrel == barrels.Length / shots - 1 ? 0 : barrel + 1;
+        if (arm == WeaponArm.Both)
+        {
+            right = !right;
+            left = !left;
+        }
+        return false;
+    }
+
+    protected bool ShootLaser(WeaponArm arm, LineRenderer laser, GameObject barrel, Color laserColor, float laserInaccuracy)
+    {
+        int layerMask = 1 << 3;
+        layerMask = ~layerMask;
+        switch (arm)
+        {
+            case WeaponArm.Right:
+                animator.SetBool("Right", true);
+                animator.SetBool("Left", false);
+                animator.SetTrigger("Shoot");
+                break;
+            case WeaponArm.Left:
+                animator.SetBool("Right", false);
+                animator.SetBool("Left", true);
+                animator.SetTrigger("Shoot");
+                break;
+        }
+        Vector3 direction = new(Random.Range(-laserInaccuracy, laserInaccuracy), Random.Range(-laserInaccuracy, laserInaccuracy), 1);
+        RaycastLaser(laser, direction, layerMask, barrel, laserColor);
+        return false;
+    }
+
+    protected bool ShootBolt(WeaponArm arm, GameObject flash, GameObject bolt, GameObject[] barrels, Material boltMaterial, Color boltColor, float angle = 0f)
+    {
+        switch (arm)
+        {
+            case WeaponArm.Both:
+                animator.SetBool("Right", right);
+                animator.SetBool("Left", left);
+                animator.SetTrigger("Shoot");
+                break;
+            case WeaponArm.Right:
+                animator.SetBool("Right", true);
+                animator.SetBool("Left", false);
+                animator.SetTrigger("Shoot");
+                break;
+            case WeaponArm.Left:
+                animator.SetBool("Right", false);
+                animator.SetBool("Left", true);
+                animator.SetTrigger("Shoot");
+                break;
+        }
+        Vector3 direction = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, angle);
+        Material m = new(boltMaterial);
+        if (boltColor != Color.clear)
+        {
+            m.color = boltColor;
+        }
+        MeshProjectile(flash, bolt, direction, barrels[barrel], boltColor, m);
+        barrel = barrel == barrels.Length - 1 ? 0 : barrel + 1;
+        if (arm == WeaponArm.Both)
+        {
+            right = !right;
+            left = !left;
+        }
+        return false;
+    }
+
+    protected bool ShootBolt(WeaponArm arm, GameObject flash, GameObject bolt, GameObject barrel, Material boltMaterial, Color boltColor, float angle = 0f)
+    {
+        switch (arm)
+        {
+            case WeaponArm.Right:
+                animator.SetBool("Right", true);
+                animator.SetBool("Left", false);
+                animator.SetTrigger("Shoot");
+                break;
+            case WeaponArm.Left:
+                animator.SetBool("Right", false);
+                animator.SetBool("Left", true);
+                animator.SetTrigger("Shoot");
+                break;
+        }
+        Vector3 direction = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, angle);
+        Material m = new(boltMaterial);
+        if (boltColor != Color.clear)
+        {
+            m.color = boltColor;
+        }
+        MeshProjectile(flash, bolt, direction, barrel, boltColor, m);
+        return false;
+    }
+
+    protected bool Throw(WeaponArm arm, GameObject thrown, GameObject projectile, GameObject[] barrels, float x, float y, float angle, int force, bool spin = false)
+    {
+        switch (arm)
+        {
+            case WeaponArm.Both:
+                animator.SetBool("Right", right);
+                animator.SetBool("Left", left);
+                animator.SetTrigger("Shoot");
+                break;
+            case WeaponArm.Right:
+                animator.SetBool("Right", true);
+                animator.SetBool("Left", false);
+                animator.SetTrigger("Shoot");
+                break;
+            case WeaponArm.Left:
+                animator.SetBool("Right", false);
+                animator.SetBool("Left", true);
+                animator.SetTrigger("Shoot");
+                break;
+        }
+        Vector3 direction = new(-cameraAimHelper.eulerAngles.x + x, transform.eulerAngles.y + y, 0f);
+        Vector3 aim = Quaternion.AngleAxis(-angle, cameraAimHelper.right) * cameraAimHelper.forward;
+        ThrownProjectile(thrown, projectile, direction, aim, transform.forward, barrels[barrel], force, spin);
+        barrel = barrel == barrels.Length - 1 ? 0 : barrel + 1;
+        if (arm == WeaponArm.Both)
+        {
+            right = !right;
+            left = !left;
+        }
+        return false;
+    }
+
+    protected bool Throw(WeaponArm arm, GameObject thrown, GameObject projectile, GameObject barrel, float x, float y, float angle, int force, bool spin = false)
+    {
+        switch (arm)
+        {
+            case WeaponArm.Right:
+                animator.SetBool("Right", true);
+                animator.SetBool("Left", false);
+                animator.SetTrigger("Shoot");
+                break;
+            case WeaponArm.Left:
+                animator.SetBool("Right", false);
+                animator.SetBool("Left", true);
+                animator.SetTrigger("Shoot");
+                break;
+        }
+        Vector3 direction = new(-cameraAimHelper.eulerAngles.x + x, transform.eulerAngles.y + y, 0f);
+        Vector3 aim = Quaternion.AngleAxis(-angle, cameraAimHelper.right) * cameraAimHelper.forward;
+        ThrownProjectile(thrown, projectile, direction, aim, transform.forward, barrel, force, spin);
+        return false;
+    }
+
+    protected bool ShootShotgun(WeaponArm arm, GameObject bullet, GameObject slug, GameObject[] barrels, float bulletInaccuracy, int slugCount)
+    {
+        int layerMask = 1 << 3;
+        layerMask = ~layerMask;
+        switch (arm)
+        {
+            case WeaponArm.Both:
+                animator.SetBool("Right", right);
+                animator.SetBool("Left", left);
+                animator.SetTrigger("Shoot");
+                break;
+            case WeaponArm.Right:
+                animator.SetBool("Right", true);
+                animator.SetBool("Left", false);
+                animator.SetTrigger("Shoot");
+                break;
+            case WeaponArm.Left:
+                animator.SetBool("Right", false);
+                animator.SetBool("Left", true);
+                animator.SetTrigger("Shoot");
+                break;
+        }
+        GameObject s = Instantiate(slug);
+        s.transform.position = barrels[barrel].transform.position;
+        s.transform.eulerAngles = new Vector3(0f, transform.eulerAngles.y, 0f);
+        Vector3 direction;
+        for (int i = 0; i < slugCount; i++)
+        {
+            direction = new Vector3(Random.Range(-bulletInaccuracy, bulletInaccuracy), Random.Range(-bulletInaccuracy, bulletInaccuracy), 1);
+            RaycastBullet(bullet, direction, layerMask, barrels[barrel], false);
+        }
+        barrel = barrel == barrels.Length - 1 ? 0 : barrel + 1;
+        if (arm == WeaponArm.Both)
+        {
+            right = !right;
+            left = !left;
+        }
+        return false;
+    }
+
+    protected bool ShootShotgun(WeaponArm arm, GameObject bullet, GameObject slug, GameObject barrel, float bulletInaccuracy, int slugCount)
+    {
+        int layerMask = 1 << 3;
+        layerMask = ~layerMask;
+        switch (arm)
+        {
+            case WeaponArm.Right:
+                animator.SetBool("Right", true);
+                animator.SetBool("Left", false);
+                animator.SetTrigger("Shoot");
+                break;
+            case WeaponArm.Left:
+                animator.SetBool("Right", false);
+                animator.SetBool("Left", true);
+                animator.SetTrigger("Shoot");
+                break;
+        }
+        GameObject s = Instantiate(slug);
+        s.transform.position = barrel.transform.position;
+        s.transform.eulerAngles = new Vector3(0f, transform.eulerAngles.y, 0f);
+        Vector3 direction;
+        for (int i = 0; i < slugCount; i++)
+        {
+            direction = new Vector3(Random.Range(-bulletInaccuracy, bulletInaccuracy), Random.Range(-bulletInaccuracy, bulletInaccuracy), 1);
+            RaycastBullet(bullet, direction, layerMask, barrel, false);
+        }
+        return false;
     }
 
     protected void Equip(GameObject weapon, GameObject attachment)

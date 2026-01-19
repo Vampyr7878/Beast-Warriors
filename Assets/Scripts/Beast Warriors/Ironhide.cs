@@ -29,6 +29,8 @@ public class Ironhide : BeastWarrior
 
     public GameObject bullet;
 
+    public Material boltMaterial;
+
     public Color boltColor;
 
     public float fireRate;
@@ -40,8 +42,6 @@ public class Ironhide : BeastWarrior
     private float deployAngle;
 
     private float time;
-
-    private int barrel;
 
     new void Awake()
     {
@@ -55,57 +55,28 @@ public class Ironhide : BeastWarrior
         base.FixedUpdate();
         if (lightShoot)
         {
-            ShootBolt();
+            lightShoot = ShootBolt(WeaponArm.None, flash, bolt, lightBarrels, boltMaterial, boltColor);
         }
         if (heavyShoot)
         {
             if (time >= fireRate)
             {
-                ShootMachineGun();
+                ShootMachineGun(WeaponArm.Both, bullet, heavyBarrels, bulletInaccuracy);
                 time = 0;
             }
             time += Time.deltaTime;
         }
     }
 
-    void ShootBolt()
-    {
-        Vector3 direction = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
-        Gradient g = new();
-        GradientColorKey[] colors = new GradientColorKey[2];
-        colors[0].color = boltColor;
-        colors[0].time = 0f;
-        colors[1].color = boltColor;
-        colors[1].time = 1f;
-        GradientAlphaKey[] alphas = new GradientAlphaKey[2];
-        alphas[0].alpha = 1f;
-        alphas[0].time = 0f;
-        alphas[1].alpha = 1f;
-        alphas[1].time = 1f;
-        g.SetKeys(colors, alphas);
-        ParticleProjectile(flash, bolt, direction, direction, lightBarrels[barrel], boltColor, boltColor, g);
-        barrel = barrel == (lightBarrels.Length - 1) ? 0 : barrel + 1;
-        lightShoot = false;
-    }
-
-    void ShootMachineGun()
-    {
-        int layerMask = 1 << 3;
-        layerMask = ~layerMask;
-        animator.SetTrigger("Shoot");
-        Vector3 direction = new(Random.Range(-bulletInaccuracy, bulletInaccuracy), Random.Range(-bulletInaccuracy, bulletInaccuracy), 1);
-        RaycastBullet(bullet, direction, layerMask, heavyBarrels[0]);
-        RaycastBullet(bullet, direction, layerMask, heavyBarrels[1]);
-    }
-
     public override void OnMeleeWeak(CallbackContext context)
     {
         weapon = 1;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         Equip(rightClub, rightHolster);
         Equip(leftClub, leftHolster);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
         Deploy(rightBlade, 0f, deployAngle, 80f);
         Deploy(leftBlade, 0f, -deployAngle, -80f);
     }
@@ -114,10 +85,11 @@ public class Ironhide : BeastWarrior
     {
         weapon = 2;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         Equip(rightClub, rightHold);
         Equip(leftClub, leftHold);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
         Deploy(rightBlade, 0f, foldAngle, 80f);
         Deploy(leftBlade, 0f, -foldAngle, -80f);
     }
@@ -126,10 +98,11 @@ public class Ironhide : BeastWarrior
     {
         weapon = 3;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         Equip(rightClub, rightHolster);
         Equip(leftClub, leftHolster);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
         Deploy(rightBlade, 0f, foldAngle, 80f);
         Deploy(leftBlade, 0f, -foldAngle, -80f);
         barrel = 0;
@@ -139,10 +112,11 @@ public class Ironhide : BeastWarrior
     {
         weapon = 4;
         animator.enabled = true;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.Bend);
         animator.SetInteger("Weapon", weapon);
         Equip(rightClub, rightHolster);
         Equip(leftClub, leftHolster);
-        character.OverrideArm("Both");
+        character.OverrideArm(WeaponArm.Both);
         Deploy(rightBlade, 0f, foldAngle, 80f);
         Deploy(leftBlade, 0f, -foldAngle, -80f);
     }
@@ -157,6 +131,9 @@ public class Ironhide : BeastWarrior
             case 4:
                 heavyShoot = context.performed;
                 time = fireRate;
+                barrel = 0;
+                right = true;
+                left = false;
                 break;
         }
     }

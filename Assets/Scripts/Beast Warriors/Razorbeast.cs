@@ -33,8 +33,6 @@ public class Razorbeast : BeastWarrior
 
     private float time;
 
-    private int barrel;
-
     new void Awake()
     {
         foldAngle = -40;
@@ -49,51 +47,25 @@ public class Razorbeast : BeastWarrior
         {
             if (time >= fireRate)
             {
-                ShootMachineGun();
+                ShootMachineGun(WeaponArm.None, bullet, lightBarrels, bulletInaccuracy);
                 time = 0;
             }
             time += Time.deltaTime;
         }
         if (heavyShoot)
         {
-            ShootShotgun();
+            heavyShoot = ShootShotgun(WeaponArm.Right, bullet, slug, heavyBarrels, bulletInaccuracy, slugCount);
         }
-    }
-
-    void ShootMachineGun()
-    {
-        int layerMask = 1 << 3;
-        layerMask = ~layerMask;
-        Vector3 direction = new(Random.Range(-bulletInaccuracy, bulletInaccuracy), Random.Range(-bulletInaccuracy, bulletInaccuracy), 1);
-        RaycastBullet(bullet, direction, layerMask, lightBarrels[barrel]);
-        barrel = barrel == (lightBarrels.Length - 1) ? 0 : barrel + 1;
-    }
-
-    void ShootShotgun()
-    {
-        int layerMask = 1 << 3;
-        layerMask = ~layerMask;
-        animator.SetTrigger("Shoot");
-        GameObject s = Instantiate(slug);
-        s.transform.position = heavyBarrels[barrel].transform.position;
-        s.transform.eulerAngles = new Vector3(0f, transform.eulerAngles.y, 0f);
-        Vector3 direction;
-        for (int i = 0; i < slugCount; i++)
-        {
-            direction = new Vector3(Random.Range(-bulletInaccuracy, bulletInaccuracy), Random.Range(-bulletInaccuracy, bulletInaccuracy), 1);
-            RaycastBullet(bullet, direction, layerMask, heavyBarrels[barrel], false);
-        }
-        barrel = barrel == (heavyBarrels.Length - 1) ? 0 : barrel + 1;
-        heavyShoot = false;
     }
 
     public override void OnMeleeWeak(CallbackContext context)
     {
         weapon = 1;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         Equip(gun, holster);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
         Deploy(rightGun, foldAngle, 0f, 0f);
         Deploy(leftGun, foldAngle, 0f, 0f);
     }
@@ -102,9 +74,10 @@ public class Razorbeast : BeastWarrior
     {
         weapon = 2;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         Equip(gun, holster);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
         Deploy(rightGun, foldAngle, 0f, 0f);
         Deploy(leftGun, foldAngle, 0f, 0f);
     }
@@ -113,9 +86,10 @@ public class Razorbeast : BeastWarrior
     {
         weapon = 3;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         Equip(gun, holster);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
         Deploy(rightGun, deployAngle, 0f, 0f);
         Deploy(leftGun, deployAngle, 0f, 0f);
     }
@@ -124,9 +98,10 @@ public class Razorbeast : BeastWarrior
     {
         weapon = 4;
         animator.enabled = true;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.Bend);
         animator.SetInteger("Weapon", weapon);
         Equip(gun, hold);
-        character.OverrideArm("Right");
+        character.OverrideArm(WeaponArm.Right);
         Deploy(rightGun, foldAngle, 0f, 0f);
         Deploy(leftGun, foldAngle, 0f, 0f);
         barrel = 0;

@@ -1,5 +1,6 @@
 using UnityEngine;
 using static UnityEngine.InputSystem.InputAction;
+using static UnityEngine.ParticleSystem;
 
 public class Inferno : BeastWarrior
 {
@@ -21,73 +22,39 @@ public class Inferno : BeastWarrior
 
     public GameObject bolt;
 
-    public GameObject ball;
+    public GameObject thrower;
+
+    public Material boltMaterial;
 
     public Color boltColor;
 
-    public Color ballColor;
+    public Color[] flameColors;
+
+    protected new void Awake()
+    {
+        base.Awake();
+        InitThrower(thrower, flameColors);
+    }
 
     protected new void FixedUpdate()
     {
         base.FixedUpdate();
         if (lightShoot)
         {
-            ShootBolt();
+            lightShoot = ShootBolt(WeaponArm.Right, flash, bolt, lightBarrel, boltMaterial, boltColor);
         }
-        if (heavyShoot)
-        {
-            ShootBall();
-        }
-    }
-
-    void ShootBolt()
-    {
-        animator.SetTrigger("Shoot");
-        Vector3 direction = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
-        Gradient g = new();
-        GradientColorKey[] colors = new GradientColorKey[2];
-        colors[0].color = boltColor;
-        colors[0].time = 0f;
-        colors[1].color = boltColor;
-        colors[1].time = 1f;
-        GradientAlphaKey[] alphas = new GradientAlphaKey[2];
-        alphas[0].alpha = 1f;
-        alphas[0].time = 0f;
-        alphas[1].alpha = 1f;
-        alphas[1].time = 1f;
-        g.SetKeys(colors, alphas);
-        ParticleProjectile(flash, bolt, direction, direction, lightBarrel, boltColor, boltColor, g);
-        lightShoot = false;
-    }
-
-    void ShootBall()
-    {
-        animator.SetTrigger("Shoot");
-        Vector3 direction = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
-        Gradient g = new();
-        GradientColorKey[] colors = new GradientColorKey[2];
-        colors[0].color = ballColor;
-        colors[0].time = 0f;
-        colors[1].color = ballColor;
-        colors[1].time = 1f;
-        GradientAlphaKey[] alphas = new GradientAlphaKey[2];
-        alphas[0].alpha = 1f;
-        alphas[0].time = 0f;
-        alphas[1].alpha = 1f;
-        alphas[1].time = 1f;
-        g.SetKeys(colors, alphas);
-        ParticleProjectile(flash, ball, direction, direction, heavyBarrel, ballColor, ballColor, g);
-        heavyShoot = false;
+        thrower.SetActive(heavyShoot);
     }
 
     public override void OnMeleeWeak(CallbackContext context)
     {
         weapon = 1;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         Equip(flamethrower, flamethrowerHolster);
         Equip(launcher, launcherHolster);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -96,27 +63,29 @@ public class Inferno : BeastWarrior
         animator.enabled = false;
         Equip(flamethrower, hold);
         Equip(launcher, launcherHolster);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
     }
 
     public override void OnRangedWeak(CallbackContext context)
     {
         weapon = 3;
         animator.enabled = true;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.Bend);
         animator.SetInteger("Weapon", weapon);
         Equip(flamethrower, flamethrowerHolster);
         Equip(launcher, hold);
-        character.OverrideArm("Right");
+        character.OverrideArm(WeaponArm.Right);
     }
 
     public override void OnRangedStrong(CallbackContext context)
     {
         weapon = 4;
         animator.enabled = true;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.Bend);
         animator.SetInteger("Weapon", weapon);
         Equip(flamethrower, hold);
         Equip(launcher, launcherHolster);
-        character.OverrideArm("Right");
+        character.OverrideArm(WeaponArm.Right);
     }
 
     public override void OnAttack(CallbackContext context)

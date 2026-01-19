@@ -19,7 +19,7 @@ public class Wolfang : BeastWarrior
 
     public GameObject heavyBarrel;
 
-    public GameObject explosion;
+    public GameObject blast;
 
     public GameObject missle;
 
@@ -36,79 +36,56 @@ public class Wolfang : BeastWarrior
         base.FixedUpdate();
         if (lightShoot)
         {
-            ShootMissle();
+            lightShoot = ShootBolt(WeaponArm.None, blast, missle, lightBarrel, missleMaterial, Color.clear);
         }
         if (heavyShoot)
         {
-            ShootBall();
+            heavyShoot = ShootBall(WeaponArm.Right, flash, ball, heavyBarrel, ballColor, ballColor);
         }
-    }
-
-    void ShootMissle()
-    {
-        Vector3 direction = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
-        MeshProjectile(explosion, missle, direction, lightBarrel, missleMaterial);
-        lightShoot = false;
-    }
-
-    void ShootBall()
-    {
-        animator.SetTrigger("Shoot");
-        Vector3 direction = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
-        Gradient g = new();
-        GradientColorKey[] colors = new GradientColorKey[2];
-        colors[0].color = ballColor;
-        colors[0].time = 0f;
-        colors[1].color = ballColor;
-        colors[1].time = 1f;
-        GradientAlphaKey[] alphas = new GradientAlphaKey[2];
-        alphas[0].alpha = 1f;
-        alphas[0].time = 0f;
-        alphas[1].alpha = 1f;
-        alphas[1].time = 1f;
-        g.SetKeys(colors, alphas);
-        ParticleProjectile(flash, ball, direction, direction, heavyBarrel, ballColor, ballColor, g);
-        heavyShoot = false;
     }
 
     public override void OnMeleeWeak(CallbackContext context)
     {
         weapon = 1;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         Equip(shield, shieldHlster);
         Equip(gun, gunHolster);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
     {
         weapon = 2;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         Equip(shield, leftHold);
         Equip(gun, gunHolster);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
     }
 
     public override void OnRangedWeak(CallbackContext context)
     {
         weapon = 3;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         Equip(shield, shieldHlster);
         Equip(gun, gunHolster);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
     }
 
     public override void OnRangedStrong(CallbackContext context)
     {
         weapon = 4;
         animator.enabled = true;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.Bend);
         animator.SetInteger("Weapon", weapon);
         Equip(shield, shieldHlster);
         Equip(gun, rightHold);
-        character.OverrideArm("Right");
+        character.OverrideArm(WeaponArm.Right);
     }
 
     public override void OnAttack(CallbackContext context)

@@ -1,4 +1,3 @@
-using System.Threading;
 using UnityEngine;
 using static UnityEngine.InputSystem.InputAction;
 
@@ -22,91 +21,55 @@ public class Terragator : BeastWarrior
 
     public GameObject slug;
 
+    public Material boltMaterial;
+
     public Color boltColor;
 
     public float bulletInaccuracy;
 
     public int slugCount;
 
-    private int barrel;
-
     protected new void FixedUpdate()
     {
         base.FixedUpdate();
         if (lightShoot)
         {
-            ShootBolt();
+            lightShoot = ShootBolt(WeaponArm.Left, flash, bolt, lightBarrels, boltMaterial, boltColor);
         }
         if (heavyShoot)
         {
-            ShootShotgun();
+            heavyShoot = ShootShotgun(WeaponArm.Right, bullet, slug, heavyBarrels, bulletInaccuracy, slugCount);
         }
-    }
-
-    void ShootBolt()
-    {
-        animator.SetTrigger("Shoot");
-        Vector3 direction = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
-        Gradient g = new();
-        GradientColorKey[] colors = new GradientColorKey[2];
-        colors[0].color = boltColor;
-        colors[0].time = 0f;
-        colors[1].color = boltColor;
-        colors[1].time = 1f;
-        GradientAlphaKey[] alphas = new GradientAlphaKey[2];
-        alphas[0].alpha = 1f;
-        alphas[0].time = 0f;
-        alphas[1].alpha = 1f;
-        alphas[1].time = 1f;
-        g.SetKeys(colors, alphas);
-        ParticleProjectile(flash, bolt, direction, direction, lightBarrels[barrel], boltColor, boltColor, g);
-        barrel = barrel == (lightBarrels.Length - 1) ? 0 : barrel + 1;
-        lightShoot = false;
-    }
-
-    void ShootShotgun()
-    {
-        int layerMask = 1 << 3;
-        layerMask = ~layerMask;
-        animator.SetTrigger("Shoot");
-        GameObject s = Instantiate(slug);
-        s.transform.position = heavyBarrels[barrel].transform.position;
-        s.transform.eulerAngles = new Vector3(0f, transform.eulerAngles.y, 0f);
-        Vector3 direction;
-        for (int i = 0; i < slugCount; i++)
-        {
-            direction = new Vector3(Random.Range(-bulletInaccuracy, bulletInaccuracy), Random.Range(-bulletInaccuracy, bulletInaccuracy), 1);
-            RaycastBullet(bullet, direction, layerMask, heavyBarrels[barrel], false);
-            barrel = barrel == (heavyBarrels.Length - 1) ? 0 : barrel + 1;
-        }
-        heavyShoot = false;
     }
 
     public override void OnMeleeWeak(CallbackContext context)
     {
         weapon = 1;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         Equip(cannon, holster);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
     {
         weapon = 2;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         Equip(cannon, holster);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
     }
 
     public override void OnRangedWeak(CallbackContext context)
     {
         weapon = 3;
         animator.enabled = true;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.Bend);
         animator.SetInteger("Weapon", weapon);
         Equip(cannon, holster);
-        character.OverrideArm("Left");
+        character.OverrideArm(WeaponArm.Left);
         barrel = 0;
     }
 
@@ -114,9 +77,11 @@ public class Terragator : BeastWarrior
     {
         weapon = 4;
         animator.enabled = true;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.Bend);
         animator.SetInteger("Weapon", weapon);
         Equip(cannon, hold);
-        character.OverrideArm("Right");
+        character.OverrideArm(WeaponArm.Right);
+        barrel = 0;
     }
 
     public override void OnAttack(CallbackContext context)

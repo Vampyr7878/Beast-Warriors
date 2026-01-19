@@ -27,7 +27,13 @@ public class LioConvoy : BeastWarrior
 
     public GameObject bolt;
 
+    public GameObject ball;
+
+    public Material boltMaterial;
+
     public Color boltColor;
+
+    public Color ballColor;
 
     private float foldAngle;
 
@@ -45,64 +51,23 @@ public class LioConvoy : BeastWarrior
         base.FixedUpdate();
         if (lightShoot)
         {
-            ShootLightBolt();
+            lightShoot = ShootBolt(WeaponArm.Both, flash, bolt, lightBarrels, boltMaterial, boltColor);
         }
         if (heavyShoot)
         {
-            ShootHeavyBolt();
+            heavyShoot = ShootBall(WeaponArm.Both, flash, ball, heavyBarrels, ballColor, ballColor);
         }
-    }
-
-    void ShootLightBolt()
-    {
-        animator.SetTrigger("Shoot");
-        Vector3 direction = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
-        Gradient g = new();
-        GradientColorKey[] colors = new GradientColorKey[2];
-        colors[0].color = boltColor;
-        colors[0].time = 0f;
-        colors[1].color = boltColor;
-        colors[1].time = 1f;
-        GradientAlphaKey[] alphas = new GradientAlphaKey[2];
-        alphas[0].alpha = 1f;
-        alphas[0].time = 0f;
-        alphas[1].alpha = 1f;
-        alphas[1].time = 1f;
-        g.SetKeys(colors, alphas);
-        ParticleProjectile(flash, bolt, direction, direction, lightBarrels[0], boltColor, boltColor, g);
-        ParticleProjectile(flash, bolt, direction, direction, lightBarrels[1], boltColor, boltColor, g);
-        lightShoot = false;
-    }
-
-    void ShootHeavyBolt()
-    {
-        animator.SetTrigger("Shoot");
-        Vector3 direction = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
-        Gradient g = new();
-        GradientColorKey[] colors = new GradientColorKey[2];
-        colors[0].color = boltColor;
-        colors[0].time = 0f;
-        colors[1].color = boltColor;
-        colors[1].time = 1f;
-        GradientAlphaKey[] alphas = new GradientAlphaKey[2];
-        alphas[0].alpha = 1f;
-        alphas[0].time = 0f;
-        alphas[1].alpha = 1f;
-        alphas[1].time = 1f;
-        g.SetKeys(colors, alphas);
-        ParticleProjectile(flash, bolt, direction, direction, heavyBarrels[0], boltColor, boltColor, g);
-        ParticleProjectile(flash, bolt, direction, direction, heavyBarrels[1], boltColor, boltColor, g);
-        heavyShoot = false;
     }
 
     public override void OnMeleeWeak(CallbackContext context)
     {
         weapon = 1;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         Equip(rightBlaster, rightHolster);
         Equip(leftBlaster, leftHolster);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
         Deploy(rightClaw, 0f, foldAngle, 90f);
         Deploy(leftClaw, 0f, -foldAngle, -90f);
     }
@@ -111,10 +76,11 @@ public class LioConvoy : BeastWarrior
     {
         weapon = 2;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         Equip(rightBlaster, rightHolster);
         Equip(leftBlaster, leftHolster);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
         Deploy(rightClaw, 0f, deployAngle, 90f);
         Deploy(leftClaw, 0f, -deployAngle, -90f);
     }
@@ -123,24 +89,32 @@ public class LioConvoy : BeastWarrior
     {
         weapon = 3;
         animator.enabled = true;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.Bend);
         animator.SetInteger("Weapon", weapon);
         Equip(rightBlaster, rightHolster);
         Equip(leftBlaster, leftHolster);
-        character.OverrideArm("Both");
+        character.OverrideArm(WeaponArm.Both);
         Deploy(rightClaw, 0f, foldAngle, 90f);
         Deploy(leftClaw, 0f, -foldAngle, -90f);
+        barrel = 0;
+        right = true;
+        left = false;
     }
 
     public override void OnRangedStrong(CallbackContext context)
     {
         weapon = 4;
         animator.enabled = true;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.Bend);
         animator.SetInteger("Weapon", weapon);
         Equip(rightBlaster, rightHold);
         Equip(leftBlaster, leftHold);
-        character.OverrideArm("Both");
+        character.OverrideArm(WeaponArm.Both);
         Deploy(rightClaw, 0f, foldAngle, 90f);
         Deploy(leftClaw, 0f, -foldAngle, -90f);
+        barrel = 0;
+        right = true;
+        left = false;
     }
 
     public override void OnAttack(CallbackContext context)

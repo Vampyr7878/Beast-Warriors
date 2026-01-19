@@ -19,9 +19,15 @@ public class MaxB : BeastWarrior
 
     public GameObject heavyBarrel;
 
-    public GameObject explosion;
+    public GameObject flash;
+
+    public GameObject ball;
+
+    public GameObject blast;
 
     public GameObject missle;
+
+    public Color ballColor;
 
     public Material missleMaterial;
 
@@ -30,68 +36,56 @@ public class MaxB : BeastWarrior
         base.FixedUpdate();
         if (lightShoot)
         {
-            ShootLightMissle();
+            lightShoot = ShootBall(WeaponArm.Right, flash, ball, lightBarrel, ballColor, ballColor);
         }
         if (heavyShoot)
         {
-            ShootHeavyMissle();
+            heavyShoot = ShootBolt(WeaponArm.Left, blast, missle, heavyBarrel, missleMaterial, Color.clear);
         }
-    }
-
-    void ShootLightMissle()
-    {
-        animator.SetTrigger("Shoot");
-        Vector3 direction = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
-        MeshProjectile(explosion, missle, direction, lightBarrel, missleMaterial);
-        lightShoot = false;
-    }
-
-    void ShootHeavyMissle()
-    {
-        animator.SetTrigger("Shoot");
-        Vector3 direction = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
-        MeshProjectile(explosion, missle, direction, heavyBarrel, missleMaterial);
-        heavyShoot = false;
     }
 
     public override void OnMeleeWeak(CallbackContext context)
     {
         weapon = 1;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         Equip(claw, clawHolster);
         Equip(gun, gunHolster);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
     {
         weapon = 2;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         Equip(claw, leftHold);
         Equip(gun, gunHolster);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
     }
 
     public override void OnRangedWeak(CallbackContext context)
     {
         weapon = 3;
         animator.enabled = true;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.Bend);
         animator.SetInteger("Weapon", weapon);
         Equip(claw, clawHolster);
         Equip(gun, rightHold);
-        character.OverrideArm("Right");
+        character.OverrideArm(WeaponArm.Right);
     }
 
     public override void OnRangedStrong(CallbackContext context)
     {
         weapon = 4;
         animator.enabled = true;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.Bend);
         animator.SetInteger("Weapon", weapon);
         Equip(claw, leftHold);
         Equip(gun, gunHolster);
-        character.OverrideArm("Left");
+        character.OverrideArm(WeaponArm.Left);
     }
 
     public override void OnAttack(CallbackContext context)

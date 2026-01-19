@@ -22,31 +22,33 @@ public class Character : MonoBehaviour
 
     public float cameraRange;
 
-    BeastWarrior warrior;
+    private BeastWarrior warrior;
 
-    Transform[] bodyParts;
+    private Transform[] bodyParts;
 
-    List<Collision> terrainCollsion;
+    private List<Collision> terrainCollsion;
 
-    float cameraAngle;
+    private float cameraAngle;
 
-    Rigidbody body;
+    private Rigidbody body;
 
-    Animator characterAnimator;
+    private Vector3 movement;
 
-    Vector3 movement;
+    private Vector2 move;
 
-    Vector2 move;
+    private Vector2 look;
 
-    Vector2 look;
+    private bool isMoving;
 
-    bool isMoving;
+    private bool isJumping;
 
-    bool isJumping;
+    private bool turningRight;
 
-    bool overrideRightArm;
+    private bool turningLeft;
 
-    bool overrideLeftArm;
+    private bool overrideRightArm;
+
+    private bool overrideLeftArm;
 
     void Awake()
     {
@@ -57,14 +59,13 @@ public class Character : MonoBehaviour
         cameraAngle = characterCamera.transform.rotation.eulerAngles.x;
         isMoving = false;
         isJumping = false;
+        turningRight = false;
+        turningLeft = false;
         bodyParts = new Transform[skeleton.Count];
         terrainCollsion = new List<Collision>();
         string character = PlayerPrefs.GetString("Character");
         GameObject prefab = Resources.Load<GameObject>($"Beast Warriors/{character}");
         GameObject instance = Instantiate(prefab, transform);
-        RuntimeAnimatorController controller = instance.GetComponent<Animator>().runtimeAnimatorController;
-        characterAnimator = GetComponentInChildren<Animator>();
-        characterAnimator.runtimeAnimatorController = controller;
         warrior = instance.GetComponent<BeastWarrior>();
         PlayerPrefs.SetString("Character", character);
     }
@@ -124,6 +125,8 @@ public class Character : MonoBehaviour
     {
         mainAnimator.SetBool("Moving", isMoving);
         mainAnimator.SetBool("Jumping", isJumping);
+        mainAnimator.SetBool("Right", turningRight);
+        mainAnimator.SetBool("Left", turningLeft);
         mainAnimator.SetBool("Forward", move.y >= 0f);
         mainAnimator.SetFloat("Blend", move.x);
     }
@@ -195,10 +198,10 @@ public class Character : MonoBehaviour
                 CompensateLimb(i, "Left Hand", 0f, 90f, 90f);
                 CompensateLimb(i, "Right Leg", 90f, 0f, -90f);
                 CompensateLimb(i, "Right Lower", 90f, 0f, 90f);
-                CompensateLimb(i, "Right Foot", 0f, -90f, 25f);
+                CompensateLimb(i, "Right Foot", 0f, -90f, 30f);
                 CompensateLimb(i, "Left Leg", 90f, 0f, 90f);
                 CompensateLimb(i, "Left Lower", 90f, 0f, -90f);
-                CompensateLimb(i, "Left Foot", 0f, -90f, 25f);
+                CompensateLimb(i, "Left Foot", 0f, -90f, 30f);
                 CompensateLimb(i, "Right Long", 90f, 0f, 180f);
                 CompensateLimb(i, "Right Claw", 0f, -90f, 90f);
                 CompensateLimb(i, "Right Hook", 90f, 0f, 0f);
@@ -217,23 +220,23 @@ public class Character : MonoBehaviour
         }
     }
 
-    public void OverrideArm(string arm)
+    public void OverrideArm(BeastWarrior.WeaponArm arm)
     {
         switch (arm)
         {
-            case "Right":
+            case BeastWarrior.WeaponArm.Right:
                 overrideRightArm = true;
                 overrideLeftArm = false;
                 break;
-            case "Left":
+            case BeastWarrior.WeaponArm.Left:
                 overrideRightArm = false;
                 overrideLeftArm = true;
                 break;
-            case "Both":
+            case BeastWarrior.WeaponArm.Both:
                 overrideRightArm = true;
                 overrideLeftArm = true;
                 break;
-            case "None":
+            case BeastWarrior.WeaponArm.None:
             default:
                 overrideRightArm = false;
                 overrideLeftArm = false;
@@ -250,6 +253,21 @@ public class Character : MonoBehaviour
     public void OnLook(CallbackContext context)
     {
         look = context.ReadValue<Vector2>();
+        if (look.x > 0)
+        {
+            turningRight = true;
+            turningLeft = false;
+        }
+        else if (look.x < 0)
+        {
+            turningRight = false;
+            turningLeft = true;
+        }
+        else
+        {
+            turningRight = false;
+            turningLeft = false;
+        }
     }
 
     public void OnJump(CallbackContext context)
@@ -264,7 +282,7 @@ public class Character : MonoBehaviour
 
     public void OnExit(CallbackContext context)
     {
-        if (context.performed)
+        if (context.canceled)
         {
             SceneManager.LoadScene("CharacterSelect");
         }

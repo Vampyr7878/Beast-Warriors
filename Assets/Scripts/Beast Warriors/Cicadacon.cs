@@ -41,8 +41,6 @@ public class Cicadacon : BeastWarrior
 
     private float time;
 
-    private int barrel;
-
     new void Awake()
     {
         foldAngle = 0;
@@ -57,55 +55,26 @@ public class Cicadacon : BeastWarrior
         {
             if (time >= fireRate)
             {
-                ShootMachineGun();
+                ShootMachineGun(WeaponArm.None, bullet, lightBarrels, bulletInaccuracy, 2);
                 time = 0;
             }
             time += Time.deltaTime;
         }
         if (heavyShoot)
         {
-            ShootBall();
+            heavyShoot = ShootBall(WeaponArm.None, flash, ball, heavyBarrel, flashColor, ballColor);
         }
-    }
-
-    void ShootMachineGun()
-    {
-        int layerMask = 1 << 3;
-        layerMask = ~layerMask;
-        animator.SetTrigger("Shoot");
-        Vector3 direction = new(Random.Range(-bulletInaccuracy, bulletInaccuracy), Random.Range(-bulletInaccuracy, bulletInaccuracy), 1);
-        RaycastBullet(bullet, direction, layerMask, lightBarrels[barrel]);
-        RaycastBullet(bullet, direction, layerMask, lightBarrels[barrel + 2]);
-        barrel = barrel == (lightBarrels.Length - 3) ? 0 : barrel + 1;
-    }
-
-    void ShootBall()
-    {
-        Vector3 direction = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
-        Gradient g = new();
-        GradientColorKey[] colors = new GradientColorKey[2];
-        colors[0].color = flashColor;
-        colors[0].time = 0f;
-        colors[1].color = ballColor;
-        colors[1].time = 1f;
-        GradientAlphaKey[] alphas = new GradientAlphaKey[2];
-        alphas[0].alpha = 1f;
-        alphas[0].time = 0f;
-        alphas[1].alpha = 1f;
-        alphas[1].time = 1f;
-        g.SetKeys(colors, alphas);
-        ParticleProjectile(flash, ball, direction, direction, heavyBarrel, flashColor, ballColor, g);
-        heavyShoot = false;
     }
 
     public override void OnMeleeWeak(CallbackContext context)
     {
         weapon = 1;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         Equip(rightSword, rightHolster);
         Equip(leftSword, leftHolster);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
         Deploy(cannon, foldAngle, 0f, 0f);
     }
 
@@ -113,10 +82,11 @@ public class Cicadacon : BeastWarrior
     {
         weapon = 2;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         Equip(rightSword, rightHold);
         Equip(leftSword, leftHold);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
         Deploy(cannon, foldAngle, 0f, 0f);
     }
 
@@ -124,10 +94,11 @@ public class Cicadacon : BeastWarrior
     {
         weapon = 3;
         animator.enabled = true;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.Straight);
         animator.SetInteger("Weapon", weapon);
         Equip(rightSword, rightHolster);
         Equip(leftSword, leftHolster);
-        character.OverrideArm("Both");
+        character.OverrideArm(WeaponArm.Both);
         Deploy(cannon, foldAngle, 0f, 0f);
     }
 
@@ -135,10 +106,11 @@ public class Cicadacon : BeastWarrior
     {
         weapon = 4;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         Equip(rightSword, rightHolster);
         Equip(leftSword, leftHolster);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
         Deploy(cannon, deployAngle, 0f, 0f);
     }
 

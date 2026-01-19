@@ -23,6 +23,7 @@ public class AirazorTransmetal : BeastWarrior
     {
         weapon = 1;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         GunMode(false);
     }
@@ -31,6 +32,7 @@ public class AirazorTransmetal : BeastWarrior
     {
         weapon = 2;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         GunMode(false);
     }
@@ -39,6 +41,7 @@ public class AirazorTransmetal : BeastWarrior
     {
         weapon = 3;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         GunMode(true);
     }
@@ -47,6 +50,7 @@ public class AirazorTransmetal : BeastWarrior
     {
         weapon = 4;
         animator.enabled = true;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.Bend);
         animator.SetInteger("Weapon", weapon);
         GunMode(false);
     }

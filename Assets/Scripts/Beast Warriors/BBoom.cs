@@ -13,7 +13,7 @@ public class BBoom : BeastWarrior
 
     public GameObject heavyBarrel;
 
-    public GameObject explosion;
+    public GameObject blast;
 
     public GameObject missle;
 
@@ -25,75 +25,47 @@ public class BBoom : BeastWarrior
 
     public Color ballColor;
 
-    private int barrel;
-
     protected new void FixedUpdate()
     {
         base.FixedUpdate();
         if (lightShoot)
         {
-            ShootMissle();
+            lightShoot = ShootBolt(WeaponArm.None, blast, missle, lightBarrels, missleMaterial, Color.clear);
         }
         if (heavyShoot)
         {
-            ShootBall();
+            heavyShoot = ShootBall(WeaponArm.Right, flash, ball, heavyBarrel, ballColor, ballColor);
         }
-    }
-
-    void ShootMissle()
-    {
-        Vector3 direction = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
-        MeshProjectile(explosion, missle, direction, lightBarrels[barrel], missleMaterial);
-        MeshProjectile(explosion, missle, direction, lightBarrels[barrel + 2], missleMaterial);
-        barrel = barrel == (lightBarrels.Length - 3) ? 0 : barrel + 1;
-        lightShoot = false;
-    }
-
-    void ShootBall()
-    {
-        animator.SetTrigger("Shoot");
-        Vector3 direction = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
-        Gradient g = new();
-        GradientColorKey[] colors = new GradientColorKey[2];
-        colors[0].color = ballColor;
-        colors[0].time = 0f;
-        colors[1].color = ballColor;
-        colors[1].time = 1f;
-        GradientAlphaKey[] alphas = new GradientAlphaKey[2];
-        alphas[0].alpha = 1f;
-        alphas[0].time = 0f;
-        alphas[1].alpha = 1f;
-        alphas[1].time = 1f;
-        g.SetKeys(colors, alphas);
-        ParticleProjectile(flash, ball, direction, direction, heavyBarrel, ballColor, ballColor, g);
-        heavyShoot = false;
     }
 
     public override void OnMeleeWeak(CallbackContext context)
     {
         weapon = 1;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         Equip(rifle, holster);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
     {
         weapon = 2;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         Equip(rifle, holster);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
     }
 
     public override void OnRangedWeak(CallbackContext context)
     {
         weapon = 3;
         animator.enabled = false;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         Equip(rifle, holster);
-        character.OverrideArm("None");
+        character.OverrideArm(WeaponArm.None);
         barrel = 0;
     }
 
@@ -101,9 +73,10 @@ public class BBoom : BeastWarrior
     {
         weapon = 4;
         animator.enabled = true;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.Bend);
         animator.SetInteger("Weapon", weapon);
         Equip(rifle, hold);
-        character.OverrideArm("Right");
+        character.OverrideArm(WeaponArm.Right);
     }
 
     public override void OnAttack(CallbackContext context)
