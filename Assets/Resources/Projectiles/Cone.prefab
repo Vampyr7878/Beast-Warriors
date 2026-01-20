@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 7195092003241328366}
   - component: {fileID: 7195092003241328365}
   - component: {fileID: 7195092003241328367}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4882,7 +4882,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -4967,4 +4967,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 100
   flash: {fileID: 6304360778048044942, guid: b4ecd4512de45ef47b17645b22d5ccf4, type: 3}
-  flashMultiply: 4
+  projectile: {fileID: 7195092003241328366}
+  player: {fileID: 0}

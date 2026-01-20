@@ -46,6 +46,7 @@ public class Terrorsaur : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         Equip(blaster, holster);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeWeak(context);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -56,6 +57,7 @@ public class Terrorsaur : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         Equip(blaster, holster);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeStrong(context);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -66,6 +68,7 @@ public class Terrorsaur : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         Equip(blaster, hold);
         character.OverrideArm(WeaponArm.Right);
+        base.OnRangedWeak(context);
     }
 
     public override void OnRangedStrong(CallbackContext context)
@@ -76,6 +79,7 @@ public class Terrorsaur : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         Equip(blaster, holster);
         character.OverrideArm(WeaponArm.None);
+        base.OnRangedStrong(context);
         barrel = 0;
     }
 

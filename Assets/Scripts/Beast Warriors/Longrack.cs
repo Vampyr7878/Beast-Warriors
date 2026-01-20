@@ -61,6 +61,7 @@ public class Longrack : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         Equip(knife, holster);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeWeak(context);
         Deploy(rightGun, foldAngle, 180f, 0f);
         Deploy(leftGun, foldAngle, 180f, 0f);
     }
@@ -73,6 +74,7 @@ public class Longrack : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         Equip(knife, hold);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeStrong(context);
         Deploy(rightGun, foldAngle, 180f, 0f);
         Deploy(leftGun, foldAngle, 180f, 0f);
     }
@@ -85,6 +87,7 @@ public class Longrack : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         Equip(knife, holster);
         character.OverrideArm(WeaponArm.Left);
+        base.OnRangedWeak(context);
         Deploy(rightGun, foldAngle, 180f, 0f);
         Deploy(leftGun, foldAngle, 180f, 0f);
     }
@@ -97,6 +100,7 @@ public class Longrack : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         Equip(knife, holster);
         character.OverrideArm(WeaponArm.None);
+        base.OnRangedStrong(context);
         Deploy(rightGun, deployAngle, 180f, 0f);
         Deploy(leftGun, deployAngle, 180f, 0f);
         barrel = 0;

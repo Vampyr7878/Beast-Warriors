@@ -1,4 +1,3 @@
-using System.Threading;
 using UnityEngine;
 using static UnityEngine.InputSystem.InputAction;
 
@@ -56,6 +55,7 @@ public class Guiledart : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         Equip(gun, holster);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeWeak(context);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -66,6 +66,7 @@ public class Guiledart : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         Equip(gun, holster);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeStrong(context);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -76,6 +77,7 @@ public class Guiledart : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         Equip(gun, hold);
         character.OverrideArm(WeaponArm.Left);
+        base.OnRangedWeak(context);
     }
 
     public override void OnRangedStrong(CallbackContext context)
@@ -86,6 +88,7 @@ public class Guiledart : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         Equip(gun, holster);
         character.OverrideArm(WeaponArm.Right);
+        base.OnRangedStrong(context);
     }
 
     public override void OnAttack(CallbackContext context)

@@ -53,6 +53,7 @@ public class Wolfang : BeastWarrior
         Equip(shield, shieldHlster);
         Equip(gun, gunHolster);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeWeak(context);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -64,6 +65,7 @@ public class Wolfang : BeastWarrior
         Equip(shield, leftHold);
         Equip(gun, gunHolster);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeStrong(context);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -75,6 +77,7 @@ public class Wolfang : BeastWarrior
         Equip(shield, shieldHlster);
         Equip(gun, gunHolster);
         character.OverrideArm(WeaponArm.None);
+        base.OnRangedWeak(context);
     }
 
     public override void OnRangedStrong(CallbackContext context)
@@ -86,6 +89,7 @@ public class Wolfang : BeastWarrior
         Equip(shield, shieldHlster);
         Equip(gun, rightHold);
         character.OverrideArm(WeaponArm.Right);
+        base.OnRangedStrong(context);
     }
 
     public override void OnAttack(CallbackContext context)

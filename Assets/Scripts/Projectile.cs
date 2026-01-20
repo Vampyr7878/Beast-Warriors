@@ -7,8 +7,6 @@ public class Projectile : MonoBehaviour
 
     public GameObject flash;
 
-    public float flashMultiply;
-
     private Rigidbody body;
 
     private new Light light;
@@ -20,14 +18,14 @@ public class Projectile : MonoBehaviour
         light = GetComponent<Light>();
     }
 
-    void OnTriggerEnter(Collider other)
+    void OnCollisionEnter(Collision collision)
     {
-        if (body != null && other.gameObject.name != "Character" && !other.isTrigger)
+        if (collision.gameObject.name != "Character" && body != null)
         {
             body.linearVelocity = Vector3.zero;
-            GameObject f = Instantiate(flash);
-            f.transform.position = transform.position + transform.forward * flashMultiply;
-            f.transform.eulerAngles = new Vector3(-transform.eulerAngles.x, transform.eulerAngles.y, 0f);
+            ContactPoint contact = collision.contacts[0];
+            Vector3 position = contact.point;
+            GameObject f = Instantiate(flash, position, Quaternion.Euler(-transform.eulerAngles.x, transform.eulerAngles.y, 0f));
             if (light != null)
             {
                 f.GetComponent<Light>().color = light.color;

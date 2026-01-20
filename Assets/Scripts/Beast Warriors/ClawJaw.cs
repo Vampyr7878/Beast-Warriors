@@ -48,6 +48,7 @@ public class ClawJaw : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         Equip(claw, holster);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeWeak(context);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -58,6 +59,7 @@ public class ClawJaw : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         Equip(claw, hold);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeStrong(context);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -68,6 +70,7 @@ public class ClawJaw : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         Equip(claw, holster);
         character.OverrideArm(WeaponArm.Both);
+        base.OnRangedWeak(context);
         barrel = 0;
         right = true;
         left = false;
@@ -81,6 +84,7 @@ public class ClawJaw : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         Equip(claw, holster);
         character.OverrideArm(WeaponArm.None);
+        base.OnRangedStrong(context);
     }
 
     public override void OnAttack(CallbackContext context)

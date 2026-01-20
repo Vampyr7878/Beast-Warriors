@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 7169620736205658759}
   - component: {fileID: 7637573381589123423}
   - component: {fileID: 7606568725941934245}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Bolt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -80,7 +80,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -260,9 +260,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe8c1b0a96cc11b42a01b73ca512b461, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 100
+  speed: 50
   flash: {fileID: 6304360778048044942, guid: b4ecd4512de45ef47b17645b22d5ccf4, type: 3}
-  flashMultiply: 4
 --- !u!33 &7637573381589123423
 MeshFilter:
   m_ObjectHideFlags: 0

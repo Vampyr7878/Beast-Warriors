@@ -41,6 +41,7 @@ public class Razorclaw : BeastWarrior
         animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeWeak(context);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -50,6 +51,7 @@ public class Razorclaw : BeastWarrior
         animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeStrong(context);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -58,6 +60,7 @@ public class Razorclaw : BeastWarrior
         animator.enabled = false;
         animator.SetInteger("Weapon", weapon);
         character.OverrideArm(WeaponArm.None);
+        base.OnRangedWeak(context);
         barrel = 0;
     }
 
@@ -68,6 +71,7 @@ public class Razorclaw : BeastWarrior
         animator.SetInteger("WeaponMode", (int)WeaponMode.Bend);
         animator.SetInteger("Weapon", weapon);
         character.OverrideArm(WeaponArm.Left);
+        base.OnRangedStrong(context);
     }
 
     public override void OnAttack(CallbackContext context)

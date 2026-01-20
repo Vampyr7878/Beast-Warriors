@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 1636974560683305628}
   - component: {fileID: 6692936998765763363}
   - component: {fileID: 6304360778048044946}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Ball
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4854,7 +4854,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 100
   flash: {fileID: 6304360778048044942, guid: b4ecd4512de45ef47b17645b22d5ccf4, type: 3}
-  flashMultiply: 2
 --- !u!108 &1636974560683305628
 Light:
   m_ObjectHideFlags: 0
@@ -4928,7 +4927,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6304360778048044942}
   serializedVersion: 5
-  m_Mass: 1
+  m_Mass: 10
   m_LinearDamping: 0
   m_AngularDamping: 0
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -4962,9 +4961,9 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 2
+  m_Radius: 1
   m_Center: {x: 0, y: 0, z: 0}

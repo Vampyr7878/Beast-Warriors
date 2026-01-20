@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using static UnityEngine.InputSystem.InputAction;
 
 public class Character : MonoBehaviour
@@ -14,13 +15,17 @@ public class Character : MonoBehaviour
 
     public List<Transform> robot;
 
+    public Image Crosshair;
+
     public LayerMask mask;
 
     public float speed;
 
     public float jump;
 
-    public float cameraRange;
+    public float cameraMin;
+
+    public float cameraMax;
 
     private BeastWarrior warrior;
 
@@ -152,12 +157,14 @@ public class Character : MonoBehaviour
             body.AddForce(Physics.gravity, ForceMode.Acceleration);
         }
         transform.Rotate(0f, look.x, 0f);
-        Vector3 rotation = characterCamera.transform.rotation.eulerAngles;
-        float angle = Mathf.Clamp(rotation.x - look.y, cameraAngle - cameraRange, cameraAngle + cameraRange);
+        characterCamera.transform.Rotate(-look.y, 0f, 0f);
+        Vector3 rotation = characterCamera.transform.eulerAngles;
+        float angle = rotation.x > 180 ? rotation.x - 360 : rotation.x;
+        angle = Mathf.Clamp(angle, cameraMin, cameraMax);
         characterCamera.transform.eulerAngles = new Vector3(angle, rotation.y, rotation.z);
         skeleton[(int)BodyPart.Part.Body].localPosition = new Vector3(-robot[(int)BodyPart.Part.Body].localPosition.x * 350,
             robot[(int)BodyPart.Part.Body].localPosition.y * 400, robot[(int)BodyPart.Part.Body].localPosition.z * 300);
-        skeleton[(int)BodyPart.Part.Head].eulerAngles = new Vector3(angle - cameraAngle, skeleton[2].eulerAngles.y, skeleton[2].eulerAngles.z);
+        skeleton[(int)BodyPart.Part.Head].rotation = Quaternion.Euler(angle - cameraAngle, skeleton[2].eulerAngles.y, skeleton[2].eulerAngles.z);
         skeleton[(int)BodyPart.Part.RightHip].localRotation = robot[(int)BodyPart.Part.RightHip].localRotation;
         skeleton[(int)BodyPart.Part.RightKnee].localRotation = robot[(int)BodyPart.Part.RightKnee].localRotation;
         skeleton[(int)BodyPart.Part.RightFoot].localRotation = robot[(int)BodyPart.Part.RightFoot].localRotation;

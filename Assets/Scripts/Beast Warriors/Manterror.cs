@@ -56,6 +56,7 @@ public class Manterror : BeastWarrior
         animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeWeak(context);
         Deploy(rightLauncher, 0f, foldAngle, 0f);
         Deploy(leftLauncher, 0f, -foldAngle, 0f);
     }
@@ -67,6 +68,7 @@ public class Manterror : BeastWarrior
         animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeStrong(context);
         Deploy(rightLauncher, 0f, deployAngle, 0f);
         Deploy(leftLauncher, 0f, -deployAngle, 0f);
     }
@@ -78,6 +80,7 @@ public class Manterror : BeastWarrior
         animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         character.OverrideArm(WeaponArm.None);
+        base.OnRangedWeak(context);
         Deploy(rightLauncher, 0f, foldAngle, 0f);
         Deploy(leftLauncher, 0f, -foldAngle, 0f);
     }
@@ -89,6 +92,7 @@ public class Manterror : BeastWarrior
         animator.SetInteger("WeaponMode", (int)WeaponMode.Bend);
         animator.SetInteger("Weapon", weapon);
         character.OverrideArm(WeaponArm.Both);
+        base.OnRangedStrong(context);
         Deploy(rightLauncher, 0f, deployAngle, 0f);
         Deploy(leftLauncher, 0f, -deployAngle, 0f);
         barrel = 0;

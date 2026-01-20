@@ -53,6 +53,7 @@ public class Convobat : BeastWarrior
         Equip(rightScimitar, rightHolster);
         Equip(leftScimitar, leftHolster);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeWeak(context);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -64,6 +65,7 @@ public class Convobat : BeastWarrior
         Equip(rightScimitar, rightHold);
         Equip(leftScimitar, leftHold);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeStrong(context);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -75,6 +77,7 @@ public class Convobat : BeastWarrior
         Equip(rightScimitar, rightHolster);
         Equip(leftScimitar, leftHolster);
         character.OverrideArm(WeaponArm.Both);
+        base.OnRangedWeak(context);
         barrel = 0;
         right = true;
         left = false;
@@ -89,6 +92,7 @@ public class Convobat : BeastWarrior
         Equip(rightScimitar, rightHolster);
         Equip(leftScimitar, leftHolster);
         character.OverrideArm(WeaponArm.None);
+        base.OnRangedStrong(context);
         barrel = 0;
     }
 

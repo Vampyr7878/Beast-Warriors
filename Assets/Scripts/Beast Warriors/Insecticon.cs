@@ -67,6 +67,7 @@ public class Insecticon : BeastWarrior
         Equip(leftSickle, leftHolster);
         Equip(crossbow, holster);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeWeak(context);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -79,6 +80,7 @@ public class Insecticon : BeastWarrior
         Equip(leftSickle, leftHold);
         Equip(crossbow, holster);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeStrong(context);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -91,6 +93,7 @@ public class Insecticon : BeastWarrior
         Equip(leftSickle, leftHolster);
         Equip(crossbow, holster);
         character.OverrideArm(WeaponArm.Both);
+        base.OnRangedWeak(context);
     }
 
     public override void OnRangedStrong(CallbackContext context)
@@ -103,6 +106,7 @@ public class Insecticon : BeastWarrior
         Equip(leftSickle, leftHolster);
         Equip(crossbow, rightHold);
         character.OverrideArm(WeaponArm.Right);
+        base.OnRangedStrong(context);
     }
 
     public override void OnAttack(CallbackContext context)

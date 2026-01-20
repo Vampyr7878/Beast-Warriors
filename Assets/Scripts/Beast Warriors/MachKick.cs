@@ -48,6 +48,7 @@ public class MachKick : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         Equip(axe, holster);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeWeak(context);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -58,6 +59,7 @@ public class MachKick : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         Equip(axe, hold);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeStrong(context);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -68,6 +70,7 @@ public class MachKick : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         Equip(axe, holster);
         character.OverrideArm(WeaponArm.Right);
+        base.OnRangedWeak(context);
     }
 
     public override void OnRangedStrong(CallbackContext context)
@@ -78,6 +81,7 @@ public class MachKick : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         Equip(axe, holster);
         character.OverrideArm(WeaponArm.None);
+        base.OnRangedStrong(context);
         barrel = 0;
     }
 

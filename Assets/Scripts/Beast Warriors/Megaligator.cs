@@ -60,6 +60,7 @@ public class Megaligator : BeastWarrior
         Equip(gun, holster);
         Equip(tail, holster);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeWeak(context);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -73,6 +74,7 @@ public class Megaligator : BeastWarrior
         Equip(gun, holster);
         Equip(tail, hold);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeStrong(context);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -86,6 +88,7 @@ public class Megaligator : BeastWarrior
         Equip(gun, holster);
         Equip(tail, holster);
         character.OverrideArm(WeaponArm.Both);
+        base.OnRangedWeak(context);
     }
 
     public override void OnRangedStrong(CallbackContext context)
@@ -99,6 +102,7 @@ public class Megaligator : BeastWarrior
         Equip(gun, hold);
         Equip(tail, holster);
         character.OverrideArm(WeaponArm.Right);
+        base.OnRangedStrong(context);
     }
 
     public override void OnAttack(CallbackContext context)

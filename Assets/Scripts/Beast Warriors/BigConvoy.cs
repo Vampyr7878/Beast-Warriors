@@ -61,6 +61,7 @@ public class BigConvoy : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         Equip(cannon, holster);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeWeak(context);
         Deploy(rightBaton, 0, 90, foldAngle);
         Deploy(leftBaton, 0, -90, -foldAngle);
     }
@@ -73,6 +74,7 @@ public class BigConvoy : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         Equip(cannon, holster);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeStrong(context);
         Deploy(rightBaton, 0, 90, -deployAngle);
         Deploy(leftBaton, 0, -90, deployAngle);
     }
@@ -85,6 +87,7 @@ public class BigConvoy : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         Equip(cannon, holster);
         character.OverrideArm(WeaponArm.None);
+        base.OnRangedWeak(context);
         Deploy(rightBaton, 0, 90, foldAngle);
         Deploy(leftBaton, 0, -90, -foldAngle);
         barrel = 0;
@@ -98,6 +101,7 @@ public class BigConvoy : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         Equip(cannon, hold);
         character.OverrideArm(WeaponArm.Right);
+        base.OnRangedStrong(context);
         Deploy(rightBaton, 0, 90, foldAngle);
         Deploy(leftBaton, 0, -90, -foldAngle);
     }

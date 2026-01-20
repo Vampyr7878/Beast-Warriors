@@ -50,6 +50,7 @@ public class Terragator : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         Equip(cannon, holster);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeWeak(context);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -60,6 +61,7 @@ public class Terragator : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         Equip(cannon, holster);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeStrong(context);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -70,6 +72,7 @@ public class Terragator : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         Equip(cannon, holster);
         character.OverrideArm(WeaponArm.Left);
+        base.OnRangedWeak(context);
         barrel = 0;
     }
 
@@ -81,6 +84,7 @@ public class Terragator : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         Equip(cannon, hold);
         character.OverrideArm(WeaponArm.Right);
+        base.OnRangedStrong(context);
         barrel = 0;
     }
 

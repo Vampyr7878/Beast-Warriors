@@ -42,7 +42,7 @@ public class SilverboltII : BeastWarrior
         base.FixedUpdate();
         if (lightShoot)
         {
-            lightShoot = Throw(WeaponArm.Both, thrown, rightSword, holds, 180f, 90f, angle, force, true);
+            lightShoot = Throw(WeaponArm.Both, thrown, rightSword, holds, 180f, 90f, true);
         }
         if (heavyShoot)
         {
@@ -59,6 +59,7 @@ public class SilverboltII : BeastWarrior
         Equip(rightSword, rightHolster);
         Equip(leftSword, leftHolster);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeWeak(context);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -70,6 +71,7 @@ public class SilverboltII : BeastWarrior
         Equip(rightSword, rightHold);
         Equip(leftSword, leftHold);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeStrong(context);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -81,6 +83,7 @@ public class SilverboltII : BeastWarrior
         Equip(rightSword, rightHold);
         Equip(leftSword, leftHold);
         character.OverrideArm(WeaponArm.Both);
+        base.OnRangedWeak(context);
         right = true;
         left = false;
     }
@@ -94,6 +97,7 @@ public class SilverboltII : BeastWarrior
         Equip(rightSword, rightHold);
         Equip(leftSword, leftHold);
         character.OverrideArm(WeaponArm.None);
+        base.OnRangedStrong(context);
         barrel = 0;
     }
 

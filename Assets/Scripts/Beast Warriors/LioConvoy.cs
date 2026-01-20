@@ -68,6 +68,7 @@ public class LioConvoy : BeastWarrior
         Equip(rightBlaster, rightHolster);
         Equip(leftBlaster, leftHolster);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeWeak(context);
         Deploy(rightClaw, 0f, foldAngle, 90f);
         Deploy(leftClaw, 0f, -foldAngle, -90f);
     }
@@ -81,6 +82,7 @@ public class LioConvoy : BeastWarrior
         Equip(rightBlaster, rightHolster);
         Equip(leftBlaster, leftHolster);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeStrong(context);
         Deploy(rightClaw, 0f, deployAngle, 90f);
         Deploy(leftClaw, 0f, -deployAngle, -90f);
     }
@@ -94,6 +96,7 @@ public class LioConvoy : BeastWarrior
         Equip(rightBlaster, rightHolster);
         Equip(leftBlaster, leftHolster);
         character.OverrideArm(WeaponArm.Both);
+        base.OnRangedWeak(context);
         Deploy(rightClaw, 0f, foldAngle, 90f);
         Deploy(leftClaw, 0f, -foldAngle, -90f);
         barrel = 0;
@@ -110,6 +113,7 @@ public class LioConvoy : BeastWarrior
         Equip(rightBlaster, rightHold);
         Equip(leftBlaster, leftHold);
         character.OverrideArm(WeaponArm.Both);
+        base.OnRangedStrong(context);
         Deploy(rightClaw, 0f, foldAngle, 90f);
         Deploy(leftClaw, 0f, -foldAngle, -90f);
         barrel = 0;

@@ -70,6 +70,7 @@ public class SeaClamp : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         Equip(launcher, holster);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeWeak(context);
         Deploy(rightClaws, 0f, foldAngle, 80f);
         Deploy(leftClaws, 0f, foldAngle + 180, -80f);
     }
@@ -82,6 +83,7 @@ public class SeaClamp : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         Equip(launcher, holster);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeStrong(context);
         Deploy(rightClaws, 0f, -deployAngle, 80f);
         Deploy(leftClaws, 0f, deployAngle + 180, -80f);
     }
@@ -94,6 +96,7 @@ public class SeaClamp : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         Equip(launcher, holster);
         character.OverrideArm(WeaponArm.None);
+        base.OnRangedWeak(context);
         Deploy(rightClaws, 0f, foldAngle, 80f);
         Deploy(leftClaws, 0f, foldAngle + 180, -80f);
     }
@@ -106,6 +109,7 @@ public class SeaClamp : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         Equip(launcher, hold);
         character.OverrideArm(WeaponArm.Right);
+        base.OnRangedStrong(context);
         Deploy(rightClaws, 0f, foldAngle, 80f);
         Deploy(leftClaws, 0f, foldAngle + 180, -80f);
         barrel = 0;

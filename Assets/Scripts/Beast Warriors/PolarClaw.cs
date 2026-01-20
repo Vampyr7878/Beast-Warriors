@@ -61,6 +61,7 @@ public class PolarClaw : BeastWarrior
         animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeWeak(context);
         Deploy(claw, foldAngle, 0f, 0f);
     }
 
@@ -71,6 +72,7 @@ public class PolarClaw : BeastWarrior
         animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeStrong(context);
         Deploy(claw, deployAngle, 0f, 0f);
     }
 
@@ -81,6 +83,7 @@ public class PolarClaw : BeastWarrior
         animator.SetInteger("WeaponMode", (int)WeaponMode.Bend);
         animator.SetInteger("Weapon", weapon);
         character.OverrideArm(WeaponArm.Both);
+        base.OnRangedWeak(context);
         Deploy(claw, foldAngle, 0f, 0f);
     }
 
@@ -91,6 +94,7 @@ public class PolarClaw : BeastWarrior
         animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         character.OverrideArm(WeaponArm.None);
+        base.OnRangedStrong(context);
         Deploy(claw, foldAngle, 0f, 0f);
         barrel = 0;
     }

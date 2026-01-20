@@ -48,6 +48,7 @@ public class Noctorro : BeastWarrior
         animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeWeak(context);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -57,6 +58,7 @@ public class Noctorro : BeastWarrior
         animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeStrong(context);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -66,6 +68,7 @@ public class Noctorro : BeastWarrior
         animator.SetInteger("WeaponMode", (int)WeaponMode.Bend);
         animator.SetInteger("Weapon", weapon);
         character.OverrideArm(WeaponArm.Both);
+        base.OnRangedWeak(context);
     }
 
     public override void OnRangedStrong(CallbackContext context)
@@ -75,6 +78,7 @@ public class Noctorro : BeastWarrior
         animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         character.OverrideArm(WeaponArm.None);
+        base.OnRangedStrong(context);
         barrel = 0;
     }
 

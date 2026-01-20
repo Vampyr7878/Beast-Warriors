@@ -77,6 +77,7 @@ public class Ironhide : BeastWarrior
         Equip(rightClub, rightHolster);
         Equip(leftClub, leftHolster);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeWeak(context);
         Deploy(rightBlade, 0f, deployAngle, 80f);
         Deploy(leftBlade, 0f, -deployAngle, -80f);
     }
@@ -90,6 +91,7 @@ public class Ironhide : BeastWarrior
         Equip(rightClub, rightHold);
         Equip(leftClub, leftHold);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeStrong(context);
         Deploy(rightBlade, 0f, foldAngle, 80f);
         Deploy(leftBlade, 0f, -foldAngle, -80f);
     }
@@ -103,6 +105,7 @@ public class Ironhide : BeastWarrior
         Equip(rightClub, rightHolster);
         Equip(leftClub, leftHolster);
         character.OverrideArm(WeaponArm.None);
+        base.OnRangedWeak(context);
         Deploy(rightBlade, 0f, foldAngle, 80f);
         Deploy(leftBlade, 0f, -foldAngle, -80f);
         barrel = 0;
@@ -117,6 +120,7 @@ public class Ironhide : BeastWarrior
         Equip(rightClub, rightHolster);
         Equip(leftClub, leftHolster);
         character.OverrideArm(WeaponArm.Both);
+        base.OnRangedStrong(context);
         Deploy(rightBlade, 0f, foldAngle, 80f);
         Deploy(leftBlade, 0f, -foldAngle, -80f);
     }

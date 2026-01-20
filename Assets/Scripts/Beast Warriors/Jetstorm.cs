@@ -60,6 +60,7 @@ public class Jetstorm : BeastWarrior
         animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeWeak(context);
         Deploy(rightGun, 0f, foldAngle, 0f);
         Deploy(rightGunBarrel, deployAngle, 0f, 0f);
         Deploy(leftGun, 0f, -foldAngle, 0f);
@@ -73,6 +74,7 @@ public class Jetstorm : BeastWarrior
         animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeStrong(context);
         Deploy(rightGun, 0f, foldAngle, 0f);
         Deploy(rightGunBarrel, deployAngle, 0f, 0f);
         Deploy(leftGun, 0f, -foldAngle, 0f);
@@ -86,6 +88,7 @@ public class Jetstorm : BeastWarrior
         animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         character.OverrideArm(WeaponArm.None);
+        base.OnRangedWeak(context);
         Deploy(rightGun, 0f, deployAngle, 0f);
         Deploy(rightGunBarrel, foldAngle, 0f, 0f);
         Deploy(leftGun, 0f, -deployAngle, 0f);
@@ -100,6 +103,7 @@ public class Jetstorm : BeastWarrior
         animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         character.OverrideArm(WeaponArm.None);
+        base.OnRangedStrong(context);
         Deploy(rightGun, 0f, foldAngle, 0f);
         Deploy(rightGunBarrel, deployAngle, 0f, 0f);
         Deploy(leftGun, 0f, -foldAngle, 0f);

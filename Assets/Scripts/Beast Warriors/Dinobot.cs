@@ -55,6 +55,7 @@ public class Dinobot : BeastWarrior
         Equip(sword, swordHolster);
         Equip(slash, slashHolster);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeWeak(context);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -66,6 +67,7 @@ public class Dinobot : BeastWarrior
         Equip(sword, rightHold);
         Equip(slash, leftHold);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeStrong(context);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -77,6 +79,7 @@ public class Dinobot : BeastWarrior
         Equip(sword, slashHolster);
         Equip(slash, leftHold);
         character.OverrideArm(WeaponArm.Left);
+        base.OnRangedWeak(context);
     }
 
     public override void OnRangedStrong(CallbackContext context)
@@ -88,6 +91,7 @@ public class Dinobot : BeastWarrior
         Equip(sword, swordHolster);
         Equip(slash, slashHolster);
         character.OverrideArm(WeaponArm.None);
+        base.OnRangedStrong(context);
     }
 
     public override void OnAttack(CallbackContext context)

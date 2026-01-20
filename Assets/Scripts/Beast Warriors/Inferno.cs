@@ -1,6 +1,5 @@
 using UnityEngine;
 using static UnityEngine.InputSystem.InputAction;
-using static UnityEngine.ParticleSystem;
 
 public class Inferno : BeastWarrior
 {
@@ -44,6 +43,7 @@ public class Inferno : BeastWarrior
             lightShoot = ShootBolt(WeaponArm.Right, flash, bolt, lightBarrel, boltMaterial, boltColor);
         }
         thrower.SetActive(heavyShoot);
+        thrower.transform.localRotation = Quaternion.Euler(-characterCamera.transform.eulerAngles.x + 5, thrower.transform.localEulerAngles.y, thrower.transform.localEulerAngles.z);
     }
 
     public override void OnMeleeWeak(CallbackContext context)
@@ -55,6 +55,7 @@ public class Inferno : BeastWarrior
         Equip(flamethrower, flamethrowerHolster);
         Equip(launcher, launcherHolster);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeWeak(context);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -64,6 +65,7 @@ public class Inferno : BeastWarrior
         Equip(flamethrower, hold);
         Equip(launcher, launcherHolster);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeStrong(context);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -75,6 +77,7 @@ public class Inferno : BeastWarrior
         Equip(flamethrower, flamethrowerHolster);
         Equip(launcher, hold);
         character.OverrideArm(WeaponArm.Right);
+        base.OnRangedWeak(context);
     }
 
     public override void OnRangedStrong(CallbackContext context)
@@ -86,6 +89,7 @@ public class Inferno : BeastWarrior
         Equip(flamethrower, hold);
         Equip(launcher, launcherHolster);
         character.OverrideArm(WeaponArm.Right);
+        base.OnRangedStrong(context);
     }
 
     public override void OnAttack(CallbackContext context)

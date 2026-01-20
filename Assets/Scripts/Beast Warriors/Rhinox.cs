@@ -75,6 +75,7 @@ public class Rhinox : BeastWarrior
         Equip(sword, swordHolster);
         Equip(gun, gunHolster);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeWeak(context);
         Deploy(rightBlaster, 0f, foldAngle, 0f);
         Deploy(leftBlaster, 0f, foldAngle, 0f);
     }
@@ -88,6 +89,7 @@ public class Rhinox : BeastWarrior
         Equip(sword, hold);
         Equip(gun, gunHolster);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeStrong(context);
         Deploy(rightBlaster, 0f, foldAngle, 0f);
         Deploy(leftBlaster, 0f, foldAngle, 0f);
     }
@@ -101,6 +103,7 @@ public class Rhinox : BeastWarrior
         Equip(sword, swordHolster);
         Equip(gun, gunHolster);
         character.OverrideArm(WeaponArm.Both);
+        base.OnRangedWeak(context);
         Deploy(rightBlaster, 0f, deployAngle, 0f);
         Deploy(leftBlaster, 0f, deployAngle, 0f);
         barrel = 0;
@@ -117,6 +120,7 @@ public class Rhinox : BeastWarrior
         Equip(sword, swordHolster);
         Equip(gun, hold);
         character.OverrideArm(WeaponArm.Right);
+        base.OnRangedStrong(context);
         Deploy(rightBlaster, 0f, foldAngle, 0f);
         Deploy(leftBlaster, 0f, foldAngle, 0f);
     }

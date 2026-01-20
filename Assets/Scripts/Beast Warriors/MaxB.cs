@@ -53,6 +53,7 @@ public class MaxB : BeastWarrior
         Equip(claw, clawHolster);
         Equip(gun, gunHolster);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeWeak(context);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -64,6 +65,7 @@ public class MaxB : BeastWarrior
         Equip(claw, leftHold);
         Equip(gun, gunHolster);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeStrong(context);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -75,6 +77,7 @@ public class MaxB : BeastWarrior
         Equip(claw, clawHolster);
         Equip(gun, rightHold);
         character.OverrideArm(WeaponArm.Right);
+        base.OnRangedWeak(context);
     }
 
     public override void OnRangedStrong(CallbackContext context)
@@ -86,6 +89,7 @@ public class MaxB : BeastWarrior
         Equip(claw, leftHold);
         Equip(gun, gunHolster);
         character.OverrideArm(WeaponArm.Left);
+        base.OnRangedStrong(context);
     }
 
     public override void OnAttack(CallbackContext context)

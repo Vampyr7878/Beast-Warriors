@@ -2,38 +2,39 @@ using UnityEngine;
 
 public class Thrown : MonoBehaviour
 {
+    public float speed;
+
     public GameObject flash;
-
-    public float flashMultiply;
-
-    public bool spin;
 
     public Vector3 forward;
 
+    public bool spin;
+    
     private Rigidbody body;
 
     void Start()
     {
         body = GetComponent<Rigidbody>();
+        body.linearVelocity = forward * speed;
     }
 
     private void FixedUpdate()
     {
         if (spin)
         {
-            transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, transform.eulerAngles.z + 30);
+            transform.Rotate(0f, 0f, 30f);
         }
     }
 
-    void OnTriggerEnter(Collider other)
+    void OnCollisionEnter(Collision collision)
     {
-        if (other.gameObject.name != "Character" && !other.isTrigger)
+        if (collision.gameObject.name != "Character" && body != null)
         {
             body.linearVelocity = Vector3.zero;
             spin = false;
-            GameObject f = Instantiate(flash);
-            f.transform.position = transform.position - GetComponent<BoxCollider>().center + forward * flashMultiply;
-            f.transform.eulerAngles = new Vector3(-transform.eulerAngles.x, transform.eulerAngles.y, 0f);
+            ContactPoint contact = collision.contacts[0];
+            Vector3 position = contact.point + contact.normal * 0.1f;
+            Instantiate(flash, position, Quaternion.Euler(-transform.eulerAngles.x, transform.eulerAngles.y, 0f));
             Destroy(gameObject);
         }
     }

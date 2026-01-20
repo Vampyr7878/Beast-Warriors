@@ -58,6 +58,7 @@ public class Armordillo : BeastWarrior
         Equip(mace, maceHolster);
         Equip(rifle, gunHolster);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeWeak(context);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -69,6 +70,7 @@ public class Armordillo : BeastWarrior
         Equip(mace, hold);
         Equip(rifle, gunHolster);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeStrong(context);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -80,6 +82,7 @@ public class Armordillo : BeastWarrior
         Equip(mace, maceHolster);
         Equip(rifle, gunHolster);
         character.OverrideArm(WeaponArm.None);
+        base.OnRangedWeak(context);
     }
 
     public override void OnRangedStrong(CallbackContext context)
@@ -91,6 +94,7 @@ public class Armordillo : BeastWarrior
         Equip(mace, maceHolster);
         Equip(rifle, hold);
         character.OverrideArm(WeaponArm.Right);
+        base.OnRangedStrong(context);
     }
 
     public override void OnAttack(CallbackContext context)

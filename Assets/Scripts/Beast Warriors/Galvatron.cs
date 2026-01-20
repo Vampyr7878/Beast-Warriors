@@ -1,4 +1,3 @@
-using System.Threading;
 using UnityEngine;
 using static UnityEngine.InputSystem.InputAction;
 
@@ -74,6 +73,7 @@ public class Galvatron : BeastWarrior
         Equip(leftAxe, leftHold);
         Equip(claw, clawHolster);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeWeak(context);
         Deploy(rightBlaster, 0f, foldAngle, 90f);
         Deploy(leftBlaster, 0f, -foldAngle, -90f);
     }
@@ -88,6 +88,7 @@ public class Galvatron : BeastWarrior
         Equip(leftAxe, leftHolster);
         Equip(claw, rightHold);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeStrong(context);
         Deploy(rightBlaster, 0f, foldAngle, 90f);
         Deploy(leftBlaster, 0f, -foldAngle, -90f);
     }
@@ -102,6 +103,7 @@ public class Galvatron : BeastWarrior
         Equip(leftAxe, leftHold);
         Equip(claw, clawHolster);
         character.OverrideArm(WeaponArm.Both);
+        base.OnRangedWeak(context);
         Deploy(rightBlaster, 0f, deployAngle, 90f);
         Deploy(leftBlaster, 0f, -deployAngle, -90f);
         barrel = 0;
@@ -119,6 +121,7 @@ public class Galvatron : BeastWarrior
         Equip(leftAxe, leftHolster);
         Equip(claw, rightHold);
         character.OverrideArm(WeaponArm.Right);
+        base.OnRangedStrong(context);
         Deploy(rightBlaster, 0f, foldAngle, 90f);
         Deploy(leftBlaster, 0f, -foldAngle, -90f);
     }

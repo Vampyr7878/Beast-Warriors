@@ -25,8 +25,6 @@ public abstract class BeastWarrior : MonoBehaviour
 
     protected Camera characterCamera;
 
-    protected Transform cameraAimHelper;
-
     protected Animator animator;
 
     protected int weapon;
@@ -48,8 +46,8 @@ public abstract class BeastWarrior : MonoBehaviour
         cameraPosition = new float[4];
         cameraPosition[0] = 0f;
         cameraPosition[1] = 0f;
-        cameraPosition[2] = -1.5f;
-        cameraPosition[3] = -1.5f;
+        cameraPosition[2] = -2.5f;
+        cameraPosition[3] = -2.5f;
         weapon = 1;
         lightShoot = false;
         heavyShoot = false;
@@ -59,7 +57,6 @@ public abstract class BeastWarrior : MonoBehaviour
     {
         character = transform.parent.gameObject.GetComponent<Character>();
         characterCamera = transform.parent.GetComponent<Character>().characterCamera;
-        cameraAimHelper = characterCamera.GetComponentsInChildren<Transform>()[1];
         animator = transform.parent.GetComponentInChildren<Animator>();
         animator.enabled = false;
     }
@@ -80,22 +77,24 @@ public abstract class BeastWarrior : MonoBehaviour
 
     protected void RaycastBullet(GameObject bullet, Vector3 direction, LayerMask layerMask, GameObject barrel, bool audio = true)
     {
-        if (Physics.Raycast(cameraAimHelper.position, cameraAimHelper.TransformDirection(direction), out RaycastHit hit, Mathf.Infinity, layerMask))
+        Quaternion rotation = Quaternion.Euler(-characterCamera.transform.eulerAngles.x, transform.parent.eulerAngles.y, 0f);
+        Vector3 target = rotation * direction;
+        if (Physics.Raycast(characterCamera.transform.position, target, out RaycastHit hit, Mathf.Infinity, layerMask))
         {
-            GameObject b = Instantiate(bullet);
-            b.transform.position = barrel.transform.position;
-            b.transform.eulerAngles = new Vector3(0f, transform.eulerAngles.y, 0f);
+            GameObject b = Instantiate(bullet, barrel.transform.position, Quaternion.Euler(0f, transform.eulerAngles.y, 0f));
             b.GetComponent<AudioSource>().enabled = audio;
             GameObject h = b.transform.GetChild(1).gameObject;
             h.transform.position = hit.point;
-            Debug.DrawLine(barrel.transform.position, hit.point, Color.blue, 3600);
-            Debug.DrawRay(cameraAimHelper.position, cameraAimHelper.TransformDirection(direction) * hit.distance, Color.cyan, 3600);
+            Debug.DrawLine(barrel.transform.position, hit.point, Color.darkBlue, 3600);
+            Debug.DrawRay(characterCamera.transform.position, target * hit.distance, Color.blue, 3600);
         }
     }
 
     protected void RaycastLaser(LineRenderer laser, Vector3 direction, LayerMask layerMask, GameObject barrel, Color color)
     {
-        if (Physics.Raycast(cameraAimHelper.position, cameraAimHelper.TransformDirection(direction), out RaycastHit hit, Mathf.Infinity, layerMask))
+        Quaternion rotation = Quaternion.Euler(-characterCamera.transform.eulerAngles.x, transform.parent.eulerAngles.y, 0f);
+        Vector3 target = rotation * direction;
+        if (Physics.Raycast(characterCamera.transform.position, target, out RaycastHit hit, Mathf.Infinity, layerMask))
         {
             LineRenderer l = Instantiate(laser);
             l.transform.position = barrel.transform.position;
@@ -113,60 +112,75 @@ public abstract class BeastWarrior : MonoBehaviour
             h.GetComponent<Light>().color = color;
             m = h.GetComponent<ParticleSystem>().main;
             m.startColor = new MinMaxGradient(color);
-            Debug.DrawLine(barrel.transform.position, hit.point, Color.red, 3600);
-            Debug.DrawRay(cameraAimHelper.position, cameraAimHelper.TransformDirection(direction) * hit.distance, Color.magenta, 3600);
+            Debug.DrawLine(barrel.transform.position, hit.point, Color.darkRed, 3600);
+            Debug.DrawRay(characterCamera.transform.position, target * hit.distance, Color.red, 3600);
         }
     }
 
-    protected void ParticleProjectile(GameObject flash, GameObject projectile, Vector3 flashDirection, Vector3 projectileDirection, GameObject barrel, Color flashColor, Color projectileColor, Gradient gradient)
+    protected void ParticleProjectile(GameObject flash, GameObject projectile, Vector3 direction, LayerMask layerMask,
+        GameObject barrel, Color flashColor, Color projectileColor, Gradient gradient)
     {
-        GameObject f = Instantiate(flash);
-        f.transform.position = barrel.transform.position;
-        f.transform.eulerAngles = flashDirection;
-        f.GetComponent<Light>().color = flashColor;
-        MainModule m = f.GetComponent<ParticleSystem>().main;
-        m.startColor = new MinMaxGradient(flashColor);
-        GameObject p = Instantiate(projectile);
-        p.transform.position = barrel.transform.position;
-        p.transform.eulerAngles = projectileDirection;
-        p.GetComponent<Light>().color = projectileColor;
-        ColorOverLifetimeModule c = p.GetComponent<ParticleSystem>().colorOverLifetime;
-        c.color = new MinMaxGradient(gradient);
-    }
-
-    protected void MeshProjectile(GameObject flash, GameObject projectile, Vector3 direction, GameObject barrel, Color flashColor, Material material)
-    {
-        GameObject e = Instantiate(flash);
-        e.transform.position = barrel.transform.position;
-        e.transform.eulerAngles = direction;
-        GameObject m = Instantiate(projectile);
-        m.transform.position = barrel.transform.position;
-        m.transform.eulerAngles = direction;
-        m.GetComponentInChildren<MeshRenderer>().material = material;
-        if (flashColor != Color.clear)
+        Quaternion rotation = Quaternion.Euler(-characterCamera.transform.eulerAngles.x, transform.parent.eulerAngles.y, 0f);
+        Vector3 target = rotation * direction;
+        if (Physics.Raycast(characterCamera.transform.position, target, out RaycastHit hit, Mathf.Infinity, layerMask))
         {
-            e.GetComponent<Light>().color = flashColor;
-            MainModule p = e.GetComponent<ParticleSystem>().main;
-            p.startColor = new MinMaxGradient(flashColor);
-            m.GetComponent<Light>().color = flashColor;
+            GameObject f = Instantiate(flash, barrel.transform.position, Quaternion.LookRotation(hit.point - barrel.transform.position));
+            f.GetComponent<Light>().color = flashColor;
+            MainModule m = f.GetComponent<ParticleSystem>().main;
+            m.startColor = new MinMaxGradient(flashColor); 
+            GameObject p = Instantiate(projectile, barrel.transform.position, Quaternion.LookRotation(-hit.point + barrel.transform.position));
+            p.GetComponent<Light>().color = projectileColor;
+            ColorOverLifetimeModule c = p.GetComponent<ParticleSystem>().colorOverLifetime;
+            c.color = new MinMaxGradient(gradient);
+            Debug.DrawLine(barrel.transform.position, hit.point, Color.darkGreen, 3600);
+            Debug.DrawRay(characterCamera.transform.position, target * hit.distance, Color.green, 3600);
         }
     }
 
-    protected void ThrownProjectile(GameObject thrown, GameObject projectile, Vector3 direction, Vector3 aim, Vector3 forward, GameObject hold, int force, bool spin)
+    protected void MeshProjectile(GameObject flash, GameObject projectile, Vector3 direction, Vector3 orientation,
+        LayerMask layerMask, GameObject barrel, Color flashColor, Material material)
     {
-        GameObject t = Instantiate(thrown);
-        Instantiate(projectile, t.transform);
-        t.transform.position = hold.transform.position;
-        t.transform.eulerAngles = direction;
-        Thrown s = t.GetComponent<Thrown>();
-        s.spin = spin;
-        s.forward = forward;
-        BoxCollider tc = t.GetComponent<BoxCollider>();
-        BoxCollider pc = projectile.GetComponent<BoxCollider>();
-        tc.center = pc.center;
-        tc.size = pc.size;
-        Rigidbody b = t.GetComponent<Rigidbody>();
-        b.AddForce(aim * force, ForceMode.Impulse);
+        Quaternion rotation = Quaternion.Euler(-characterCamera.transform.eulerAngles.x, transform.parent.eulerAngles.y, 0f);
+        Vector3 target = rotation * direction;
+        if (Physics.Raycast(characterCamera.transform.position, target, out RaycastHit hit, Mathf.Infinity, layerMask))
+        {
+            GameObject e = Instantiate(flash, barrel.transform.position, Quaternion.LookRotation(hit.point - barrel.transform.position));
+            GameObject m = Instantiate(projectile, barrel.transform.position, Quaternion.LookRotation(-hit.point + barrel.transform.position));
+            m.transform.Rotate(orientation);
+            m.GetComponentInChildren<MeshRenderer>().material = material;
+            if (flashColor != Color.clear)
+            {
+                e.GetComponent<Light>().color = flashColor;
+                MainModule p = e.GetComponent<ParticleSystem>().main;
+                p.startColor = new MinMaxGradient(flashColor);
+                m.GetComponent<Light>().color = flashColor;
+            }
+            Debug.DrawLine(barrel.transform.position, hit.point, Color.darkCyan, 3600);
+            Debug.DrawRay(characterCamera.transform.position, target * hit.distance, Color.cyan, 3600);
+        }
+    }
+
+    protected void ThrownProjectile(GameObject thrown, GameObject projectile, Vector3 direction,
+        Vector3 orientation, LayerMask layerMask, GameObject hold, bool spin)
+    {
+        Quaternion rotation = Quaternion.Euler(-characterCamera.transform.eulerAngles.x, transform.parent.eulerAngles.y, 0f);
+        Vector3 target = rotation * direction;
+        if (Physics.Raycast(characterCamera.transform.position, target, out RaycastHit hit, Mathf.Infinity, layerMask))
+        {
+            GameObject t = Instantiate(thrown, hold.transform.position, Quaternion.LookRotation(-hit.point + hold.transform.position));
+            GameObject p = Instantiate(projectile, t.transform);
+            t.transform.localScale = transform.parent.localScale;
+            t.transform.Rotate(orientation);
+            Thrown s = t.GetComponent<Thrown>();
+            s.forward = (hit.point - hold.transform.position).normalized;
+            s.spin = spin;
+            BoxCollider tc = t.GetComponent<BoxCollider>();
+            BoxCollider pc = projectile.GetComponent<BoxCollider>();
+            tc.center = new Vector3(pc.center.x, pc.center.y, -pc.center.z);
+            tc.size = pc.size;
+            Debug.DrawLine(hold.transform.position, hit.point, Color.darkMagenta, 3600);
+            Debug.DrawRay(characterCamera.transform.position, target * hit.distance, Color.magenta, 3600);
+        }
     }
 
     protected void InitThrower(GameObject thrower, Color[] flameColors)
@@ -220,7 +234,7 @@ public abstract class BeastWarrior : MonoBehaviour
         Vector3 direction;
         for (int i = 0; i < shots; i++)
         {
-            direction = new(Random.Range(-bulletInaccuracy, bulletInaccuracy), Random.Range(-bulletInaccuracy, bulletInaccuracy), 1);
+            direction = new(Random.Range(-bulletInaccuracy, bulletInaccuracy), Random.Range(-bulletInaccuracy, bulletInaccuracy), -1f);
             RaycastBullet(bullet, direction, layerMask, barrels[barrel + i * barrels.Length / 2]);
         }
         barrel = barrel == barrels.Length / shots - 1 ? 0 : barrel + 1;
@@ -248,12 +262,14 @@ public abstract class BeastWarrior : MonoBehaviour
                 animator.SetTrigger("Shoot");
                 break;
         }
-        Vector3 direction = new(Random.Range(-bulletInaccuracy, bulletInaccuracy), Random.Range(-bulletInaccuracy, bulletInaccuracy), 1);
+        Vector3 direction = new(Random.Range(-bulletInaccuracy, bulletInaccuracy), Random.Range(-bulletInaccuracy, bulletInaccuracy), -1f);
         RaycastBullet(bullet, direction, layerMask, barrel);
     }
 
     protected bool ShootBall(WeaponArm arm, GameObject flash, GameObject ball, GameObject[] barrels, Color flashColor, Color ballColor)
     {
+        int layerMask = 1 << 3;
+        layerMask = ~layerMask;
         switch (arm)
         {
             case WeaponArm.Both:
@@ -272,8 +288,7 @@ public abstract class BeastWarrior : MonoBehaviour
                 animator.SetTrigger("Shoot");
                 break;
         }
-        Vector3 flashDirection = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y + 180, 0f);
-        Vector3 projectileDirection = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
+        Vector3 direction = new(0f, 0f, -1f);
         Gradient g = new();
         GradientColorKey[] colors = new GradientColorKey[2];
         colors[0].color = flashColor;
@@ -286,7 +301,7 @@ public abstract class BeastWarrior : MonoBehaviour
         alphas[1].alpha = 1f;
         alphas[1].time = 1f;
         g.SetKeys(colors, alphas);
-        ParticleProjectile(flash, ball, flashDirection, projectileDirection, barrels[barrel], flashColor, ballColor, g);
+        ParticleProjectile(flash, ball, direction, layerMask, barrels[barrel], flashColor, ballColor, g);
         barrel = barrel == barrels.Length - 1 ? 0 : barrel + 1;
         if (arm == WeaponArm.Both)
         {
@@ -298,6 +313,8 @@ public abstract class BeastWarrior : MonoBehaviour
 
     protected bool ShootBall(WeaponArm arm, GameObject flash, GameObject ball, GameObject barrel, Color flashColor, Color ballColor)
     {
+        int layerMask = 1 << 3;
+        layerMask = ~layerMask;
         switch (arm)
         {
             case WeaponArm.Right:
@@ -311,8 +328,7 @@ public abstract class BeastWarrior : MonoBehaviour
                 animator.SetTrigger("Shoot");
                 break;
         }
-        Vector3 flashDirection = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y + 180, 0f);
-        Vector3 projectileDirection = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, 0f);
+        Vector3 direction = new(0f, 0f, -1f);
         Gradient g = new();
         GradientColorKey[] colors = new GradientColorKey[2];
         colors[0].color = flashColor;
@@ -325,7 +341,7 @@ public abstract class BeastWarrior : MonoBehaviour
         alphas[1].alpha = 1f;
         alphas[1].time = 1f;
         g.SetKeys(colors, alphas);
-        ParticleProjectile(flash, ball, flashDirection, projectileDirection, barrel, flashColor, ballColor, g);
+        ParticleProjectile(flash, ball, direction, layerMask, barrel, flashColor, ballColor, g);
         return false;
     }
 
@@ -354,7 +370,7 @@ public abstract class BeastWarrior : MonoBehaviour
         Vector3 direction;
         for (int i = 0; i < shots; i++)
         {
-            direction = new(Random.Range(-laserInaccuracy, laserInaccuracy), Random.Range(-laserInaccuracy, laserInaccuracy), 1);
+            direction = new(Random.Range(-laserInaccuracy, laserInaccuracy), Random.Range(-laserInaccuracy, laserInaccuracy), -1f);
             RaycastLaser(laser, direction, layerMask, barrels[barrel + i * barrels.Length / 2], laserColor);
         }
         barrel = barrel == barrels.Length / shots - 1 ? 0 : barrel + 1;
@@ -383,13 +399,15 @@ public abstract class BeastWarrior : MonoBehaviour
                 animator.SetTrigger("Shoot");
                 break;
         }
-        Vector3 direction = new(Random.Range(-laserInaccuracy, laserInaccuracy), Random.Range(-laserInaccuracy, laserInaccuracy), 1);
+        Vector3 direction = new(Random.Range(-laserInaccuracy, laserInaccuracy), Random.Range(-laserInaccuracy, laserInaccuracy), -1f);
         RaycastLaser(laser, direction, layerMask, barrel, laserColor);
         return false;
     }
 
     protected bool ShootBolt(WeaponArm arm, GameObject flash, GameObject bolt, GameObject[] barrels, Material boltMaterial, Color boltColor, float angle = 0f)
     {
+        int layerMask = 1 << 3;
+        layerMask = ~layerMask;
         switch (arm)
         {
             case WeaponArm.Both:
@@ -408,13 +426,14 @@ public abstract class BeastWarrior : MonoBehaviour
                 animator.SetTrigger("Shoot");
                 break;
         }
-        Vector3 direction = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, angle);
+        Vector3 direction = new(0f, 0f, -1f);
+        Vector3 orientation = new(0f, 0f, angle);
         Material m = new(boltMaterial);
         if (boltColor != Color.clear)
         {
             m.color = boltColor;
         }
-        MeshProjectile(flash, bolt, direction, barrels[barrel], boltColor, m);
+        MeshProjectile(flash, bolt, direction, orientation, layerMask, barrels[barrel], boltColor, m);
         barrel = barrel == barrels.Length - 1 ? 0 : barrel + 1;
         if (arm == WeaponArm.Both)
         {
@@ -426,6 +445,8 @@ public abstract class BeastWarrior : MonoBehaviour
 
     protected bool ShootBolt(WeaponArm arm, GameObject flash, GameObject bolt, GameObject barrel, Material boltMaterial, Color boltColor, float angle = 0f)
     {
+        int layerMask = 1 << 3;
+        layerMask = ~layerMask;
         switch (arm)
         {
             case WeaponArm.Right:
@@ -439,18 +460,21 @@ public abstract class BeastWarrior : MonoBehaviour
                 animator.SetTrigger("Shoot");
                 break;
         }
-        Vector3 direction = new(-cameraAimHelper.eulerAngles.x, transform.eulerAngles.y, angle);
+        Vector3 direction = new(0f, 0f, -1f);
+        Vector3 orientation = new(0f, 0f, angle);
         Material m = new(boltMaterial);
         if (boltColor != Color.clear)
         {
             m.color = boltColor;
         }
-        MeshProjectile(flash, bolt, direction, barrel, boltColor, m);
+        MeshProjectile(flash, bolt, direction, orientation, layerMask, barrel, boltColor, m);
         return false;
     }
 
-    protected bool Throw(WeaponArm arm, GameObject thrown, GameObject projectile, GameObject[] barrels, float x, float y, float angle, int force, bool spin = false)
+    protected bool Throw(WeaponArm arm, GameObject thrown, GameObject projectile, GameObject[] barrels, float x, float y, bool spin = false)
     {
+        int layerMask = 1 << 3;
+        layerMask = ~layerMask;
         switch (arm)
         {
             case WeaponArm.Both:
@@ -469,9 +493,9 @@ public abstract class BeastWarrior : MonoBehaviour
                 animator.SetTrigger("Shoot");
                 break;
         }
-        Vector3 direction = new(-cameraAimHelper.eulerAngles.x + x, transform.eulerAngles.y + y, 0f);
-        Vector3 aim = Quaternion.AngleAxis(-angle, cameraAimHelper.right) * cameraAimHelper.forward;
-        ThrownProjectile(thrown, projectile, direction, aim, transform.forward, barrels[barrel], force, spin);
+        Vector3 direction = new(0f, 0f, -1f);
+        Vector3 orientation = new(x, y, 0f);
+        ThrownProjectile(thrown, projectile, direction, orientation, layerMask, barrels[barrel], spin);
         barrel = barrel == barrels.Length - 1 ? 0 : barrel + 1;
         if (arm == WeaponArm.Both)
         {
@@ -481,8 +505,10 @@ public abstract class BeastWarrior : MonoBehaviour
         return false;
     }
 
-    protected bool Throw(WeaponArm arm, GameObject thrown, GameObject projectile, GameObject barrel, float x, float y, float angle, int force, bool spin = false)
+    protected bool Throw(WeaponArm arm, GameObject thrown, GameObject projectile, GameObject barrel, float x, float y, bool spin = false)
     {
+        int layerMask = 1 << 3;
+        layerMask = ~layerMask;
         switch (arm)
         {
             case WeaponArm.Right:
@@ -496,9 +522,9 @@ public abstract class BeastWarrior : MonoBehaviour
                 animator.SetTrigger("Shoot");
                 break;
         }
-        Vector3 direction = new(-cameraAimHelper.eulerAngles.x + x, transform.eulerAngles.y + y, 0f);
-        Vector3 aim = Quaternion.AngleAxis(-angle, cameraAimHelper.right) * cameraAimHelper.forward;
-        ThrownProjectile(thrown, projectile, direction, aim, transform.forward, barrel, force, spin);
+        Vector3 direction = new(0f, 0f, -1f);
+        Vector3 orientation = new(x, y, 0f);
+        ThrownProjectile(thrown, projectile, direction, orientation, layerMask, barrel, spin);
         return false;
     }
 
@@ -524,13 +550,11 @@ public abstract class BeastWarrior : MonoBehaviour
                 animator.SetTrigger("Shoot");
                 break;
         }
-        GameObject s = Instantiate(slug);
-        s.transform.position = barrels[barrel].transform.position;
-        s.transform.eulerAngles = new Vector3(0f, transform.eulerAngles.y, 0f);
+        Instantiate(slug, barrels[barrel].transform.position, Quaternion.Euler(0f, transform.eulerAngles.y, 0f));
         Vector3 direction;
         for (int i = 0; i < slugCount; i++)
         {
-            direction = new Vector3(Random.Range(-bulletInaccuracy, bulletInaccuracy), Random.Range(-bulletInaccuracy, bulletInaccuracy), 1);
+            direction = new Vector3(Random.Range(-bulletInaccuracy, bulletInaccuracy), Random.Range(-bulletInaccuracy, bulletInaccuracy), -1f);
             RaycastBullet(bullet, direction, layerMask, barrels[barrel], false);
         }
         barrel = barrel == barrels.Length - 1 ? 0 : barrel + 1;
@@ -559,13 +583,11 @@ public abstract class BeastWarrior : MonoBehaviour
                 animator.SetTrigger("Shoot");
                 break;
         }
-        GameObject s = Instantiate(slug);
-        s.transform.position = barrel.transform.position;
-        s.transform.eulerAngles = new Vector3(0f, transform.eulerAngles.y, 0f);
+        Instantiate(slug, barrel.transform.position, Quaternion.Euler(0f, transform.eulerAngles.y, 0f));
         Vector3 direction;
         for (int i = 0; i < slugCount; i++)
         {
-            direction = new Vector3(Random.Range(-bulletInaccuracy, bulletInaccuracy), Random.Range(-bulletInaccuracy, bulletInaccuracy), 1);
+            direction = new Vector3(Random.Range(-bulletInaccuracy, bulletInaccuracy), Random.Range(-bulletInaccuracy, bulletInaccuracy), -1f);
             RaycastBullet(bullet, direction, layerMask, barrel, false);
         }
         return false;
@@ -583,13 +605,33 @@ public abstract class BeastWarrior : MonoBehaviour
         weapon.transform.localEulerAngles = new Vector3(xAngle, yAngle, zAngle);
     }
 
-    public abstract void OnMeleeWeak(CallbackContext context);
+    public virtual void OnMeleeWeak(CallbackContext context)
+    {
+        character.Crosshair.enabled = false;
+        lightShoot = false;
+        heavyShoot = false;
+    }
 
-    public abstract void OnMeleeStrong(CallbackContext context);
+    public virtual void OnMeleeStrong(CallbackContext context)
+    {
+        character.Crosshair.enabled = false;
+        lightShoot = false;
+        heavyShoot = false;
+    }
 
-    public abstract void OnRangedWeak(CallbackContext context);
+    public virtual void OnRangedWeak(CallbackContext context)
+    {
+        character.Crosshair.enabled = true;
+        lightShoot = false;
+        heavyShoot = false;
+    }
 
-    public abstract void OnRangedStrong(CallbackContext context);
+    public virtual void OnRangedStrong(CallbackContext context)
+    {
+        character.Crosshair.enabled = true;
+        lightShoot = false;
+        heavyShoot = false;
+    }
 
     public abstract void OnAttack(CallbackContext context);
 }

@@ -62,6 +62,7 @@ public class Dirgegun : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         Equip(launcher, holster);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeWeak(context);
         Deploy(backLauncher, foldAngle, 0f, -180f);
     }
 
@@ -73,6 +74,7 @@ public class Dirgegun : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         Equip(launcher, holster);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeStrong(context);
         Deploy(backLauncher, foldAngle, 0f, -180f);
     }
 
@@ -84,6 +86,7 @@ public class Dirgegun : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         Equip(launcher, holster);
         character.OverrideArm(WeaponArm.None);
+        base.OnRangedWeak(context);
         Deploy(backLauncher, deployAngle, 0f, -180f);
     }
 
@@ -95,6 +98,7 @@ public class Dirgegun : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         Equip(launcher, hold);
         character.OverrideArm(WeaponArm.Right);
+        base.OnRangedStrong(context);
         Deploy(backLauncher, foldAngle, 0f, -180f);
     }
 

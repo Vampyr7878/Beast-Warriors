@@ -52,7 +52,7 @@ public class Silverbolt : BeastWarrior
         base.FixedUpdate();
         if (lightShoot)
         {
-            lightShoot = Throw(WeaponArm.Both, thrown, rightBlade, holds, 180f, 90f, angle, force, true);
+            lightShoot = Throw(WeaponArm.Both, thrown, rightBlade, holds, 180f, 90f, true);
         }
         if (heavyShoot)
         {
@@ -69,6 +69,7 @@ public class Silverbolt : BeastWarrior
         Equip(rightBlade, rightHolster);
         Equip(leftBlade, leftHolster);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeWeak(context);
         Deploy(rightCannons, 0f, foldAngle, 0f);
         Deploy(leftCannons, 0f, -foldAngle, 0f);
     }
@@ -82,6 +83,7 @@ public class Silverbolt : BeastWarrior
         Equip(rightBlade, rightHold);
         Equip(leftBlade, leftHold);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeStrong(context);
         Deploy(rightCannons, 0f, foldAngle, 0f);
         Deploy(leftCannons, 0f, -foldAngle, 0f);
     }
@@ -95,6 +97,7 @@ public class Silverbolt : BeastWarrior
         Equip(rightBlade, rightHold);
         Equip(leftBlade, leftHold);
         character.OverrideArm(WeaponArm.Both);
+        base.OnRangedWeak(context);
         Deploy(rightCannons, 0f, foldAngle, 0f);
         Deploy(leftCannons, 0f, -foldAngle, 0f);
         right = true;
@@ -110,6 +113,7 @@ public class Silverbolt : BeastWarrior
         Equip(rightBlade, rightHolster);
         Equip(leftBlade, leftHolster);
         character.OverrideArm(WeaponArm.None);
+        base.OnRangedStrong(context);
         Deploy(rightCannons, 0f, deployAngle, 0f);
         Deploy(leftCannons, 0f, -deployAngle, 0f);
         barrel = 0;

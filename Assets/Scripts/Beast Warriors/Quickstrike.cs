@@ -59,6 +59,7 @@ public class Quickstrike : BeastWarrior
         animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeWeak(context);
         Deploy(cobraHead, 0f, foldAngle, 90f);
     }
 
@@ -69,6 +70,7 @@ public class Quickstrike : BeastWarrior
         animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeStrong(context);
         Deploy(cobraHead, 0f, foldAngle, 90f);
     }
 
@@ -79,6 +81,7 @@ public class Quickstrike : BeastWarrior
         animator.SetInteger("WeaponMode", (int)WeaponMode.None);
         animator.SetInteger("Weapon", weapon);
         character.OverrideArm(WeaponArm.None);
+        base.OnRangedWeak(context);
         Deploy(cobraHead, 0f, foldAngle, 90f);
     }
 
@@ -89,6 +92,7 @@ public class Quickstrike : BeastWarrior
         animator.SetInteger("WeaponMode", (int)WeaponMode.Diagonal);
         animator.SetInteger("Weapon", weapon);
         character.OverrideArm(WeaponArm.Right);
+        base.OnRangedStrong(context);
         Deploy(cobraHead, 0f, deployAngle, 90f);
     }
 

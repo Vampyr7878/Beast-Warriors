@@ -66,6 +66,7 @@ public class Razorbeast : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         Equip(gun, holster);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeWeak(context);
         Deploy(rightGun, foldAngle, 0f, 0f);
         Deploy(leftGun, foldAngle, 0f, 0f);
     }
@@ -78,6 +79,7 @@ public class Razorbeast : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         Equip(gun, holster);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeStrong(context);
         Deploy(rightGun, foldAngle, 0f, 0f);
         Deploy(leftGun, foldAngle, 0f, 0f);
     }
@@ -90,6 +92,7 @@ public class Razorbeast : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         Equip(gun, holster);
         character.OverrideArm(WeaponArm.None);
+        base.OnRangedWeak(context);
         Deploy(rightGun, deployAngle, 0f, 0f);
         Deploy(leftGun, deployAngle, 0f, 0f);
     }
@@ -102,6 +105,7 @@ public class Razorbeast : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         Equip(gun, hold);
         character.OverrideArm(WeaponArm.Right);
+        base.OnRangedStrong(context);
         Deploy(rightGun, foldAngle, 0f, 0f);
         Deploy(leftGun, foldAngle, 0f, 0f);
         barrel = 0;

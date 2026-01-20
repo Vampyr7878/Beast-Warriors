@@ -75,6 +75,7 @@ public class Cicadacon : BeastWarrior
         Equip(rightSword, rightHolster);
         Equip(leftSword, leftHolster);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeWeak(context);
         Deploy(cannon, foldAngle, 0f, 0f);
     }
 
@@ -87,6 +88,7 @@ public class Cicadacon : BeastWarrior
         Equip(rightSword, rightHold);
         Equip(leftSword, leftHold);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeStrong(context);
         Deploy(cannon, foldAngle, 0f, 0f);
     }
 
@@ -99,6 +101,7 @@ public class Cicadacon : BeastWarrior
         Equip(rightSword, rightHolster);
         Equip(leftSword, leftHolster);
         character.OverrideArm(WeaponArm.Both);
+        base.OnRangedWeak(context);
         Deploy(cannon, foldAngle, 0f, 0f);
     }
 
@@ -111,6 +114,7 @@ public class Cicadacon : BeastWarrior
         Equip(rightSword, rightHolster);
         Equip(leftSword, leftHolster);
         character.OverrideArm(WeaponArm.None);
+        base.OnRangedStrong(context);
         Deploy(cannon, deployAngle, 0f, 0f);
     }
 

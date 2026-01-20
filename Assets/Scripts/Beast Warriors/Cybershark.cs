@@ -64,6 +64,7 @@ public class Cybershark : BeastWarrior
         Equip(head, hold);
         Equip(tail, tailHolster);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeWeak(context);
         Deploy(chestCannon, foldAngle, 0f, 0f);
     }
 
@@ -76,6 +77,7 @@ public class Cybershark : BeastWarrior
         Equip(head, headHolster);
         Equip(tail, hold);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeStrong(context);
         Deploy(chestCannon, foldAngle, 0f, 0f);
     }
 
@@ -88,6 +90,7 @@ public class Cybershark : BeastWarrior
         Equip(head, headHolster);
         Equip(tail, hold);
         character.OverrideArm(WeaponArm.Right);
+        base.OnRangedWeak(context);
         Deploy(chestCannon, foldAngle, 0f, 0f);
     }
 
@@ -100,6 +103,7 @@ public class Cybershark : BeastWarrior
         Equip(head, hold);
         Equip(tail, tailHolster);
         character.OverrideArm(WeaponArm.None);
+        base.OnRangedStrong(context);
         Deploy(chestCannon, deployAngle, 0f, 0f);
     }
 

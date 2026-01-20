@@ -49,7 +49,7 @@ public class Rattrap : BeastWarrior
         }
         if (heavyShoot)
         {
-            heavyShoot = Throw(WeaponArm.Right, thrown, bomb, hold, 0f, -180f, angle, force);
+            heavyShoot = Throw(WeaponArm.Right, thrown, bomb, hold, 0f, -180f);
         }
     }
 
@@ -63,6 +63,7 @@ public class Rattrap : BeastWarrior
         Equip(rifleBack, backHolster);
         Equip(bomb, bombHolster);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeWeak(context);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -75,6 +76,7 @@ public class Rattrap : BeastWarrior
         Equip(rifleBack, hold);
         Equip(bomb, bombHolster);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeStrong(context);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -87,6 +89,7 @@ public class Rattrap : BeastWarrior
         Equip(rifleBack, hold);
         Equip(bomb, bombHolster);
         character.OverrideArm(WeaponArm.Right);
+        base.OnRangedWeak(context);
     }
 
     public override void OnRangedStrong(CallbackContext context)
@@ -99,6 +102,7 @@ public class Rattrap : BeastWarrior
         Equip(rifleBack, backHolster);
         Equip(bomb, hold);
         character.OverrideArm(WeaponArm.Right);
+        base.OnRangedStrong(context);
     }
 
     public override void OnAttack(CallbackContext context)

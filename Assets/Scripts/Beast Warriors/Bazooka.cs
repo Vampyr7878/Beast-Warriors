@@ -57,6 +57,7 @@ public class Bazooka : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         Equip(axe, holster);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeWeak(context);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -67,6 +68,7 @@ public class Bazooka : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         Equip(axe, axeHold);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeStrong(context);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -77,6 +79,7 @@ public class Bazooka : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         Equip(axe, holster);
         character.OverrideArm(WeaponArm.Left);
+        base.OnRangedWeak(context);
     }
 
     public override void OnRangedStrong(CallbackContext context)
@@ -87,6 +90,7 @@ public class Bazooka : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         Equip(axe, gunHold);
         character.OverrideArm(WeaponArm.Right);
+        base.OnRangedStrong(context);
     }
 
     public override void OnAttack(CallbackContext context)

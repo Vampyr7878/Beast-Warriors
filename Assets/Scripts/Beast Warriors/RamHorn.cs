@@ -52,6 +52,7 @@ public class RamHorn : BeastWarrior
         claw.SetActive(false);
         Equip(claw, holster);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeWeak(context);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -64,6 +65,7 @@ public class RamHorn : BeastWarrior
         claw.SetActive(true);
         Equip(claw, hold);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeStrong(context);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -76,6 +78,7 @@ public class RamHorn : BeastWarrior
         claw.SetActive(false);
         Equip(claw, holster);
         character.OverrideArm(WeaponArm.None);
+        base.OnRangedWeak(context);
     }
 
     public override void OnRangedStrong(CallbackContext context)
@@ -88,6 +91,7 @@ public class RamHorn : BeastWarrior
         claw.SetActive(false);
         Equip(claw, holster);
         character.OverrideArm(WeaponArm.Both);
+        base.OnRangedStrong(context);
         barrel = 0;
         right = true;
         left = false;

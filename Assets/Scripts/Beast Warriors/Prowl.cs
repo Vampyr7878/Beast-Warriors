@@ -57,6 +57,7 @@ public class Prowl : BeastWarrior
         fork.SetActive(false);
         Equip(fork, holster);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeWeak(context);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -69,6 +70,7 @@ public class Prowl : BeastWarrior
         fork.SetActive(true);
         Equip(fork, hold);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeStrong(context);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -81,6 +83,7 @@ public class Prowl : BeastWarrior
         fork.SetActive(false);
         Equip(fork, holster);
         character.OverrideArm(WeaponArm.None);
+        base.OnRangedWeak(context);
     }
 
     public override void OnRangedStrong(CallbackContext context)
@@ -93,6 +96,7 @@ public class Prowl : BeastWarrior
         fork.SetActive(false);
         Equip(fork, holster);
         character.OverrideArm(WeaponArm.Both);
+        base.OnRangedStrong(context);
     }
 
     public override void OnAttack(CallbackContext context)

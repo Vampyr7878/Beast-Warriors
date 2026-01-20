@@ -80,6 +80,7 @@ public class OptimusPrimal : BeastWarrior
         Equip(rightSword, rightHolster);
         Equip(leftSword, leftHolster);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeWeak(context);
         Deploy(rightCannon, foldAngle, 0f, 0f);
         Deploy(leftCannon, foldAngle, 0f, 0f);
     }
@@ -94,6 +95,7 @@ public class OptimusPrimal : BeastWarrior
         Equip(rightSword, rightHold);
         Equip(leftSword, leftHold);
         character.OverrideArm(WeaponArm.None);
+        base.OnMeleeStrong(context);
         Deploy(rightCannon, foldAngle, 0f, 0f);
         Deploy(leftCannon, foldAngle, 0f, 0f);
     }
@@ -108,6 +110,7 @@ public class OptimusPrimal : BeastWarrior
         Equip(rightSword, rightHolster);
         Equip(leftSword, leftHolster);
         character.OverrideArm(WeaponArm.Left);
+        base.OnRangedWeak(context);
         Deploy(rightCannon, foldAngle, 0f, 0f);
         Deploy(leftCannon, foldAngle, 0f, 0f);
     }
@@ -122,6 +125,7 @@ public class OptimusPrimal : BeastWarrior
         Equip(rightSword, rightHolster);
         Equip(leftSword, leftHolster);
         character.OverrideArm(WeaponArm.None);
+        base.OnRangedStrong(context);
         Deploy(rightCannon, deployAngle, 0f, 0f);
         Deploy(leftCannon, deployAngle, 0f, 0f);
         barrel = 0;
