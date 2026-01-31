@@ -27,16 +27,24 @@ public class Magnaboss : BeastWarrior
 
     public Material missleMaterial;
 
+    public float boltCooldown;
+
+    public int boltCost;
+
+    public float missleCooldown;
+
+    public int missleCost;
+
     protected new void FixedUpdate()
     {
         base.FixedUpdate();
         if (lightShoot)
         {
-            lightShoot = ShootBolt(WeaponArm.None, flash, bolt, lightBarrel, boltMaterial, boltColor);
+            lightShoot = ShootBolt(WeaponArm.None, flash, bolt, lightBarrel, boltMaterial, boltColor, boltCost, boltCooldown);
         }
-        if (heavyShoot)
+        else if (heavyShoot)
         {
-            heavyShoot = ShootBolt(WeaponArm.None, blast, missle, heavyBarrels, missleMaterial, Color.clear);
+            heavyShoot = ShootBolt(WeaponArm.None, blast, missle, heavyBarrels, missleMaterial, Color.clear, missleCost, missleCooldown);
         }
     }
 
@@ -90,10 +98,18 @@ public class Magnaboss : BeastWarrior
         switch (weapon)
         {
             case 3:
-                lightShoot = context.performed;
+                if (canShoot && character.energy >= boltCost)
+                {
+                    lightShoot = context.performed;
+                    canShoot = !lightShoot;
+                }
                 break;
             case 4:
-                heavyShoot = context.performed;
+                if (canShoot && character.energy >= missleCost)
+                {
+                    heavyShoot = context.performed;
+                    canShoot = !heavyShoot;
+                }
                 break;
         }
     }

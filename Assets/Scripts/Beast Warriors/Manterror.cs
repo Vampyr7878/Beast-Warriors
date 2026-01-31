@@ -23,7 +23,15 @@ public class Manterror : BeastWarrior
 
     public Color discColor;
 
+    public float laserCooldown;
+
     public float laserInaccuracy;
+
+    public int laserCost;
+
+    public float discCooldown;
+
+    public int discCost;
 
     private float foldAngle;
 
@@ -41,11 +49,11 @@ public class Manterror : BeastWarrior
         base.FixedUpdate();
         if (lightShoot)
         {
-            lightShoot = ShootLaser(WeaponArm.None, laser, lightBarrels, laserColor, laserInaccuracy, 2);
+            lightShoot = ShootLaser(WeaponArm.None, laser, lightBarrels, laserColor, laserInaccuracy, laserCooldown, laserCost, 2);
         }
-        if (heavyShoot)
+        else if (heavyShoot)
         {
-            heavyShoot = ShootBolt(WeaponArm.Both, flash, disc, heavyBarrels, discMaterial, discColor, 90f);
+            heavyShoot = ShootBolt(WeaponArm.Both, flash, disc, heavyBarrels, discMaterial, discColor, discCost, discCooldown, 90f);
         }
     }
 
@@ -105,10 +113,18 @@ public class Manterror : BeastWarrior
         switch (weapon)
         {
             case 3:
-                lightShoot = context.performed;
+                if (canShoot && character.energy >= laserCost)
+                {
+                    lightShoot = context.performed;
+                    canShoot = !lightShoot;
+                }
                 break;
             case 4:
-                heavyShoot = context.performed;
+                if (canShoot && character.energy >= discCost)
+                {
+                    heavyShoot = context.performed;
+                    canShoot = !heavyShoot;
+                }
                 break;
         }
     }

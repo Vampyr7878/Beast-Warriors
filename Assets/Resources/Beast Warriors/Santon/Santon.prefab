@@ -4431,11 +4431,14 @@ MonoBehaviour:
   - {fileID: 1467521731648583940}
   flash: {fileID: 6304360778048044942, guid: b4ecd4512de45ef47b17645b22d5ccf4, type: 3}
   bolt: {fileID: 7169620736205658760, guid: 205133862f0e7664f98afb3ed37abacb, type: 3}
-  bullet: {fileID: 3474837066459004095, guid: 0dea4693c7d850e48b7253a911891254, type: 3}
+  bullet: {fileID: 3474837066459004095, guid: 49f5b0dc6fd053d4e92768315c1c41d1, type: 3}
   boltMaterial: {fileID: 2100000, guid: 8f820246ec185114d905d1fe95336d0b, type: 2}
   boltColor: {r: 0.44313726, g: 0.050980393, b: 0.05490196, a: 1}
-  fireRate: 0.1
+  boltCooldown: 0.2
+  boltCost: 10
+  fireRate: 0.4
   bulletInaccuracy: 0.1
+  bulletCost: 20
 --- !u!1 &3747432818530372846
 GameObject:
   m_ObjectHideFlags: 0

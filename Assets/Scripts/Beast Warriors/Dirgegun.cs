@@ -30,6 +30,14 @@ public class Dirgegun : BeastWarrior
 
     public Material missleMaterial;
 
+    public float boltCooldown;
+
+    public int boltCost;
+
+    public float missleCooldown;
+
+    public int missleCost;
+
     private float foldAngle;
 
     private float deployAngle;
@@ -46,11 +54,11 @@ public class Dirgegun : BeastWarrior
         base.FixedUpdate();
         if (lightShoot)
         {
-            lightShoot = ShootBolt(WeaponArm.None, flash, bolt, lightBarrel, boltMaterial, boltColor);
+            lightShoot = ShootBolt(WeaponArm.None, flash, bolt, lightBarrel, boltMaterial, boltColor, boltCost, boltCooldown);
         }
-        if (heavyShoot)
+        else if (heavyShoot)
         {
-            heavyShoot = ShootBolt(WeaponArm.Right, blast, missle, heavyBarrel, missleMaterial, Color.clear);
+            heavyShoot = ShootBolt(WeaponArm.Right, blast, missle, heavyBarrel, missleMaterial, Color.clear, missleCost, missleCooldown);
         }
     }
 
@@ -107,10 +115,18 @@ public class Dirgegun : BeastWarrior
         switch (weapon)
         {
             case 3:
-                lightShoot = context.performed;
+                if (canShoot && character.energy >= boltCost)
+                {
+                    lightShoot = context.performed;
+                    canShoot = !lightShoot;
+                }
                 break;
             case 4:
-                heavyShoot = context.performed;
+                if (canShoot && character.energy >= missleCost)
+                {
+                    heavyShoot = context.performed;
+                    canShoot = !heavyShoot;
+                }
                 break;
         }
     }

@@ -29,6 +29,12 @@ public class Rattrap : BeastWarrior
 
     public float bulletInaccuracy;
 
+    public int bulletCost;
+
+    public float throwCooldown;
+
+    public int throwCost;
+
     public int angle;
 
     public int force;
@@ -38,18 +44,18 @@ public class Rattrap : BeastWarrior
     protected new void FixedUpdate()
     {
         base.FixedUpdate();
-        if (lightShoot)
+        if (lightShoot && character.energy >= bulletCost)
         {
             if (time >= fireRate)
             {
-                ShootMachineGun(WeaponArm.Right, bullet, lightBarrel, bulletInaccuracy);
+                ShootMachineGun(WeaponArm.Right, bullet, lightBarrel, bulletInaccuracy, 0f, bulletCost);
                 time = 0;
             }
             time += Time.deltaTime;
         }
-        if (heavyShoot)
+        else if (heavyShoot)
         {
-            heavyShoot = Throw(WeaponArm.Right, thrown, bomb, hold, 0f, -180f);
+            heavyShoot = Throw(WeaponArm.Right, thrown, bomb, hold, 0f, -180f, throwCooldown, throwCost);
         }
     }
 
@@ -114,7 +120,11 @@ public class Rattrap : BeastWarrior
                 time = fireRate;
                 break;
             case 4:
-                heavyShoot = context.performed;
+                if (canShoot && character.energy >= throwCost)
+                {
+                    heavyShoot = context.performed;
+                    canShoot = !heavyShoot;
+                }
                 break;
         }
     }

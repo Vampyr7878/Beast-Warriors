@@ -19,29 +19,28 @@ public class Archadis : BeastWarrior
 
     public Color laserColor;
 
+    public float laserCooldown;
+
     public float laserInaccuracy;
+
+    public int laserCost;
 
     public float fireRate;
 
     public float bulletInaccuracy;
 
-    private float time;
+    public int bulletCost;
 
     protected new void FixedUpdate()
     {
         base.FixedUpdate();
         if (lightShoot)
         {
-            lightShoot = ShootLaser(WeaponArm.Left, laser, lightBarrel, laserColor, laserInaccuracy);
+            lightShoot = ShootLaser(WeaponArm.Left, laser, lightBarrel, laserColor, laserInaccuracy, laserCooldown, laserCost);
         }
-        if (heavyShoot)
+        else if (heavyShoot)
         {
-            if (time >= fireRate)
-            {
-                ShootMachineGun(WeaponArm.Right, bullet, heavyBarrel, bulletInaccuracy);
-                time = 0;
-            }
-            time += Time.deltaTime;
+            heavyShoot = ShootMachineGun(WeaponArm.Right, bullet, heavyBarrel, bulletInaccuracy, fireRate, bulletCost);
         }
     }
 
@@ -94,11 +93,18 @@ public class Archadis : BeastWarrior
         switch (weapon)
         {
             case 3:
-                lightShoot = context.performed;
-                time = fireRate;
+                if (canShoot && character.energy >= laserCost)
+                {
+                    lightShoot = context.performed;
+                    canShoot = !lightShoot;
+                }
                 break;
             case 4:
-                heavyShoot = context.performed;
+                if (canShoot && character.energy >= bulletCost)
+                {
+                    heavyShoot = context.performed;
+                    canShoot = !heavyShoot;
+                }
                 break;
         }
     }

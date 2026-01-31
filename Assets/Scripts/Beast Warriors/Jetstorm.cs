@@ -27,7 +27,15 @@ public class Jetstorm : BeastWarrior
 
     public Color laserColor;
 
+    public float boltCooldown;
+
+    public int boltCost;
+
+    public float laserCooldown;
+
     public float laserInaccuracy;
+
+    public int laserCost;
 
     private float foldAngle;
 
@@ -45,11 +53,11 @@ public class Jetstorm : BeastWarrior
         base.FixedUpdate();
         if (lightShoot)
         {
-            lightShoot = ShootBolt(WeaponArm.None, flash, bolt, lightBarrels, boltMaterial, boltColor);
+            lightShoot = ShootBolt(WeaponArm.None, flash, bolt, lightBarrels, boltMaterial, boltColor, boltCost, boltCooldown);
         }
-        if (heavyShoot)
+        else if (heavyShoot)
         {
-            heavyShoot = ShootLaser(WeaponArm.None, laser, heavyBarrel, laserColor, laserInaccuracy);
+            heavyShoot = ShootLaser(WeaponArm.None, laser, heavyBarrel, laserColor, laserInaccuracy, laserCooldown, laserCost);
         }
     }
 
@@ -115,10 +123,18 @@ public class Jetstorm : BeastWarrior
         switch (weapon)
         {
             case 3:
-                lightShoot = context.performed;
+                if (canShoot && character.energy >= boltCost)
+                {
+                    lightShoot = context.performed;
+                    canShoot = !lightShoot;
+                }
                 break;
             case 4:
-                heavyShoot = context.performed;
+                if (canShoot && character.energy >= laserCost)
+                {
+                    heavyShoot = context.performed;
+                    canShoot = !heavyShoot;
+                }
                 break;
         }
     }

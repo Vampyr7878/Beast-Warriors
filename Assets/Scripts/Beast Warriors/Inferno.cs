@@ -29,6 +29,16 @@ public class Inferno : BeastWarrior
 
     public Color[] flameColors;
 
+    public float boltCooldown;
+
+    public int boltCost;
+
+    public float flameRate;
+
+    public int flameCost;
+
+    private float time;
+
     protected new void Awake()
     {
         base.Awake();
@@ -40,10 +50,20 @@ public class Inferno : BeastWarrior
         base.FixedUpdate();
         if (lightShoot)
         {
-            lightShoot = ShootBolt(WeaponArm.Right, flash, bolt, lightBarrel, boltMaterial, boltColor);
+            lightShoot = ShootBolt(WeaponArm.Right, flash, bolt, lightBarrel, boltMaterial, boltColor, boltCost, boltCooldown);
         }
-        thrower.SetActive(heavyShoot);
-        thrower.transform.localRotation = Quaternion.Euler(-characterCamera.transform.eulerAngles.x + 5, thrower.transform.localEulerAngles.y, thrower.transform.localEulerAngles.z);
+        thrower.SetActive(heavyShoot && character.energy >= flameCost);
+        if (thrower.activeSelf)
+        {
+            if (time >= flameRate)
+            {
+                character.energy -= flameCost;
+                time = 0;
+            }
+            time += Time.deltaTime;
+            thrower.transform.localRotation = Quaternion.Euler(-characterCamera.transform.eulerAngles.x + 5,
+                thrower.transform.localEulerAngles.y, thrower.transform.localEulerAngles.z);
+        }
     }
 
     public override void OnMeleeWeak(CallbackContext context)
@@ -97,10 +117,15 @@ public class Inferno : BeastWarrior
         switch (weapon)
         {
             case 3:
-                lightShoot = context.performed;
+                if (canShoot && character.energy >= boltCost)
+                {
+                    lightShoot = context.performed;
+                    canShoot = !lightShoot;
+                }
                 break;
             case 4:
                 heavyShoot = context.performed;
+                time = flameRate;
                 break;
         }
     }

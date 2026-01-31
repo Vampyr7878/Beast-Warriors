@@ -21,11 +21,11 @@ public class Rhinox : BeastWarrior
 
     public GameObject[] heavyBarrels;
 
+    public GameObject bullet;
+
     public GameObject flash;
 
     public GameObject bolt;
-
-    public GameObject bullet;
 
     public Material boltMaterial;
 
@@ -34,6 +34,12 @@ public class Rhinox : BeastWarrior
     public float fireRate;
 
     public float bulletInaccuracy;
+
+    public int bulletCost;
+
+    public float boltCooldown;
+
+    public int boltCost;
 
     private float foldAngle;
 
@@ -51,18 +57,18 @@ public class Rhinox : BeastWarrior
     protected new void FixedUpdate()
     {
         base.FixedUpdate();
-        if (lightShoot)
-        {
-            lightShoot = ShootBolt(WeaponArm.Both, flash, bolt, lightBarrels, boltMaterial, boltColor);
-        }
-        if (heavyShoot)
+        if (lightShoot && character.energy >= bulletCost)
         {
             if (time >= fireRate)
             {
-                ShootMachineGun(WeaponArm.Right, bullet, heavyBarrels, bulletInaccuracy);
+                ShootMachineGun(WeaponArm.Right, bullet, lightBarrels, bulletInaccuracy, 0f, bulletCost, 2);
                 time = 0;
             }
             time += Time.deltaTime;
+        }
+        else if (heavyShoot)
+        {
+            heavyShoot = ShootBolt(WeaponArm.Both, flash, bolt, heavyBarrels, boltMaterial, boltColor, boltCost, boltCooldown);
         }
     }
 
@@ -101,6 +107,20 @@ public class Rhinox : BeastWarrior
         animator.SetInteger("WeaponMode", (int)WeaponMode.Bend);
         animator.SetInteger("Weapon", weapon);
         Equip(sword, swordHolster);
+        Equip(gun, hold);
+        character.OverrideArm(WeaponArm.Right);
+        base.OnRangedStrong(context);
+        Deploy(rightBlaster, 0f, foldAngle, 0f);
+        Deploy(leftBlaster, 0f, foldAngle, 0f);
+    }
+
+    public override void OnRangedStrong(CallbackContext context)
+    {
+        weapon = 4;
+        animator.enabled = true;
+        animator.SetInteger("WeaponMode", (int)WeaponMode.Bend);
+        animator.SetInteger("Weapon", weapon);
+        Equip(sword, swordHolster);
         Equip(gun, gunHolster);
         character.OverrideArm(WeaponArm.Both);
         base.OnRangedWeak(context);
@@ -111,31 +131,21 @@ public class Rhinox : BeastWarrior
         left = false;
     }
 
-    public override void OnRangedStrong(CallbackContext context)
-    {
-        weapon = 4;
-        animator.enabled = true;
-        animator.SetInteger("WeaponMode", (int)WeaponMode.Bend);
-        animator.SetInteger("Weapon", weapon);
-        Equip(sword, swordHolster);
-        Equip(gun, hold);
-        character.OverrideArm(WeaponArm.Right);
-        base.OnRangedStrong(context);
-        Deploy(rightBlaster, 0f, foldAngle, 0f);
-        Deploy(leftBlaster, 0f, foldAngle, 0f);
-    }
-
     public override void OnAttack(CallbackContext context)
     {
         switch (weapon)
         {
             case 3:
                 lightShoot = context.performed;
-                break;
-            case 4:
-                heavyShoot = context.performed;
                 time = fireRate;
                 barrel = 0;
+                break;
+            case 4:
+                if (canShoot && character.energy >= boltCost)
+                {
+                    heavyShoot = context.performed;
+                    canShoot = !heavyShoot;
+                }
                 break;
         }
     }

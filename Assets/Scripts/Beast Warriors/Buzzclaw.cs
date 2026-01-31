@@ -29,18 +29,26 @@ public class Buzzclaw : BeastWarrior
 
     public Color ballColor;
 
+    public float laserCooldown;
+
     public float laserInaccuracy;
+
+    public int laserCost;
+
+    public float ballCooldown;
+
+    public int ballCost;
 
     protected new void FixedUpdate()
     {
         base.FixedUpdate();
         if (lightShoot)
         {
-            lightShoot = ShootLaser(WeaponArm.Left, laser, lightBarrel, laserColor, laserInaccuracy);
+            lightShoot = ShootLaser(WeaponArm.Left, laser, lightBarrel, laserColor, laserInaccuracy, laserCooldown, laserCost);
         }
-        if (heavyShoot)
+        else if (heavyShoot)
         {
-            heavyShoot = ShootBall(WeaponArm.Right, flash, ball, heavyBarrel, flashColor, ballColor);
+            heavyShoot = ShootBall(WeaponArm.Right, flash, ball, heavyBarrel, ballColor, ballColor, ballCooldown, ballCost);
         }
     }
 
@@ -101,10 +109,18 @@ public class Buzzclaw : BeastWarrior
         switch (weapon)
         {
             case 3:
-                lightShoot = context.performed;
+                if (canShoot && character.energy >= laserCost)
+                {
+                    lightShoot = context.performed;
+                    canShoot = !lightShoot;
+                }
                 break;
             case 4:
-                heavyShoot = context.performed;
+                if (canShoot && character.energy >= ballCost)
+                {
+                    heavyShoot = context.performed;
+                    canShoot = !heavyShoot;
+                }
                 break;
         }
     }

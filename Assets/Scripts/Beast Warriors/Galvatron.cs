@@ -39,6 +39,14 @@ public class Galvatron : BeastWarrior
 
     public Color ballColor;
 
+    public float boltCooldown;
+
+    public int boltCost;
+
+    public float ballCooldown;
+
+    public int ballCost;
+
     private float foldAngle;
 
     private float deployAngle;
@@ -55,11 +63,11 @@ public class Galvatron : BeastWarrior
         base.FixedUpdate();
         if (lightShoot)
         {
-            lightShoot = ShootBolt(WeaponArm.Both, flash, bolt, lightBarrels, boltMaterial, boltColor);
+            lightShoot = ShootBolt(WeaponArm.Both, flash, bolt, lightBarrels, boltMaterial, boltColor, boltCost, boltCooldown);
         }
-        if (heavyShoot)
+        else if (heavyShoot)
         {
-            heavyShoot = ShootBall(WeaponArm.Right, flash, ball, heavyBarrel, ballColor, ballColor);
+            heavyShoot = ShootBall(WeaponArm.Right, flash, ball, heavyBarrel, ballColor, ballColor, ballCooldown, ballCost);
         }
     }
 
@@ -131,10 +139,18 @@ public class Galvatron : BeastWarrior
         switch (weapon)
         {
             case 3:
-                lightShoot = context.performed;
+                if (canShoot && character.energy >= boltCost)
+                {
+                    lightShoot = context.performed;
+                    canShoot = !lightShoot;
+                }
                 break;
             case 4:
-                heavyShoot = context.performed;
+                if (canShoot && character.energy >= ballCost)
+                {
+                    heavyShoot = context.performed;
+                    canShoot = !heavyShoot;
+                }
                 break;
         }
     }

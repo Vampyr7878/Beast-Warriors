@@ -31,18 +31,26 @@ public class Dinobot : BeastWarrior
 
     public Color laserColor;
 
+    public float boltCooldown;
+
+    public int boltCost;
+
+    public float laserCooldown;
+
     public float laserInaccuracy;
+
+    public int laserCost;
 
     protected new void FixedUpdate()
     {
         base.FixedUpdate();
         if (lightShoot)
         {
-            lightShoot = ShootBolt(WeaponArm.Left, flash, bolt, lightBarrel, boltMaterial, boltColor);
+            lightShoot = ShootBolt(WeaponArm.Left, flash, bolt, lightBarrel, boltMaterial, boltColor, boltCost, boltCooldown);
         }
-        if (heavyShoot)
+        else if (heavyShoot)
         {
-            heavyShoot = ShootLaser(WeaponArm.None, laser, heavyBarrels, laserColor, laserInaccuracy, 2);
+            heavyShoot = ShootLaser(WeaponArm.None, laser, heavyBarrels, laserColor, laserInaccuracy, laserCooldown, laserCost, 2);
         }
     }
 
@@ -99,10 +107,18 @@ public class Dinobot : BeastWarrior
         switch (weapon)
         {
             case 3:
-                lightShoot = context.performed;
+                if (canShoot && character.energy >= boltCost)
+                {
+                    lightShoot = context.performed;
+                    canShoot = !lightShoot;
+                }
                 break;
             case 4:
-                heavyShoot = context.performed;
+                if (canShoot && character.energy >= laserCost)
+                {
+                    heavyShoot = context.performed;
+                    canShoot = !heavyShoot;
+                }
                 break;
         }
     }

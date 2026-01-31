@@ -15,9 +15,19 @@ public class Character : MonoBehaviour
 
     public List<Transform> robot;
 
+    public Image healthBar;
+
+    public Image energyBar;
+
     public Image Crosshair;
 
     public LayerMask mask;
+
+    public int health;
+
+    public int energy;
+
+    public float energyRate;
 
     public float speed;
 
@@ -35,6 +45,8 @@ public class Character : MonoBehaviour
 
     private float cameraAngle;
 
+    private float energyTime;
+
     private Rigidbody body;
 
     private Vector3 movement;
@@ -42,6 +54,10 @@ public class Character : MonoBehaviour
     private Vector2 move;
 
     private Vector2 look;
+
+    private int barHeight;
+
+    private int barMultiplier;
 
     private bool isMoving;
 
@@ -62,6 +78,8 @@ public class Character : MonoBehaviour
             bone.GetComponent<MeshRenderer>().enabled = false;
         }
         cameraAngle = characterCamera.transform.rotation.eulerAngles.x;
+        barHeight = 30;
+        barMultiplier = 3;
         isMoving = false;
         isJumping = false;
         turningRight = false;
@@ -134,6 +152,8 @@ public class Character : MonoBehaviour
         mainAnimator.SetBool("Left", turningLeft);
         mainAnimator.SetBool("Forward", move.y >= 0f);
         mainAnimator.SetFloat("Blend", move.x);
+        healthBar.rectTransform.sizeDelta = new Vector2(barMultiplier * health, barHeight);
+        energyBar.rectTransform.sizeDelta = new Vector2(barMultiplier * energy, barHeight);
     }
 
     void FixedUpdate()
@@ -158,10 +178,10 @@ public class Character : MonoBehaviour
         }
         transform.Rotate(0f, look.x, 0f);
         characterCamera.transform.Rotate(-look.y, 0f, 0f);
-        Vector3 rotation = characterCamera.transform.eulerAngles;
+        Vector3 rotation = characterCamera.transform.localEulerAngles;
         float angle = rotation.x > 180 ? rotation.x - 360 : rotation.x;
         angle = Mathf.Clamp(angle, cameraMin, cameraMax);
-        characterCamera.transform.eulerAngles = new Vector3(angle, rotation.y, rotation.z);
+        characterCamera.transform.localRotation = Quaternion.Euler(angle, 180, 0);
         skeleton[(int)BodyPart.Part.Body].localPosition = new Vector3(-robot[(int)BodyPart.Part.Body].localPosition.x * 350,
             robot[(int)BodyPart.Part.Body].localPosition.y * 400, robot[(int)BodyPart.Part.Body].localPosition.z * 300);
         skeleton[(int)BodyPart.Part.Head].rotation = Quaternion.Euler(angle - cameraAngle, skeleton[2].eulerAngles.y, skeleton[2].eulerAngles.z);
@@ -186,6 +206,7 @@ public class Character : MonoBehaviour
             skeleton[(int)BodyPart.Part.LeftClaw].localRotation = robot[(int)BodyPart.Part.LeftElbow].localRotation;
         }
         MoveParts();
+        RegenareteEnergy();
     }
 
     void MoveParts()
@@ -224,6 +245,16 @@ public class Character : MonoBehaviour
         if (bodyParts[index].CompareTag(tag))
         {
             bodyParts[index].transform.localRotation *= Quaternion.Euler(x, y, z);
+        }
+    }
+
+    void RegenareteEnergy()
+    {
+        energyTime += Time.deltaTime;
+        if (energyTime >= energyRate)
+        {
+            energy = energy < 100 ? energy + 1 : 100;
+            energyTime -= energyRate;
         }
     }
 

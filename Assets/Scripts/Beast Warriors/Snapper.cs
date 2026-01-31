@@ -25,23 +25,29 @@ public class Snapper : BeastWarrior
 
     public float bulletInaccuracy;
 
+    public int bulletCost;
+
+    public float missleCooldown;
+
+    public int missleCost;
+
     private float time;
 
     protected new void FixedUpdate()
     {
         base.FixedUpdate();
-        if (lightShoot)
+        if (lightShoot && character.energy >= bulletCost)
         {
             if (time >= fireRate)
             {
-                ShootMachineGun(WeaponArm.None, bullet, lightBarrels, bulletInaccuracy);
+                ShootMachineGun(WeaponArm.None, bullet, lightBarrels, bulletInaccuracy, 0f, bulletCost);
                 time = 0;
             }
             time += Time.deltaTime;
         }
-        if (heavyShoot)
+        else if (heavyShoot)
         {
-            heavyShoot = ShootBolt(WeaponArm.Right, blast, missle, heavyBarrels, missleMaterial, Color.clear);
+            heavyShoot = ShootBolt(WeaponArm.Right, blast, missle, heavyBarrels, missleMaterial, Color.clear, missleCost, missleCooldown);
         }
     }
 
@@ -100,7 +106,11 @@ public class Snapper : BeastWarrior
                 barrel = 0;
                 break;
             case 4:
-                heavyShoot = context.performed;
+                if (canShoot && character.energy >= missleCost)
+                {
+                    heavyShoot = context.performed;
+                    canShoot = !heavyShoot;
+                }
                 break;
         }
     }

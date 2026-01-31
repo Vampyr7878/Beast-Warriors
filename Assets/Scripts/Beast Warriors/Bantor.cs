@@ -21,23 +21,29 @@ public class Bantor : BeastWarrior
 
     public float bulletInaccuracy;
 
+    public int bulletCost;
+
+    public float coneCooldown;
+
+    public int coneCost;
+
     private float time;
 
     protected new void FixedUpdate()
     {
         base.FixedUpdate();
-        if (lightShoot)
+        if (lightShoot && character.energy >= bulletCost)
         {
             if (time >= fireRate)
             {
-                ShootMachineGun(WeaponArm.Left, bullet, lightBarrels, bulletInaccuracy);
+                ShootMachineGun(WeaponArm.Left, bullet, lightBarrels, bulletInaccuracy, 0f, bulletCost);
                 time = 0;
             }
             time += Time.deltaTime;
         }
-        if (heavyShoot)
+        else if (heavyShoot)
         {
-            heavyShoot = ShootBall(WeaponArm.Right, flash, cone, heavyBarrel, flashColor, coneColor);
+            heavyShoot = ShootBall(WeaponArm.Right, flash, cone, heavyBarrel, flashColor, coneColor, coneCooldown, coneCost);
         }
     }
 
@@ -91,7 +97,11 @@ public class Bantor : BeastWarrior
                 barrel = 0;
                 break;
             case 4:
-                heavyShoot = context.performed;
+                if (canShoot && character.energy >= coneCost)
+                {
+                    heavyShoot = context.performed;
+                    canShoot = !heavyShoot;
+                }
                 break;
         }
     }

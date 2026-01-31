@@ -33,15 +33,19 @@ public class Ironhide : BeastWarrior
 
     public Color boltColor;
 
+    public float boltCooldown;
+
+    public int boltCost;
+
     public float fireRate;
 
     public float bulletInaccuracy;
 
+    public int bulletCost;
+
     private float foldAngle;
 
     private float deployAngle;
-
-    private float time;
 
     new void Awake()
     {
@@ -55,16 +59,11 @@ public class Ironhide : BeastWarrior
         base.FixedUpdate();
         if (lightShoot)
         {
-            lightShoot = ShootBolt(WeaponArm.None, flash, bolt, lightBarrels, boltMaterial, boltColor);
+            lightShoot = ShootBolt(WeaponArm.None, flash, bolt, lightBarrels, boltMaterial, boltColor, boltCost, boltCooldown);
         }
-        if (heavyShoot)
+        else if (heavyShoot)
         {
-            if (time >= fireRate)
-            {
-                ShootMachineGun(WeaponArm.Both, bullet, heavyBarrels, bulletInaccuracy);
-                time = 0;
-            }
-            time += Time.deltaTime;
+            heavyShoot = ShootMachineGun(WeaponArm.Both, bullet, heavyBarrels, bulletInaccuracy, fireRate, bulletCost);
         }
     }
 
@@ -123,6 +122,9 @@ public class Ironhide : BeastWarrior
         base.OnRangedStrong(context);
         Deploy(rightBlade, 0f, foldAngle, 80f);
         Deploy(leftBlade, 0f, -foldAngle, -80f);
+        barrel = 0;
+        right = true;
+        left = false;
     }
 
     public override void OnAttack(CallbackContext context)
@@ -130,14 +132,18 @@ public class Ironhide : BeastWarrior
         switch (weapon)
         {
             case 3:
-                lightShoot = context.performed;
+                if (canShoot && character.energy >= boltCost)
+                {
+                    lightShoot = context.performed;
+                    canShoot = !lightShoot;
+                }
                 break;
             case 4:
-                heavyShoot = context.performed;
-                time = fireRate;
-                barrel = 0;
-                right = true;
-                left = false;
+                if (canShoot && character.energy >= bulletCost)
+                {
+                    heavyShoot = context.performed;
+                    canShoot = !heavyShoot;
+                }
                 break;
         }
     }

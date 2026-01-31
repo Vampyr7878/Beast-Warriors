@@ -31,6 +31,14 @@ public class Cybershark : BeastWarrior
 
     public Material missleMaterial;
 
+    public float ballCooldown;
+
+    public int ballCost;
+
+    public float missleCooldown;
+
+    public int missleCost;
+
     private float foldAngle;
 
     private float deployAngle;
@@ -47,11 +55,11 @@ public class Cybershark : BeastWarrior
         base.FixedUpdate();
         if (lightShoot)
         {
-            lightShoot = ShootBall(WeaponArm.Right, flash, ball, lightBarrel, ballColor, ballColor);
+            lightShoot = ShootBall(WeaponArm.Right, flash, ball, lightBarrel, ballColor, ballColor, ballCooldown, ballCost);
         }
-        if (heavyShoot)
+        else if (heavyShoot)
         {
-            heavyShoot = ShootBolt(WeaponArm.None, blast, missle, heavyBarrel, missleMaterial, Color.clear);
+            heavyShoot = ShootBolt(WeaponArm.None, blast, missle, heavyBarrel, missleMaterial, Color.clear, missleCost, missleCooldown);
         }
     }
 
@@ -112,10 +120,18 @@ public class Cybershark : BeastWarrior
         switch (weapon)
         {
             case 3:
-                lightShoot = context.performed;
+                if (canShoot && character.energy >= ballCost)
+                {
+                    lightShoot = context.performed;
+                    canShoot = !lightShoot;
+                }
                 break;
             case 4:
-                heavyShoot = context.performed;
+                if (canShoot && character.energy >= missleCost)
+                {
+                    heavyShoot = context.performed;
+                    canShoot = !heavyShoot;
+                }
                 break;
         }
     }

@@ -25,23 +25,29 @@ public class Airazor : BeastWarrior
 
     public float bulletInaccuracy;
 
+    public int bulletCost;
+
+    public float ballCooldown;
+
+    public int ballCost;
+
     private float time;
 
     protected new void FixedUpdate()
     {
         base.FixedUpdate();
-        if (lightShoot)
+        if (lightShoot && character.energy >= bulletCost)
         {
             if (time >= fireRate)
             {
-                ShootMachineGun(WeaponArm.Both, bullet, lightBarrels, bulletInaccuracy);
+                ShootMachineGun(WeaponArm.Both, bullet, lightBarrels, bulletInaccuracy, 0f, bulletCost);
                 time = 0;
             }
             time += Time.deltaTime;
         }
-        if (heavyShoot)
+        else if (heavyShoot)
         {
-            heavyShoot = ShootBall(WeaponArm.Right, flash, ball, heavyBarrel, ballColor, ballColor);
+            heavyShoot = ShootBall(WeaponArm.Right, flash, ball, heavyBarrel, ballColor, ballColor, ballCooldown, ballCost);
         }
     }
 
@@ -101,7 +107,11 @@ public class Airazor : BeastWarrior
                 left = false;
                 break;
             case 4:
-                heavyShoot = context.performed;
+                if (canShoot && character.energy >= ballCost)
+                {
+                    heavyShoot = context.performed;
+                    canShoot = !heavyShoot;
+                }
                 break;
         }
     }

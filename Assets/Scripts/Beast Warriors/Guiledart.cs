@@ -27,23 +27,29 @@ public class Guiledart : BeastWarrior
 
     public float bulletInaccuracy;
 
+    public int bulletCost;
+
+    public float boltCooldown;
+
+    public int boltCost;
+
     private float time;
 
     protected new void FixedUpdate()
     {
         base.FixedUpdate();
-        if (lightShoot)
+        if (lightShoot && character.energy >= bulletCost)
         {
             if (time >= fireRate)
             {
-                ShootMachineGun(WeaponArm.Left, bullet, lightBarrel, bulletInaccuracy);
+                ShootMachineGun(WeaponArm.Left, bullet, lightBarrel, bulletInaccuracy, 0f, bulletCost);
                 time = 0;
             }
             time += Time.deltaTime;
         }
-        if (heavyShoot)
+        else if (heavyShoot)
         {
-            heavyShoot = ShootBolt(WeaponArm.Right, flash, bolt, heavyBarrel, boltMaterial, boltColor);
+            heavyShoot = ShootBolt(WeaponArm.Right, flash, bolt, heavyBarrel, boltMaterial, boltColor, boltCost, boltCooldown);
         }
     }
 
@@ -100,7 +106,11 @@ public class Guiledart : BeastWarrior
                 time = fireRate;
                 break;
             case 4:
-                heavyShoot = context.performed;
+                if (canShoot && character.energy >= boltCost)
+                {
+                    heavyShoot = context.performed;
+                    canShoot = !heavyShoot;
+                }
                 break;
         }
     }

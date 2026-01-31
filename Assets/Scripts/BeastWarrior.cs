@@ -31,6 +31,8 @@ public abstract class BeastWarrior : MonoBehaviour
 
     protected float[] cameraPosition;
 
+    protected bool canShoot;
+
     protected bool lightShoot;
 
     protected bool heavyShoot;
@@ -49,6 +51,7 @@ public abstract class BeastWarrior : MonoBehaviour
         cameraPosition[2] = -2.5f;
         cameraPosition[3] = -2.5f;
         weapon = 1;
+        canShoot = true;
         lightShoot = false;
         heavyShoot = false;
     }
@@ -73,6 +76,11 @@ public abstract class BeastWarrior : MonoBehaviour
             x = Mathf.Clamp(x + 0.1f, x, cameraPosition[weapon - 1]);
         }
         characterCamera.transform.localPosition = new Vector3(x, characterCamera.transform.localPosition.y, characterCamera.transform.localPosition.z);
+    }
+
+    protected void ShootingCooldown()
+    {
+        canShoot = true;
     }
 
     protected void RaycastBullet(GameObject bullet, Vector3 direction, LayerMask layerMask, GameObject barrel, bool audio = true)
@@ -209,7 +217,8 @@ public abstract class BeastWarrior : MonoBehaviour
         lights[1].color = flameColors[2];
     }
 
-    protected void ShootMachineGun(WeaponArm arm, GameObject bullet, GameObject[] barrels, float bulletInaccuracy, int shots = 1)
+    protected bool ShootMachineGun(WeaponArm arm, GameObject bullet, GameObject[] barrels,
+        float inaccuracy, float cooldown = 0f, int cost = 0, int shots = 1)
     {
         int layerMask = 1 << 3;
         layerMask = ~layerMask;
@@ -234,7 +243,7 @@ public abstract class BeastWarrior : MonoBehaviour
         Vector3 direction;
         for (int i = 0; i < shots; i++)
         {
-            direction = new(Random.Range(-bulletInaccuracy, bulletInaccuracy), Random.Range(-bulletInaccuracy, bulletInaccuracy), -1f);
+            direction = new(Random.Range(-inaccuracy, inaccuracy), Random.Range(-inaccuracy, inaccuracy), -1f);
             RaycastBullet(bullet, direction, layerMask, barrels[barrel + i * barrels.Length / 2]);
         }
         barrel = barrel == barrels.Length / shots - 1 ? 0 : barrel + 1;
@@ -243,9 +252,16 @@ public abstract class BeastWarrior : MonoBehaviour
             right = !right;
             left = !left;
         }
+        character.energy -= cost;
+        if (cooldown > 0f)
+        {
+            Invoke(nameof(ShootingCooldown), cooldown);
+        }
+        return false;
     }
 
-    protected void ShootMachineGun(WeaponArm arm, GameObject bullet, GameObject barrel, float bulletInaccuracy)
+    protected bool ShootMachineGun(WeaponArm arm, GameObject bullet, GameObject barrel,
+        float inaccuracy, float cooldown = 0f, int cost = 0)
     {
         int layerMask = 1 << 3;
         layerMask = ~layerMask;
@@ -262,11 +278,18 @@ public abstract class BeastWarrior : MonoBehaviour
                 animator.SetTrigger("Shoot");
                 break;
         }
-        Vector3 direction = new(Random.Range(-bulletInaccuracy, bulletInaccuracy), Random.Range(-bulletInaccuracy, bulletInaccuracy), -1f);
+        Vector3 direction = new(Random.Range(-inaccuracy, inaccuracy), Random.Range(-inaccuracy, inaccuracy), -1f);
         RaycastBullet(bullet, direction, layerMask, barrel);
+        character.energy -= cost;
+        if (cooldown > 0f)
+        {
+            Invoke(nameof(ShootingCooldown), cooldown);
+        }
+        return false;
     }
 
-    protected bool ShootBall(WeaponArm arm, GameObject flash, GameObject ball, GameObject[] barrels, Color flashColor, Color ballColor)
+    protected bool ShootBall(WeaponArm arm, GameObject flash, GameObject ball, GameObject[] barrels,
+        Color flashColor, Color ballColor, float cooldown = 0f, int cost = 0)
     {
         int layerMask = 1 << 3;
         layerMask = ~layerMask;
@@ -308,10 +331,16 @@ public abstract class BeastWarrior : MonoBehaviour
             right = !right;
             left = !left;
         }
+        character.energy -= cost;
+        if (cooldown > 0f)
+        {
+            Invoke(nameof(ShootingCooldown), cooldown);
+        }
         return false;
     }
 
-    protected bool ShootBall(WeaponArm arm, GameObject flash, GameObject ball, GameObject barrel, Color flashColor, Color ballColor)
+    protected bool ShootBall(WeaponArm arm, GameObject flash, GameObject ball, GameObject barrel,
+        Color flashColor, Color ballColor, float cooldown = 0f, int cost = 0)
     {
         int layerMask = 1 << 3;
         layerMask = ~layerMask;
@@ -342,10 +371,16 @@ public abstract class BeastWarrior : MonoBehaviour
         alphas[1].time = 1f;
         g.SetKeys(colors, alphas);
         ParticleProjectile(flash, ball, direction, layerMask, barrel, flashColor, ballColor, g);
+        character.energy -= cost;
+        if (cooldown > 0f)
+        {
+            Invoke(nameof(ShootingCooldown), cooldown);
+        }
         return false;
     }
 
-    protected bool ShootLaser(WeaponArm arm, LineRenderer laser, GameObject[] barrels, Color laserColor, float laserInaccuracy, int shots = 1)
+    protected bool ShootLaser(WeaponArm arm, LineRenderer laser, GameObject[] barrels, Color color,
+        float inaccuracy, float cooldown = 0f, int cost = 0, int shots = 1)
     {
         int layerMask = 1 << 3;
         layerMask = ~layerMask;
@@ -370,8 +405,8 @@ public abstract class BeastWarrior : MonoBehaviour
         Vector3 direction;
         for (int i = 0; i < shots; i++)
         {
-            direction = new(Random.Range(-laserInaccuracy, laserInaccuracy), Random.Range(-laserInaccuracy, laserInaccuracy), -1f);
-            RaycastLaser(laser, direction, layerMask, barrels[barrel + i * barrels.Length / 2], laserColor);
+            direction = new(Random.Range(-inaccuracy, inaccuracy), Random.Range(-inaccuracy, inaccuracy), -1f);
+            RaycastLaser(laser, direction, layerMask, barrels[barrel + i * barrels.Length / 2], color);
         }
         barrel = barrel == barrels.Length / shots - 1 ? 0 : barrel + 1;
         if (arm == WeaponArm.Both)
@@ -379,10 +414,16 @@ public abstract class BeastWarrior : MonoBehaviour
             right = !right;
             left = !left;
         }
+        character.energy -= cost;
+        if (cooldown > 0f)
+        {
+            Invoke(nameof(ShootingCooldown), cooldown);
+        }
         return false;
     }
 
-    protected bool ShootLaser(WeaponArm arm, LineRenderer laser, GameObject barrel, Color laserColor, float laserInaccuracy)
+    protected bool ShootLaser(WeaponArm arm, LineRenderer laser, GameObject barrel,
+        Color color, float inaccuracy, float cooldown = 0f, int cost = 0)
     {
         int layerMask = 1 << 3;
         layerMask = ~layerMask;
@@ -399,12 +440,18 @@ public abstract class BeastWarrior : MonoBehaviour
                 animator.SetTrigger("Shoot");
                 break;
         }
-        Vector3 direction = new(Random.Range(-laserInaccuracy, laserInaccuracy), Random.Range(-laserInaccuracy, laserInaccuracy), -1f);
-        RaycastLaser(laser, direction, layerMask, barrel, laserColor);
+        Vector3 direction = new(Random.Range(-inaccuracy, inaccuracy), Random.Range(-inaccuracy, inaccuracy), -1f);
+        RaycastLaser(laser, direction, layerMask, barrel, color);
+        character.energy -= cost;
+        if (cooldown > 0f)
+        {
+            Invoke(nameof(ShootingCooldown), cooldown);
+        }
         return false;
     }
 
-    protected bool ShootBolt(WeaponArm arm, GameObject flash, GameObject bolt, GameObject[] barrels, Material boltMaterial, Color boltColor, float angle = 0f)
+    protected bool ShootBolt(WeaponArm arm, GameObject flash, GameObject bolt, GameObject[] barrels,
+        Material material, Color color, int cost = 0, float cooldown = 0f, float angle = 0f)
     {
         int layerMask = 1 << 3;
         layerMask = ~layerMask;
@@ -428,22 +475,28 @@ public abstract class BeastWarrior : MonoBehaviour
         }
         Vector3 direction = new(0f, 0f, -1f);
         Vector3 orientation = new(0f, 0f, angle);
-        Material m = new(boltMaterial);
-        if (boltColor != Color.clear)
+        Material m = new(material);
+        if (color != Color.clear)
         {
-            m.color = boltColor;
+            m.color = color;
         }
-        MeshProjectile(flash, bolt, direction, orientation, layerMask, barrels[barrel], boltColor, m);
+        MeshProjectile(flash, bolt, direction, orientation, layerMask, barrels[barrel], color, m);
         barrel = barrel == barrels.Length - 1 ? 0 : barrel + 1;
         if (arm == WeaponArm.Both)
         {
             right = !right;
             left = !left;
         }
+        character.energy -= cost;
+        if (cooldown > 0f)
+        {
+            Invoke(nameof(ShootingCooldown), cooldown);
+        }
         return false;
     }
 
-    protected bool ShootBolt(WeaponArm arm, GameObject flash, GameObject bolt, GameObject barrel, Material boltMaterial, Color boltColor, float angle = 0f)
+    protected bool ShootBolt(WeaponArm arm, GameObject flash, GameObject bolt, GameObject barrel,
+        Material material, Color color, int cost = 0, float cooldown = 0f, float angle = 0f)
     {
         int layerMask = 1 << 3;
         layerMask = ~layerMask;
@@ -462,16 +515,22 @@ public abstract class BeastWarrior : MonoBehaviour
         }
         Vector3 direction = new(0f, 0f, -1f);
         Vector3 orientation = new(0f, 0f, angle);
-        Material m = new(boltMaterial);
-        if (boltColor != Color.clear)
+        Material m = new(material);
+        if (color != Color.clear)
         {
-            m.color = boltColor;
+            m.color = color;
         }
-        MeshProjectile(flash, bolt, direction, orientation, layerMask, barrel, boltColor, m);
+        MeshProjectile(flash, bolt, direction, orientation, layerMask, barrel, color, m);
+        character.energy -= cost;
+        if (cooldown > 0f)
+        {
+            Invoke(nameof(ShootingCooldown), cooldown);
+        }
         return false;
     }
 
-    protected bool Throw(WeaponArm arm, GameObject thrown, GameObject projectile, GameObject[] barrels, float x, float y, bool spin = false)
+    protected bool Throw(WeaponArm arm, GameObject thrown, GameObject projectile, GameObject[] barrels,
+        float x, float y, float cooldown = 0f, int cost = 0, bool spin = false)
     {
         int layerMask = 1 << 3;
         layerMask = ~layerMask;
@@ -502,10 +561,16 @@ public abstract class BeastWarrior : MonoBehaviour
             right = !right;
             left = !left;
         }
+        character.energy -= cost;
+        if (cooldown > 0f)
+        {
+            Invoke(nameof(ShootingCooldown), cooldown);
+        }
         return false;
     }
 
-    protected bool Throw(WeaponArm arm, GameObject thrown, GameObject projectile, GameObject barrel, float x, float y, bool spin = false)
+    protected bool Throw(WeaponArm arm, GameObject thrown, GameObject projectile, GameObject barrel,
+        float x, float y, float cooldown = 0f, int cost = 0, bool spin = false)
     {
         int layerMask = 1 << 3;
         layerMask = ~layerMask;
@@ -525,10 +590,16 @@ public abstract class BeastWarrior : MonoBehaviour
         Vector3 direction = new(0f, 0f, -1f);
         Vector3 orientation = new(x, y, 0f);
         ThrownProjectile(thrown, projectile, direction, orientation, layerMask, barrel, spin);
+        character.energy -= cost;
+        if (cooldown > 0f)
+        {
+            Invoke(nameof(ShootingCooldown), cooldown);
+        }
         return false;
     }
 
-    protected bool ShootShotgun(WeaponArm arm, GameObject bullet, GameObject slug, GameObject[] barrels, float bulletInaccuracy, int slugCount)
+    protected bool ShootShotgun(WeaponArm arm, GameObject bullet, GameObject slug, GameObject[] barrels,
+        float inaccuracy, float cooldown = 0f, int cost = 0, int slugCount = 1)
     {
         int layerMask = 1 << 3;
         layerMask = ~layerMask;
@@ -554,7 +625,7 @@ public abstract class BeastWarrior : MonoBehaviour
         Vector3 direction;
         for (int i = 0; i < slugCount; i++)
         {
-            direction = new Vector3(Random.Range(-bulletInaccuracy, bulletInaccuracy), Random.Range(-bulletInaccuracy, bulletInaccuracy), -1f);
+            direction = new Vector3(Random.Range(-inaccuracy, inaccuracy), Random.Range(-inaccuracy, inaccuracy), -1f);
             RaycastBullet(bullet, direction, layerMask, barrels[barrel], false);
         }
         barrel = barrel == barrels.Length - 1 ? 0 : barrel + 1;
@@ -563,10 +634,16 @@ public abstract class BeastWarrior : MonoBehaviour
             right = !right;
             left = !left;
         }
+        character.energy -= cost;
+        if (cooldown > 0f)
+        {
+            Invoke(nameof(ShootingCooldown), cooldown);
+        }
         return false;
     }
 
-    protected bool ShootShotgun(WeaponArm arm, GameObject bullet, GameObject slug, GameObject barrel, float bulletInaccuracy, int slugCount)
+    protected bool ShootShotgun(WeaponArm arm, GameObject bullet, GameObject slug, GameObject barrel,
+        float inaccuracy, float cooldown = 0f, int cost = 0, int slugCount = 1)
     {
         int layerMask = 1 << 3;
         layerMask = ~layerMask;
@@ -587,8 +664,13 @@ public abstract class BeastWarrior : MonoBehaviour
         Vector3 direction;
         for (int i = 0; i < slugCount; i++)
         {
-            direction = new Vector3(Random.Range(-bulletInaccuracy, bulletInaccuracy), Random.Range(-bulletInaccuracy, bulletInaccuracy), -1f);
+            direction = new Vector3(Random.Range(-inaccuracy, inaccuracy), Random.Range(-inaccuracy, inaccuracy), -1f);
             RaycastBullet(bullet, direction, layerMask, barrel, false);
+        }
+        character.energy -= cost;
+        if (cooldown > 0f)
+        {
+            Invoke(nameof(ShootingCooldown), cooldown);
         }
         return false;
     }
@@ -608,6 +690,7 @@ public abstract class BeastWarrior : MonoBehaviour
     public virtual void OnMeleeWeak(CallbackContext context)
     {
         character.Crosshair.enabled = false;
+        canShoot = true;
         lightShoot = false;
         heavyShoot = false;
     }
@@ -615,6 +698,7 @@ public abstract class BeastWarrior : MonoBehaviour
     public virtual void OnMeleeStrong(CallbackContext context)
     {
         character.Crosshair.enabled = false;
+        canShoot = true;
         lightShoot = false;
         heavyShoot = false;
     }
@@ -622,6 +706,7 @@ public abstract class BeastWarrior : MonoBehaviour
     public virtual void OnRangedWeak(CallbackContext context)
     {
         character.Crosshair.enabled = true;
+        canShoot = true;
         lightShoot = false;
         heavyShoot = false;
     }
@@ -629,6 +714,7 @@ public abstract class BeastWarrior : MonoBehaviour
     public virtual void OnRangedStrong(CallbackContext context)
     {
         character.Crosshair.enabled = true;
+        canShoot = true;
         lightShoot = false;
         heavyShoot = false;
     }

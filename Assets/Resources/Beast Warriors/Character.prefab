@@ -160,10 +160,10 @@ Rigidbody:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7397820348159117300}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Mass: 4
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -200,9 +200,9 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 1.5
-  m_Height: 5
+  m_Height: 5.3
   m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0.25}
+  m_Center: {x: 0, y: 0, z: 0.2}
 --- !u!114 &7397820348159117297
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -312,6 +312,34 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 107480e2-fdcc-4c0c-a2fe-0251611b6a6a
     m_ActionName: 'Robot Mode/Attack[/Mouse/leftButton,/XInputControllerWindows/rightTrigger]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: f540bd37-f8fd-44fe-9432-0314aa8d1d66
+    m_ActionName: 'Character Select/Exit[/Keyboard/escape,/XInputControllerWindows/start]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 8d2a095a-c6a5-4682-b329-88feb52fe905
+    m_ActionName: 'Character Select/Previous[/Keyboard/comma,/XInputControllerWindows/leftTrigger]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 8f848928-51ba-4c5d-a35e-4343c22a9fc1
+    m_ActionName: 'Character Select/Next[/Keyboard/period,/XInputControllerWindows/rightTrigger]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 7c2bfc54-8c80-4d00-9e96-86dd212e9590
+    m_ActionName: 'Character Select/Move[/Keyboard/leftArrow,/Keyboard/rightArrow,/XInputControllerWindows/dpad/x]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 71d6eef2-60ba-421a-812e-edb4b307e92b
+    m_ActionName: 'Character Select/Select[/Keyboard/enter,/XInputControllerWindows/select]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 29597870-5d82-4dd8-96c3-9deabec0e52e
+    m_ActionName: 'Menu/Move[/Keyboard/upArrow,/Keyboard/downArrow,/XInputControllerWindows/dpad/y]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: cc14011c-a60e-42a6-897f-98bc08b0b623
+    m_ActionName: 'Menu/Select[/Keyboard/enter,/XInputControllerWindows/buttonSouth]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Robot Mode
@@ -385,12 +413,18 @@ MonoBehaviour:
   - {fileID: 5752529219721688215}
   - {fileID: 0}
   - {fileID: 897102398400367739}
+  healthBar: {fileID: 0}
+  energyBar: {fileID: 0}
+  Crosshair: {fileID: 0}
   mask:
     serializedVersion: 2
     m_Bits: 64
+  health: 100
+  energy: 100
   speed: 10
   jump: 20
-  cameraRange: 20
+  cameraMin: -40
+  cameraMax: 20
 --- !u!1 &7397820348998323167
 GameObject:
   m_ObjectHideFlags: 0
@@ -417,14 +451,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7397820348998323167}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.9848078, z: -0.17364816, w: 0}
-  m_LocalPosition: {x: 0, y: 4, z: 5.5}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: 0, y: 2.5, z: 5.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1485113299}
   m_Father: {fileID: 7397820348159117299}
-  m_LocalEulerAnglesHint: {x: 20, y: 180, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!20 &7397820348998323165
 Camera:
   m_ObjectHideFlags: 0
@@ -682,6 +716,70 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7397820348159117299}
     m_Modifications:
+    - target: {fileID: 781057471840731693, guid: a60a5a833ee448440b542e3f15a983e9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 781057471840731693, guid: a60a5a833ee448440b542e3f15a983e9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 781057471840731693, guid: a60a5a833ee448440b542e3f15a983e9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4439001885696449140, guid: a60a5a833ee448440b542e3f15a983e9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4439001885696449140, guid: a60a5a833ee448440b542e3f15a983e9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4439001885696449140, guid: a60a5a833ee448440b542e3f15a983e9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4439001886067394246, guid: a60a5a833ee448440b542e3f15a983e9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4439001886067394246, guid: a60a5a833ee448440b542e3f15a983e9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4439001886067394246, guid: a60a5a833ee448440b542e3f15a983e9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4439001886106976215, guid: a60a5a833ee448440b542e3f15a983e9, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: afd59a6031c886a46a2b28f841486252, type: 2}
+    - target: {fileID: 4439001886112077864, guid: a60a5a833ee448440b542e3f15a983e9, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4439001886112077864, guid: a60a5a833ee448440b542e3f15a983e9, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4439001886112077864, guid: a60a5a833ee448440b542e3f15a983e9, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4439001886112077864, guid: a60a5a833ee448440b542e3f15a983e9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4439001886112077864, guid: a60a5a833ee448440b542e3f15a983e9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4439001886112077864, guid: a60a5a833ee448440b542e3f15a983e9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4439001886161763762, guid: a60a5a833ee448440b542e3f15a983e9, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0
@@ -725,6 +823,18 @@ PrefabInstance:
     - target: {fileID: 4439001886161763763, guid: a60a5a833ee448440b542e3f15a983e9, type: 3}
       propertyPath: m_Name
       value: Skeleton
+      objectReference: {fileID: 0}
+    - target: {fileID: 4439001886382692643, guid: a60a5a833ee448440b542e3f15a983e9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4439001886382692643, guid: a60a5a833ee448440b542e3f15a983e9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4439001886382692643, guid: a60a5a833ee448440b542e3f15a983e9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

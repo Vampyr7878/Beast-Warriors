@@ -19,18 +19,26 @@ public class DrillBit : BeastWarrior
 
     public Color coneColor;
 
+    public float laserCooldown;
+
     public float laserInaccuracy;
+
+    public int laserCost;
+
+    public float coneCooldown;
+
+    public int coneCost;
 
     protected new void FixedUpdate()
     {
         base.FixedUpdate();
         if (lightShoot)
         {
-            lightShoot = ShootLaser(WeaponArm.Left, laser, lightBarrel, laserColor, laserInaccuracy);
+            lightShoot = ShootLaser(WeaponArm.Left, laser, lightBarrel, laserColor, laserInaccuracy, laserCooldown, laserCost);
         }
-        if (heavyShoot)
+        else if (heavyShoot)
         {
-            heavyShoot = ShootBall(WeaponArm.Right, flash, cone, heavyBarrel, flashColor, coneColor);
+            heavyShoot = ShootBall(WeaponArm.Right, flash, cone, heavyBarrel, flashColor, coneColor, coneCooldown, coneCost);
         }
     }
 
@@ -79,10 +87,18 @@ public class DrillBit : BeastWarrior
         switch (weapon)
         {
             case 3:
-                lightShoot = context.performed;
+                if (canShoot && character.energy >= laserCost)
+                {
+                    lightShoot = context.performed;
+                    canShoot = !lightShoot;
+                }
                 break;
             case 4:
-                heavyShoot = context.performed;
+                if (canShoot && character.energy >= coneCost)
+                {
+                    heavyShoot = context.performed;
+                    canShoot = !heavyShoot;
+                }
                 break;
         }
     }

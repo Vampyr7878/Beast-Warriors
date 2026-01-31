@@ -25,6 +25,12 @@ public class Razorbeast : BeastWarrior
 
     public float bulletInaccuracy;
 
+    public int bulletCost;
+
+    public float slugCooldown;
+
+    public int slugCost;
+
     public int slugCount;
 
     private float foldAngle;
@@ -43,18 +49,18 @@ public class Razorbeast : BeastWarrior
     protected new void FixedUpdate()
     {
         base.FixedUpdate();
-        if (lightShoot)
+        if (lightShoot && character.energy >= bulletCost)
         {
             if (time >= fireRate)
             {
-                ShootMachineGun(WeaponArm.None, bullet, lightBarrels, bulletInaccuracy);
+                ShootMachineGun(WeaponArm.None, bullet, lightBarrels, bulletInaccuracy, 0f, bulletCost);
                 time = 0;
             }
             time += Time.deltaTime;
         }
-        if (heavyShoot)
+        else if (heavyShoot)
         {
-            heavyShoot = ShootShotgun(WeaponArm.Right, bullet, slug, heavyBarrels, bulletInaccuracy, slugCount);
+            heavyShoot = ShootShotgun(WeaponArm.Right, bullet, slug, heavyBarrels, bulletInaccuracy, slugCooldown, slugCost, slugCount);
         }
     }
 
@@ -121,7 +127,11 @@ public class Razorbeast : BeastWarrior
                 barrel = 0;
                 break;
             case 4:
-                heavyShoot = context.performed;
+                if (canShoot && character.energy >= slugCost)
+                {
+                    heavyShoot = context.performed;
+                    canShoot = !heavyShoot;
+                }
                 break;
         }
     }

@@ -19,18 +19,26 @@ public class Transquito : BeastWarrior
 
     public Color boltColor;
 
+    public float laserCooldown;
+
     public float laserInaccuracy;
+
+    public int laserCost;
+
+    public float boltCooldown;
+
+    public int boltCost;
 
     protected new void FixedUpdate()
     {
         base.FixedUpdate();
         if (lightShoot)
         {
-            lightShoot = ShootLaser(WeaponArm.Both, laser, lightBarrels, laserColor, laserInaccuracy);
+            lightShoot = ShootLaser(WeaponArm.Both, laser, lightBarrels, laserColor, laserInaccuracy, laserCooldown, laserCost);
         }
-        if (heavyShoot)
+        else if (heavyShoot)
         {
-            heavyShoot = ShootBolt(WeaponArm.None, flash, bolt, heavyBarrel, boltMaterial, boltColor);
+            heavyShoot = ShootBolt(WeaponArm.None, flash, bolt, heavyBarrel, boltMaterial, boltColor, boltCost, boltCooldown);
         }
     }
 
@@ -82,10 +90,18 @@ public class Transquito : BeastWarrior
         switch (weapon)
         {
             case 3:
-                lightShoot = context.performed;
+                if (canShoot && character.energy >= laserCost)
+                {
+                    lightShoot = context.performed;
+                    canShoot = !lightShoot;
+                }
                 break;
             case 4:
-                heavyShoot = context.performed;
+                if (canShoot && character.energy >= boltCost)
+                {
+                    heavyShoot = context.performed;
+                    canShoot = !heavyShoot;
+                }
                 break;
         }
     }

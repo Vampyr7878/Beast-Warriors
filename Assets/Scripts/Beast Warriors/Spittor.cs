@@ -19,18 +19,26 @@ public class Spittor : BeastWarrior
 
     public Color ballColor;
 
+    public float laserCooldown;
+
     public float laserInaccuracy;
+
+    public int laserCost;
+
+    public float ballCooldown;
+
+    public int ballCost;
 
     protected new void FixedUpdate()
     {
         base.FixedUpdate();
         if (lightShoot)
         {
-            lightShoot = ShootLaser(WeaponArm.Both, laser, lightBarrels, laserColor, laserInaccuracy);
+            lightShoot = ShootLaser(WeaponArm.Both, laser, lightBarrels, laserColor, laserInaccuracy, laserCooldown, laserCost);
         }
-        if (heavyShoot)
+        else if (heavyShoot)
         {
-            heavyShoot = ShootBall(WeaponArm.None, flash, ball, heavyBarrels, flashColor, ballColor);
+            heavyShoot = ShootBall(WeaponArm.None, flash, ball, heavyBarrels, ballColor, ballColor, ballCooldown, ballCost);
         }
     }
 
@@ -83,10 +91,18 @@ public class Spittor : BeastWarrior
         switch (weapon)
         {
             case 3:
-                lightShoot = context.performed;
+                if (canShoot && character.energy >= laserCost)
+                {
+                    lightShoot = context.performed;
+                    canShoot = !lightShoot;
+                }
                 break;
             case 4:
-                heavyShoot = context.performed;
+                if (canShoot && character.energy >= ballCost)
+                {
+                    heavyShoot = context.performed;
+                    canShoot = !heavyShoot;
+                }
                 break;
         }
     }

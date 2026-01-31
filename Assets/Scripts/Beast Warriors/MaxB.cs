@@ -31,16 +31,24 @@ public class MaxB : BeastWarrior
 
     public Material missleMaterial;
 
+    public float ballCooldown;
+
+    public int ballCost;
+
+    public float missleCooldown;
+
+    public int missleCost;
+
     protected new void FixedUpdate()
     {
         base.FixedUpdate();
         if (lightShoot)
         {
-            lightShoot = ShootBall(WeaponArm.Right, flash, ball, lightBarrel, ballColor, ballColor);
+            lightShoot = ShootBall(WeaponArm.Right, flash, ball, lightBarrel, ballColor, ballColor, ballCooldown, ballCost);
         }
-        if (heavyShoot)
+        else if (heavyShoot)
         {
-            heavyShoot = ShootBolt(WeaponArm.Left, blast, missle, heavyBarrel, missleMaterial, Color.clear);
+            heavyShoot = ShootBolt(WeaponArm.Left, blast, missle, heavyBarrel, missleMaterial, Color.clear, missleCost, missleCooldown);
         }
     }
 
@@ -97,10 +105,18 @@ public class MaxB : BeastWarrior
         switch (weapon)
         {
             case 3:
-                lightShoot = context.performed;
+                if (canShoot && character.energy >= ballCost)
+                {
+                    lightShoot = context.performed;
+                    canShoot = !lightShoot;
+                }
                 break;
             case 4:
-                heavyShoot = context.performed;
+                if (canShoot && character.energy >= missleCost)
+                {
+                    heavyShoot = context.performed;
+                    canShoot = !heavyShoot;
+                }
                 break;
         }
     }

@@ -25,11 +25,19 @@ public class SilverboltII : BeastWarrior
 
     public Material missleMaterial;
 
-    private GameObject[] holds;
+    public float throwCooldown;
+
+    public int throwCost;
 
     public int angle;
 
     public int force;
+
+    public float missleCooldown;
+
+    public int missleCost;
+
+    private GameObject[] holds;
 
     new void Awake()
     {
@@ -42,11 +50,11 @@ public class SilverboltII : BeastWarrior
         base.FixedUpdate();
         if (lightShoot)
         {
-            lightShoot = Throw(WeaponArm.Both, thrown, rightSword, holds, 180f, 90f, true);
+            lightShoot = Throw(WeaponArm.Both, thrown, rightSword, holds, 180f, 90f, throwCooldown, throwCost, true);
         }
-        if (heavyShoot)
+        else if (heavyShoot)
         {
-            heavyShoot = ShootBolt(WeaponArm.None, blast, missle, heavyBarrels, missleMaterial, Color.clear);
+            heavyShoot = ShootBolt(WeaponArm.None, blast, missle, heavyBarrels, missleMaterial, Color.clear, missleCost, missleCooldown);
         }
     }
 
@@ -106,10 +114,18 @@ public class SilverboltII : BeastWarrior
         switch (weapon)
         {
             case 3:
-                lightShoot = context.performed;
+                if (canShoot && character.energy >= throwCost)
+                {
+                    lightShoot = context.performed;
+                    canShoot = !lightShoot;
+                }
                 break;
             case 4:
-                heavyShoot = context.performed;
+                if (canShoot && character.energy >= missleCost)
+                {
+                    heavyShoot = context.performed;
+                    canShoot = !heavyShoot;
+                }
                 break;
         }
     }

@@ -25,7 +25,15 @@ public class Terragator : BeastWarrior
 
     public Color boltColor;
 
+    public float boltCooldown;
+
+    public int boltCost;
+
     public float bulletInaccuracy;
+
+    public float slugCooldown;
+
+    public int slugCost;
 
     public int slugCount;
 
@@ -34,11 +42,11 @@ public class Terragator : BeastWarrior
         base.FixedUpdate();
         if (lightShoot)
         {
-            lightShoot = ShootBolt(WeaponArm.Left, flash, bolt, lightBarrels, boltMaterial, boltColor);
+            lightShoot = ShootBolt(WeaponArm.Left, flash, bolt, lightBarrels, boltMaterial, boltColor, boltCost, boltCooldown);
         }
-        if (heavyShoot)
+        else if (heavyShoot)
         {
-            heavyShoot = ShootShotgun(WeaponArm.Right, bullet, slug, heavyBarrels, bulletInaccuracy, slugCount);
+            heavyShoot = ShootShotgun(WeaponArm.Right, bullet, slug, heavyBarrels, bulletInaccuracy, slugCooldown, slugCost, slugCount);
         }
     }
 
@@ -93,10 +101,18 @@ public class Terragator : BeastWarrior
         switch (weapon)
         {
             case 3:
-                lightShoot = context.performed;
+                if (canShoot && character.energy >= boltCost)
+                {
+                    lightShoot = context.performed;
+                    canShoot = !lightShoot;
+                }
                 break;
             case 4:
-                heavyShoot = context.performed;
+                if (canShoot && character.energy >= slugCost)
+                {
+                    heavyShoot = context.performed;
+                    canShoot = !heavyShoot;
+                }
                 break;
         }
     }

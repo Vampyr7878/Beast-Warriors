@@ -5094,9 +5094,13 @@ MonoBehaviour:
   laser: {fileID: 1902466104029136014, guid: 386d27ab257dd55428cc6279eee12f9b, type: 3}
   blast: {fileID: 6304360778048044942, guid: 0ffe01f45e67ce14e8b38a925ceeb477, type: 3}
   missle: {fileID: 6467447202475496393, guid: 7b5a7645e61192649a90e6fa5aa86ba6, type: 3}
-  laserColor: {r: 0.78431374, g: 0.09803922, b: 0.03137255, a: 0.5019608}
+  laserColor: {r: 0.78431374, g: 0.09803922, b: 0.03137255, a: 1}
   missleMaterial: {fileID: 2100000, guid: 65b9f8b5c2ec2724ba0e6a72419cf9fe, type: 2}
+  laserCooldown: 0.2
   laserInaccuracy: 0.01
+  laserCost: 10
+  missleCooldown: 0.4
+  missleCost: 20
 --- !u!1 &4529165389331170995
 GameObject:
   m_ObjectHideFlags: 0

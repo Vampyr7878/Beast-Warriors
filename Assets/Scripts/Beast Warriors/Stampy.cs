@@ -21,23 +21,29 @@ public class Stampy : BeastWarrior
 
     public float bulletInaccuracy;
 
+    public int bulletCost;
+
+    public float boltCooldown;
+
+    public int boltCost;
+
     private float time;
 
     protected new void FixedUpdate()
     {
         base.FixedUpdate();
-        if (lightShoot)
+        if (lightShoot && character.energy >= bulletCost)
         {
             if (time >= fireRate)
             {
-                ShootMachineGun(WeaponArm.None, bullet, lightBarrels, bulletInaccuracy);
+                ShootMachineGun(WeaponArm.None, bullet, lightBarrels, bulletInaccuracy, 0f, bulletCost, 2);
                 time = 0;
             }
             time += Time.deltaTime;
         }
-        if (heavyShoot)
+        else if (heavyShoot)
         {
-            heavyShoot = ShootBolt(WeaponArm.Both, flash, bolt, heavyBarrels, boltMaterial, boltColor);
+            heavyShoot = ShootBolt(WeaponArm.Both, flash, bolt, heavyBarrels, boltMaterial, boltColor, boltCost, boltCooldown);
         }
     }
 
@@ -94,7 +100,11 @@ public class Stampy : BeastWarrior
                 barrel = 0;
                 break;
             case 4:
-                heavyShoot = context.performed;
+                if (canShoot && character.energy >= boltCost)
+                {
+                    heavyShoot = context.performed;
+                    canShoot = !heavyShoot;
+                }
                 break;
         }
     }

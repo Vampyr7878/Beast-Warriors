@@ -35,6 +35,12 @@ public class Cicadacon : BeastWarrior
 
     public float bulletInaccuracy;
 
+    public int bulletCost;
+
+    public float ballCooldown;
+
+    public int ballCost;
+
     private float foldAngle;
 
     private float deployAngle;
@@ -51,18 +57,18 @@ public class Cicadacon : BeastWarrior
     protected new void FixedUpdate()
     {
         base.FixedUpdate();
-        if (lightShoot)
+        if (lightShoot && character.energy >= bulletCost)
         {
             if (time >= fireRate)
             {
-                ShootMachineGun(WeaponArm.None, bullet, lightBarrels, bulletInaccuracy, 2);
+                ShootMachineGun(WeaponArm.None, bullet, lightBarrels, bulletInaccuracy, 0f, bulletCost, 2);
                 time = 0;
             }
             time += Time.deltaTime;
         }
-        if (heavyShoot)
+        else if (heavyShoot)
         {
-            heavyShoot = ShootBall(WeaponArm.None, flash, ball, heavyBarrel, flashColor, ballColor);
+            heavyShoot = ShootBall(WeaponArm.None, flash, ball, heavyBarrel, ballColor, ballColor, ballCooldown, ballCost);
         }
     }
 
@@ -128,7 +134,11 @@ public class Cicadacon : BeastWarrior
                 barrel = 0;
                 break;
             case 4:
-                heavyShoot = context.performed;
+                if (canShoot && character.energy >= ballCost)
+                {
+                    heavyShoot = context.performed;
+                    canShoot = !heavyShoot;
+                }
                 break;
         }
     }

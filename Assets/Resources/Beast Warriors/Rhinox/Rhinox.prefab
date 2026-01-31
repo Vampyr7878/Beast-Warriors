@@ -8102,7 +8102,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7756214445116686063}
   m_Layer: 0
-  m_Name: Light Barrel
+  m_Name: Heavy Barrel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10978,18 +10978,21 @@ MonoBehaviour:
   gunHolster: {fileID: 6149144701915010159}
   hold: {fileID: 4536549233218890388}
   lightBarrels:
-  - {fileID: 8227515875579494216}
-  - {fileID: 5847074197586023151}
-  heavyBarrels:
   - {fileID: 8997682487171999497}
   - {fileID: 8966792307681872176}
+  heavyBarrels:
+  - {fileID: 8227515875579494216}
+  - {fileID: 5847074197586023151}
+  bullet: {fileID: 3474837066459004095, guid: 0dea4693c7d850e48b7253a911891254, type: 3}
   flash: {fileID: 6304360778048044942, guid: b4ecd4512de45ef47b17645b22d5ccf4, type: 3}
   bolt: {fileID: 7169620736205658760, guid: 205133862f0e7664f98afb3ed37abacb, type: 3}
-  bullet: {fileID: 3474837066459004095, guid: 0dea4693c7d850e48b7253a911891254, type: 3}
   boltMaterial: {fileID: 2100000, guid: 8f820246ec185114d905d1fe95336d0b, type: 2}
   boltColor: {r: 0.2901961, g: 0.61960787, b: 0.28627452, a: 1}
   fireRate: 0.1
   bulletInaccuracy: 0.1
+  bulletCost: 5
+  boltCooldown: 0.4
+  boltCost: 20
 --- !u!1 &7886177069648506089
 GameObject:
   m_ObjectHideFlags: 0
@@ -11936,7 +11939,7 @@ GameObject:
   m_Component:
   - component: {fileID: 461897454697544118}
   m_Layer: 0
-  m_Name: Light Barrel
+  m_Name: Heavy Barrel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13215,7 +13218,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3838361540275104069}
   m_Layer: 0
-  m_Name: Heavy Barrel
+  m_Name: Light Barrel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13246,7 +13249,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2995983022230566624}
   m_Layer: 0
-  m_Name: Heavy Barrel
+  m_Name: Light Barrel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

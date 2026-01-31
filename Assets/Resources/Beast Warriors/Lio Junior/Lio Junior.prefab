@@ -7754,11 +7754,14 @@ MonoBehaviour:
   - {fileID: 5566995749387707722}
   - {fileID: 1348856845938018906}
   laser: {fileID: 1902466104029136014, guid: 386d27ab257dd55428cc6279eee12f9b, type: 3}
-  bullet: {fileID: 3474837066459004095, guid: 0dea4693c7d850e48b7253a911891254, type: 3}
+  bullet: {fileID: 3474837066459004095, guid: 49f5b0dc6fd053d4e92768315c1c41d1, type: 3}
   laserColor: {r: 0.6431373, g: 0.65882355, b: 0.7019608, a: 1}
+  laserCooldown: 0.2
   laserInaccuracy: 0.01
-  fireRate: 0.1
+  laserCost: 10
+  fireRate: 0.4
   bulletInaccuracy: 0.1
+  bulletCost: 20
 --- !u!1 &8820482003220790953
 GameObject:
   m_ObjectHideFlags: 0

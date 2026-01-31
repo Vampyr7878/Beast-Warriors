@@ -21,29 +21,28 @@ public class Prowl : BeastWarrior
 
     public Color laserColor;
 
+    public float laserCooldown;
+
     public float laserInaccuracy;
+
+    public int laserCost;
 
     public float fireRate;
 
     public float bulletInaccuracy;
 
-    private float time;
+    public int bulletCost;
 
     protected new void FixedUpdate()
     {
         base.FixedUpdate();
         if (lightShoot)
         {
-            lightShoot = ShootLaser(WeaponArm.None, laser, lightBarrels, laserColor, laserInaccuracy, 2);
+            lightShoot = ShootLaser(WeaponArm.None, laser, lightBarrels, laserColor, laserInaccuracy, laserCooldown, laserCost, 2);
         }
-        if (heavyShoot)
+        else if (heavyShoot)
         {
-            if (time >= fireRate)
-            {
-                ShootMachineGun(WeaponArm.Both, bullet, heavyBarrels, bulletInaccuracy);
-                time = 0;
-            }
-            time += Time.deltaTime;
+            heavyShoot = ShootMachineGun(WeaponArm.Both, bullet, heavyBarrels, bulletInaccuracy, fireRate, bulletCost);
         }
     }
 
@@ -97,6 +96,9 @@ public class Prowl : BeastWarrior
         Equip(fork, holster);
         character.OverrideArm(WeaponArm.Both);
         base.OnRangedStrong(context);
+        barrel = 0;
+        right = true;
+        left = false;
     }
 
     public override void OnAttack(CallbackContext context)
@@ -104,14 +106,18 @@ public class Prowl : BeastWarrior
         switch (weapon)
         {
             case 3:
-                lightShoot = context.performed;
-                time = fireRate;
-                barrel = 0;
-                right = true;
-                left = false;
+                if (canShoot && character.energy >= laserCost)
+                {
+                    lightShoot = context.performed;
+                    canShoot = !lightShoot;
+                }
                 break;
             case 4:
-                heavyShoot = context.performed;
+                if (canShoot && character.energy >= bulletCost)
+                {
+                    heavyShoot = context.performed;
+                    canShoot = !heavyShoot;
+                }
                 break;
         }
     }

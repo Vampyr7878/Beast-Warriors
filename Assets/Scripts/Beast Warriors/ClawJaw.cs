@@ -27,16 +27,24 @@ public class ClawJaw : BeastWarrior
 
     public Color discColor;
 
+    public float boltCooldown;
+
+    public int boltCost;
+
+    public float discCooldown;
+
+    public int discCost;
+
     protected new void FixedUpdate()
     {
         base.FixedUpdate();
         if (lightShoot)
         {
-            lightShoot = ShootBolt(WeaponArm.Both, flash, bolt, lightBarrels, boltMaterial, boltColor);
+            lightShoot = ShootBolt(WeaponArm.Both, flash, bolt, lightBarrels, boltMaterial, boltColor, boltCost, boltCooldown);
         }
-        if (heavyShoot)
+        else if (heavyShoot)
         {
-            heavyShoot = ShootBolt(WeaponArm.None, flash, disc, heavyBarrel, discMaterial, discColor);
+            heavyShoot = ShootBolt(WeaponArm.None, flash, disc, heavyBarrel, discMaterial, discColor, boltCost, discCooldown);
         }
     }
 
@@ -92,10 +100,18 @@ public class ClawJaw : BeastWarrior
         switch (weapon)
         {
             case 3:
-                lightShoot = context.performed;
+                if (canShoot && character.energy >= boltCost)
+                {
+                    lightShoot = context.performed;
+                    canShoot = !lightShoot;
+                }
                 break;
             case 4:
-                heavyShoot = context.performed;
+                if (canShoot && character.energy >= discCost)
+                {
+                    heavyShoot = context.performed;
+                    canShoot = !heavyShoot;
+                }
                 break;
         }
     }

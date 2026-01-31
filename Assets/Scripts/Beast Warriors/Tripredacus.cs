@@ -27,23 +27,29 @@ public class Tripredacus : BeastWarrior
 
     public float bulletInaccuracy;
 
+    public int bulletCost;
+
+    public float boltCooldown;
+
+    public int boltCost;
+
     private float time;
 
     protected new void FixedUpdate()
     {
         base.FixedUpdate();
-        if (lightShoot)
+        if (lightShoot && character.energy >= bulletCost)
         {
             if (time >= fireRate)
             {
-                ShootMachineGun(WeaponArm.None, bullet, lightBarrels, bulletInaccuracy, 2);
+                ShootMachineGun(WeaponArm.None, bullet, lightBarrels, bulletInaccuracy, 0f, bulletCost);
                 time = 0;
             }
             time += Time.deltaTime;
         }
-        if (heavyShoot)
+        else if (heavyShoot)
         {
-            heavyShoot = ShootBolt(WeaponArm.Right, flash, bolt, heavyBarrels, boltMaterial, boltColor);
+            heavyShoot = ShootBolt(WeaponArm.Right, flash, bolt, heavyBarrels, boltMaterial, boltColor, boltCost, boltCooldown);
         }
     }
 
@@ -102,7 +108,11 @@ public class Tripredacus : BeastWarrior
                 barrel = 0;
                 break;
             case 4:
-                heavyShoot = context.performed;
+                if (canShoot && character.energy >= boltCost)
+                {
+                    heavyShoot = context.performed;
+                    canShoot = !heavyShoot;
+                }
                 break;
         }
     }

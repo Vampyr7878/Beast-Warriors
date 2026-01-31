@@ -25,27 +25,26 @@ public class Bazooka : BeastWarrior
 
     public Color boltColor;
 
+    public float boltCooldown;
+
+    public int boltCost;
+
     public float fireRate;
 
     public float bulletInaccuracy;
 
-    private float time;
+    public int bulletCost;
 
     protected new void FixedUpdate()
     {
         base.FixedUpdate();
         if (lightShoot)
         {
-            lightShoot = ShootBolt(WeaponArm.Left, flash, bolt, lightBarrel, boltMaterial, boltColor);
+            lightShoot = ShootBolt(WeaponArm.Left, flash, bolt, lightBarrel, boltMaterial, boltColor, boltCost, boltCooldown);
         }
-        if (heavyShoot)
+        else if (heavyShoot)
         {
-            if (time >= fireRate)
-            {
-                ShootMachineGun(WeaponArm.Right, bullet, heavyBarrel, bulletInaccuracy);
-                time = 0;
-            }
-            time += Time.deltaTime;
+            heavyShoot = ShootMachineGun(WeaponArm.Right, bullet, heavyBarrel, bulletInaccuracy, fireRate, bulletCost);
         }
     }
 
@@ -98,11 +97,18 @@ public class Bazooka : BeastWarrior
         switch (weapon)
         {
             case 3:
-                lightShoot = context.performed;
+                if (canShoot && character.energy >= boltCost)
+                {
+                    lightShoot = context.performed;
+                    canShoot = !lightShoot;
+                }
                 break;
             case 4:
-                heavyShoot = context.performed;
-                time = fireRate;
+                if (canShoot && character.energy >= bulletCost)
+                {
+                    heavyShoot = context.performed;
+                    canShoot = !heavyShoot;
+                }
                 break;
         }
     }
