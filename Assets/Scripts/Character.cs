@@ -107,15 +107,14 @@ public class Character : MonoBehaviour
                 i = skeleton.FindIndex(b => b.name == child.tag);
                 if (i >= 0)
                 {
-                    if (child.tag.Contains("Foot"))
+                    if (child.tag.Contains("Foot") || child.tag.Contains("Hand"))
                     {
                         child.isBodyPart = false;
-                        GameObject foot = new(child.tag.Replace(" ", ""));
-                        foot.transform.parent = child.transform.parent;
-                        foot.transform.position = child.transform.position;
-                        foot.transform.localEulerAngles = new Vector3(0f, -180f, -90f);
-                        foot.tag = child.tag;
-                        bodyParts[i] = foot.transform;
+                        GameObject apendage = new(child.tag.Replace(" ", ""));
+                        apendage.transform.SetParent(child.transform.parent);
+                        apendage.transform.position = child.transform.position;
+                        apendage.tag = child.tag;
+                        bodyParts[i] = apendage.transform;
                     }
                     else
                     {
@@ -127,12 +126,11 @@ public class Character : MonoBehaviour
         foreach (BodyPart child in GetComponentsInChildren<BodyPart>(true))
         {
             if (!child.isBodyPart)
-
             {
                 i = skeleton.FindIndex(b => b.name == child.tag);
                 if (i >= 0)
                 {
-                    child.transform.parent = bodyParts[i];
+                    child.transform.SetParent(bodyParts[i]);
                 }
             }
         }
@@ -216,26 +214,26 @@ public class Character : MonoBehaviour
             if (bodyParts[i] != null)
             {
                 bodyParts[i].transform.SetPositionAndRotation(skeleton[i].position, skeleton[i].rotation);
-                CompensateLimb(i, "Right Arm", 90f, 0f, 0f);
-                CompensateLimb(i, "Right Elbow", 0f, -90f, 90f);
-                CompensateLimb(i, "Right Forearm", 90f, 0f, 0f);
-                CompensateLimb(i, "Right Hand", 0f, 90f, 90f);
-                CompensateLimb(i, "Left Arm", 90f, 0f, 0f);
-                CompensateLimb(i, "Left Elbow", 0f, -90f, 90f);
-                CompensateLimb(i, "Left Forearm", 90f, 0f, 0f);
-                CompensateLimb(i, "Left Hand", 0f, 90f, 90f);
-                CompensateLimb(i, "Right Leg", 90f, 0f, -90f);
-                CompensateLimb(i, "Right Lower", 90f, 0f, 90f);
-                CompensateLimb(i, "Right Foot", 0f, -90f, 30f);
-                CompensateLimb(i, "Left Leg", 90f, 0f, 90f);
-                CompensateLimb(i, "Left Lower", 90f, 0f, -90f);
-                CompensateLimb(i, "Left Foot", 0f, -90f, 30f);
-                CompensateLimb(i, "Right Long", 90f, 0f, 180f);
-                CompensateLimb(i, "Right Claw", 0f, -90f, 90f);
-                CompensateLimb(i, "Right Hook", 90f, 0f, 0f);
-                CompensateLimb(i, "Left Long", 90f, 0f, 180f);
-                CompensateLimb(i, "Left Claw", 0f, -90f, 90f);
-                CompensateLimb(i, "Left Hook", 90f, 0f, 0f);
+                CompensateLimb(i, "Right Arm", -90f, 0f, 0f);
+                CompensateLimb(i, "Right Elbow", 90f, 0f, 0f);
+                CompensateLimb(i, "Right Forearm", -90f, 0f, 0f);
+                CompensateLimb(i, "Right Hand", 0f, 90, 180f);
+                CompensateLimb(i, "Left Arm", -90f, 0f, 0f);
+                CompensateLimb(i, "Left Elbow", 90f, 0f, 0f);
+                CompensateLimb(i, "Left Forearm", -90f, 0f, 0f);
+                CompensateLimb(i, "Left Hand", 0f, -90f, 180f);
+                CompensateLimb(i, "Right Leg", -90f, 0f, 90f);
+                CompensateLimb(i, "Right Lower", -90f, 0f, -90f);
+                CompensateLimb(i, "Right Foot", 120f, 0f, 0f);
+                CompensateLimb(i, "Left Leg", -90f, 0f, -90f);
+                CompensateLimb(i, "Left Lower", -90f, 0f, 90f);
+                CompensateLimb(i, "Left Foot", 120f, 0f, 0f);
+                CompensateLimb(i, "Right Long", -90f, 0f, 0f);
+                CompensateLimb(i, "Right Claw", 90f, 0f, 0f);
+                CompensateLimb(i, "Left Long", -90f, 0f, 0f);
+                CompensateLimb(i, "Left Claw", 90f, 0f, 0f);
+                CompensateLimb(i, "Right Hook", -90f, 0f, 0f);
+                CompensateLimb(i, "Left Hook", -90f, 0f, 0f);
             }
         }
     }

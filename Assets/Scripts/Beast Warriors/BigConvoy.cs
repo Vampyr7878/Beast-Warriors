@@ -37,14 +37,22 @@ public class BigConvoy : BeastWarrior
 
     public int ballCost;
 
-    private float foldAngle;
+    private Vector3[] foldVectors;
 
-    private float deployAngle;
+    private Vector3[] deployVectors;
 
     new void Awake()
     {
-        foldAngle = 80;
-        deployAngle = 100;
+        foldVectors = new Vector3[]
+        {
+            new(0f, 90f, -90f),
+            new(0f, -90f, 90f)
+        };
+        deployVectors = new Vector3[]
+        {
+            new(0f, 90f, 90f),
+            new(0f, -90f, -90f)
+        };
         base.Awake();
     }
 
@@ -70,8 +78,8 @@ public class BigConvoy : BeastWarrior
         Equip(cannon, holster);
         character.OverrideArm(WeaponArm.None);
         base.OnMeleeWeak(context);
-        Deploy(rightBaton, 0, 90, foldAngle);
-        Deploy(leftBaton, 0, -90, -foldAngle);
+        Deploy(rightBaton, foldVectors[0]);
+        Deploy(leftBaton, foldVectors[1]);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -83,8 +91,8 @@ public class BigConvoy : BeastWarrior
         Equip(cannon, holster);
         character.OverrideArm(WeaponArm.None);
         base.OnMeleeStrong(context);
-        Deploy(rightBaton, 0, 90, -deployAngle);
-        Deploy(leftBaton, 0, -90, deployAngle);
+        Deploy(rightBaton, deployVectors[0]);
+        Deploy(leftBaton, deployVectors[1]);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -96,8 +104,8 @@ public class BigConvoy : BeastWarrior
         Equip(cannon, holster);
         character.OverrideArm(WeaponArm.None);
         base.OnRangedWeak(context);
-        Deploy(rightBaton, 0, 90, foldAngle);
-        Deploy(leftBaton, 0, -90, -foldAngle);
+        Deploy(rightBaton, foldVectors[0]);
+        Deploy(leftBaton, foldVectors[1]);
         barrel = 0;
     }
 
@@ -110,8 +118,8 @@ public class BigConvoy : BeastWarrior
         Equip(cannon, hold);
         character.OverrideArm(WeaponArm.Right);
         base.OnRangedStrong(context);
-        Deploy(rightBaton, 0, 90, foldAngle);
-        Deploy(leftBaton, 0, -90, -foldAngle);
+        Deploy(rightBaton, foldVectors[0]);
+        Deploy(leftBaton, foldVectors[1]);
     }
 
     public override void OnAttack(CallbackContext context)

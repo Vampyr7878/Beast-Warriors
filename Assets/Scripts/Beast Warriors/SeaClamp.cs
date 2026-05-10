@@ -37,16 +37,24 @@ public class SeaClamp : BeastWarrior
 
     public int boltCost;
 
-    private float foldAngle;
+    private Vector3[] foldVectors;
 
-    private float deployAngle;
+    private Vector3[] deployVectors;
 
     private float time;
 
     new void Awake()
     {
-        foldAngle = 0;
-        deployAngle = 160;
+        foldVectors = new Vector3[]
+        {
+            new(0f, 0f, -10f),
+            new(0f, 0f, 10f)
+        };
+        deployVectors = new Vector3[]
+        {
+            new(180, 0f, 10f),
+            new(180f, 0f, -10f)
+        };
         base.Awake();
     }
 
@@ -57,7 +65,7 @@ public class SeaClamp : BeastWarrior
         {
             if (time >= fireRate)
             {
-                ShootMachineGun(WeaponArm.None, bullet, lightBarrels, bulletInaccuracy, 0f, bulletCost);
+                ShootMachineGun(WeaponArm.None, bullet, lightBarrels, bulletInaccuracy, 0f, bulletCost, 2);
                 time = 0;
             }
             time += Time.deltaTime;
@@ -77,8 +85,8 @@ public class SeaClamp : BeastWarrior
         Equip(launcher, holster);
         character.OverrideArm(WeaponArm.None);
         base.OnMeleeWeak(context);
-        Deploy(rightClaws, 0f, foldAngle, 80f);
-        Deploy(leftClaws, 0f, foldAngle + 180, -80f);
+        Deploy(rightClaws, foldVectors[0]);
+        Deploy(leftClaws, foldVectors[1]);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -90,8 +98,8 @@ public class SeaClamp : BeastWarrior
         Equip(launcher, holster);
         character.OverrideArm(WeaponArm.None);
         base.OnMeleeStrong(context);
-        Deploy(rightClaws, 0f, -deployAngle, 80f);
-        Deploy(leftClaws, 0f, deployAngle + 180, -80f);
+        Deploy(rightClaws, deployVectors[0]);
+        Deploy(leftClaws, deployVectors[1]);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -103,8 +111,8 @@ public class SeaClamp : BeastWarrior
         Equip(launcher, holster);
         character.OverrideArm(WeaponArm.None);
         base.OnRangedWeak(context);
-        Deploy(rightClaws, 0f, foldAngle, 80f);
-        Deploy(leftClaws, 0f, foldAngle + 180, -80f);
+        Deploy(rightClaws, foldVectors[0]);
+        Deploy(leftClaws, foldVectors[1]);
     }
 
     public override void OnRangedStrong(CallbackContext context)
@@ -116,8 +124,8 @@ public class SeaClamp : BeastWarrior
         Equip(launcher, hold);
         character.OverrideArm(WeaponArm.Right);
         base.OnRangedStrong(context);
-        Deploy(rightClaws, 0f, foldAngle, 80f);
-        Deploy(leftClaws, 0f, foldAngle + 180, -80f);
+        Deploy(rightClaws, foldVectors[0]);
+        Deploy(leftClaws, foldVectors[1]);
         barrel = 0;
     }
 

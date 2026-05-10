@@ -41,16 +41,16 @@ public class Cicadacon : BeastWarrior
 
     public int ballCost;
 
-    private float foldAngle;
+    private Vector3 foldVector;
 
-    private float deployAngle;
+    private Vector3 deployVector;
 
     private float time;
 
     new void Awake()
     {
-        foldAngle = 0;
-        deployAngle = 90;
+        foldVector = new(0f, 180f, 0f);
+        deployVector = new(90f, 180f, 0f);
         base.Awake();
     }
 
@@ -68,7 +68,7 @@ public class Cicadacon : BeastWarrior
         }
         else if (heavyShoot)
         {
-            heavyShoot = ShootBall(WeaponArm.None, flash, ball, heavyBarrel, ballColor, ballColor, ballCooldown, ballCost);
+            heavyShoot = ShootBall(WeaponArm.None, flash, ball, heavyBarrel, flashColor, ballColor, ballCooldown, ballCost);
         }
     }
 
@@ -82,7 +82,7 @@ public class Cicadacon : BeastWarrior
         Equip(leftSword, leftHolster);
         character.OverrideArm(WeaponArm.None);
         base.OnMeleeWeak(context);
-        Deploy(cannon, foldAngle, 0f, 0f);
+        Deploy(cannon, foldVector);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -95,7 +95,7 @@ public class Cicadacon : BeastWarrior
         Equip(leftSword, leftHold);
         character.OverrideArm(WeaponArm.None);
         base.OnMeleeStrong(context);
-        Deploy(cannon, foldAngle, 0f, 0f);
+        Deploy(cannon, foldVector);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -108,7 +108,7 @@ public class Cicadacon : BeastWarrior
         Equip(leftSword, leftHolster);
         character.OverrideArm(WeaponArm.Both);
         base.OnRangedWeak(context);
-        Deploy(cannon, foldAngle, 0f, 0f);
+        Deploy(cannon, foldVector);
     }
 
     public override void OnRangedStrong(CallbackContext context)
@@ -121,7 +121,7 @@ public class Cicadacon : BeastWarrior
         Equip(leftSword, leftHolster);
         character.OverrideArm(WeaponArm.None);
         base.OnRangedStrong(context);
-        Deploy(cannon, deployAngle, 0f, 0f);
+        Deploy(cannon, deployVector);
     }
 
     public override void OnAttack(CallbackContext context)

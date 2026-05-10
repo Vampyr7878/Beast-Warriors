@@ -38,7 +38,7 @@ public class Spittor : BeastWarrior
         }
         else if (heavyShoot)
         {
-            heavyShoot = ShootBall(WeaponArm.None, flash, ball, heavyBarrels, ballColor, ballColor, ballCooldown, ballCost);
+            heavyShoot = ShootBall(WeaponArm.None, flash, ball, heavyBarrels, flashColor, ballColor, ballCooldown, ballCost);
         }
     }
 

@@ -29,16 +29,16 @@ public class PolarClaw : BeastWarrior
 
     public int ballCost;
 
-    private float foldAngle;
+    private Vector3 foldVector;
 
-    private float deployAngle;
+    private Vector3 deployVector;
 
     private float time;
 
     new void Awake()
     {
-        foldAngle = 0;
-        deployAngle = -130;
+        foldVector = new(0f, 180f, 0f);
+        deployVector = new(-130f, 180f, 0f);
         base.Awake();
     }
 
@@ -56,7 +56,7 @@ public class PolarClaw : BeastWarrior
         }
         else if (heavyShoot)
         {
-            heavyShoot = ShootBall(WeaponArm.None, flash, ball, heavyBarrels, ballColor, ballColor, ballCooldown, ballCost);
+            heavyShoot = ShootBall(WeaponArm.None, flash, ball, heavyBarrels, flashColor, ballColor, ballCooldown, ballCost);
         }
     }
 
@@ -68,7 +68,7 @@ public class PolarClaw : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         character.OverrideArm(WeaponArm.None);
         base.OnMeleeWeak(context);
-        Deploy(claw, foldAngle, 0f, 0f);
+        Deploy(claw, foldVector);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -79,7 +79,7 @@ public class PolarClaw : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         character.OverrideArm(WeaponArm.None);
         base.OnMeleeStrong(context);
-        Deploy(claw, deployAngle, 0f, 0f);
+        Deploy(claw, deployVector);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -90,7 +90,7 @@ public class PolarClaw : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         character.OverrideArm(WeaponArm.Both);
         base.OnRangedWeak(context);
-        Deploy(claw, foldAngle, 0f, 0f);
+        Deploy(claw, foldVector);
     }
 
     public override void OnRangedStrong(CallbackContext context)
@@ -101,7 +101,7 @@ public class PolarClaw : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         character.OverrideArm(WeaponArm.None);
         base.OnRangedStrong(context);
-        Deploy(claw, foldAngle, 0f, 0f);
+        Deploy(claw, foldVector);
         barrel = 0;
     }
 

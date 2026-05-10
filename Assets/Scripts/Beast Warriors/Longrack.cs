@@ -37,14 +37,22 @@ public class Longrack : BeastWarrior
 
     public int missleCost;
 
-    private float foldAngle;
+    private Vector3[] foldVectors;
 
-    private float deployAngle;
+    private Vector3[] deployVectors;
 
     new void Awake()
     {
-        foldAngle = 0;
-        deployAngle = 90;
+        foldVectors = new Vector3[]
+        {
+            new(0f, 180f, 0f),
+            new(0f, 180f, 0f)
+        };
+        deployVectors = new Vector3[]
+        {
+            new(-90f, 180f, 0f),
+            new(-90f, 180f, 0f)
+        };
         base.Awake();
     }
 
@@ -70,8 +78,8 @@ public class Longrack : BeastWarrior
         Equip(knife, holster);
         character.OverrideArm(WeaponArm.None);
         base.OnMeleeWeak(context);
-        Deploy(rightGun, foldAngle, 180f, 0f);
-        Deploy(leftGun, foldAngle, 180f, 0f);
+        Deploy(rightGun, foldVectors[0]);
+        Deploy(leftGun, foldVectors[1]);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -83,8 +91,8 @@ public class Longrack : BeastWarrior
         Equip(knife, hold);
         character.OverrideArm(WeaponArm.None);
         base.OnMeleeStrong(context);
-        Deploy(rightGun, foldAngle, 180f, 0f);
-        Deploy(leftGun, foldAngle, 180f, 0f);
+        Deploy(rightGun, foldVectors[0]);
+        Deploy(leftGun, foldVectors[1]);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -96,8 +104,8 @@ public class Longrack : BeastWarrior
         Equip(knife, holster);
         character.OverrideArm(WeaponArm.Left);
         base.OnRangedWeak(context);
-        Deploy(rightGun, foldAngle, 180f, 0f);
-        Deploy(leftGun, foldAngle, 180f, 0f);
+        Deploy(rightGun, foldVectors[0]);
+        Deploy(leftGun, foldVectors[1]);
     }
 
     public override void OnRangedStrong(CallbackContext context)
@@ -109,8 +117,8 @@ public class Longrack : BeastWarrior
         Equip(knife, holster);
         character.OverrideArm(WeaponArm.None);
         base.OnRangedStrong(context);
-        Deploy(rightGun, deployAngle, 180f, 0f);
-        Deploy(leftGun, deployAngle, 180f, 0f);
+        Deploy(rightGun, deployVectors[0]);
+        Deploy(leftGun, deployVectors[1]);
         barrel = 0;
     }
 

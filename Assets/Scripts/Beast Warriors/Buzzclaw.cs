@@ -25,8 +25,6 @@ public class Buzzclaw : BeastWarrior
 
     public Color laserColor;
 
-    public Color flashColor;
-
     public Color ballColor;
 
     public float laserCooldown;

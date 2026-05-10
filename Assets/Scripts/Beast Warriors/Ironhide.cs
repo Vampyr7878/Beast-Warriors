@@ -43,14 +43,22 @@ public class Ironhide : BeastWarrior
 
     public int bulletCost;
 
-    private float foldAngle;
+    private Vector3[] foldVectors;
 
-    private float deployAngle;
+    private Vector3[] deployVectors;
 
     new void Awake()
     {
-        foldAngle = 90;
-        deployAngle = -90;
+        foldVectors = new Vector3[]
+        {
+            new(0f, 90f, -90f),
+            new(0f, -90f, 90f)
+        };
+        deployVectors = new Vector3[]
+        {
+            new(0f, -90f, -90f),
+            new(0f, 90f, 90f)
+        };
         base.Awake();
     }
 
@@ -77,8 +85,8 @@ public class Ironhide : BeastWarrior
         Equip(leftClub, leftHolster);
         character.OverrideArm(WeaponArm.None);
         base.OnMeleeWeak(context);
-        Deploy(rightBlade, 0f, deployAngle, 80f);
-        Deploy(leftBlade, 0f, -deployAngle, -80f);
+        Deploy(rightBlade, deployVectors[0]);
+        Deploy(leftBlade, deployVectors[1]);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -91,8 +99,8 @@ public class Ironhide : BeastWarrior
         Equip(leftClub, leftHold);
         character.OverrideArm(WeaponArm.None);
         base.OnMeleeStrong(context);
-        Deploy(rightBlade, 0f, foldAngle, 80f);
-        Deploy(leftBlade, 0f, -foldAngle, -80f);
+        Deploy(rightBlade, foldVectors[0]);
+        Deploy(leftBlade, foldVectors[1]);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -105,8 +113,8 @@ public class Ironhide : BeastWarrior
         Equip(leftClub, leftHolster);
         character.OverrideArm(WeaponArm.None);
         base.OnRangedWeak(context);
-        Deploy(rightBlade, 0f, foldAngle, 80f);
-        Deploy(leftBlade, 0f, -foldAngle, -80f);
+        Deploy(rightBlade, foldVectors[0]);
+        Deploy(leftBlade, foldVectors[1]);
         barrel = 0;
     }
 
@@ -120,8 +128,8 @@ public class Ironhide : BeastWarrior
         Equip(leftClub, leftHolster);
         character.OverrideArm(WeaponArm.Both);
         base.OnRangedStrong(context);
-        Deploy(rightBlade, 0f, foldAngle, 80f);
-        Deploy(leftBlade, 0f, -foldAngle, -80f);
+        Deploy(rightBlade, foldVectors[0]);
+        Deploy(leftBlade, foldVectors[1]);
         barrel = 0;
         right = true;
         left = false;

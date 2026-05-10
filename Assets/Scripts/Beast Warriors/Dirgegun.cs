@@ -1,4 +1,3 @@
-using System.Threading;
 using UnityEngine;
 using static UnityEngine.InputSystem.InputAction;
 
@@ -38,14 +37,14 @@ public class Dirgegun : BeastWarrior
 
     public int missleCost;
 
-    private float foldAngle;
+    private Vector3 foldVector;
 
-    private float deployAngle;
+    private Vector3 deployVector;
 
     new void Awake()
     {
-        foldAngle = -90;
-        deployAngle = -325;
+        foldVector = new(0f, 180f, 0f);
+        deployVector = new(-235f, 180f, 0f);
         base.Awake();
     }
 
@@ -71,7 +70,7 @@ public class Dirgegun : BeastWarrior
         Equip(launcher, holster);
         character.OverrideArm(WeaponArm.None);
         base.OnMeleeWeak(context);
-        Deploy(backLauncher, foldAngle, 0f, -180f);
+        Deploy(backLauncher, foldVector);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -83,7 +82,7 @@ public class Dirgegun : BeastWarrior
         Equip(launcher, holster);
         character.OverrideArm(WeaponArm.None);
         base.OnMeleeStrong(context);
-        Deploy(backLauncher, foldAngle, 0f, -180f);
+        Deploy(backLauncher, foldVector);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -95,7 +94,7 @@ public class Dirgegun : BeastWarrior
         Equip(launcher, holster);
         character.OverrideArm(WeaponArm.None);
         base.OnRangedWeak(context);
-        Deploy(backLauncher, deployAngle, 0f, -180f);
+        Deploy(backLauncher, deployVector);
     }
 
     public override void OnRangedStrong(CallbackContext context)
@@ -107,7 +106,7 @@ public class Dirgegun : BeastWarrior
         Equip(launcher, hold);
         character.OverrideArm(WeaponArm.Right);
         base.OnRangedStrong(context);
-        Deploy(backLauncher, foldAngle, 0f, -180f);
+        Deploy(backLauncher, foldVector);
     }
 
     public override void OnAttack(CallbackContext context)

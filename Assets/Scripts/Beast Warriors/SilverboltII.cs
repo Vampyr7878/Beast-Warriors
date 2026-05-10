@@ -94,6 +94,7 @@ public class SilverboltII : BeastWarrior
         base.OnRangedWeak(context);
         right = true;
         left = false;
+        barrel = 0;
     }
 
     public override void OnRangedStrong(CallbackContext context)

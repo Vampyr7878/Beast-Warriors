@@ -43,15 +43,27 @@ public class Silverbolt : BeastWarrior
 
     private GameObject[] holds;
 
-    private float foldAngle;
+    private Vector3[] foldVectors;
 
-    private float deployAngle;
+    private Vector3[] deployVectors;
 
     new void Awake()
     {
-        holds = new GameObject[2] { rightHold, leftHold };
-        foldAngle = 180;
-        deployAngle = 90;
+        holds = new GameObject[]
+        { 
+            rightHold,
+            leftHold
+        };
+        foldVectors = new Vector3[]
+        {
+            new(0f, 180f, 0f),
+            new(0f, 180f, 0f)
+        };
+        deployVectors = new Vector3[]
+        {
+            new(0f, 90f, 0f),
+            new(0f, -90f, 0f)
+        };
         base.Awake();
     }
 
@@ -78,8 +90,8 @@ public class Silverbolt : BeastWarrior
         Equip(leftBlade, leftHolster);
         character.OverrideArm(WeaponArm.None);
         base.OnMeleeWeak(context);
-        Deploy(rightCannons, 0f, foldAngle, 0f);
-        Deploy(leftCannons, 0f, -foldAngle, 0f);
+        Deploy(rightCannons, foldVectors[0]);
+        Deploy(leftCannons, foldVectors[1]);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -92,8 +104,8 @@ public class Silverbolt : BeastWarrior
         Equip(leftBlade, leftHold);
         character.OverrideArm(WeaponArm.None);
         base.OnMeleeStrong(context);
-        Deploy(rightCannons, 0f, foldAngle, 0f);
-        Deploy(leftCannons, 0f, -foldAngle, 0f);
+        Deploy(rightCannons, foldVectors[0]);
+        Deploy(leftCannons, foldVectors[1]);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -106,10 +118,11 @@ public class Silverbolt : BeastWarrior
         Equip(leftBlade, leftHold);
         character.OverrideArm(WeaponArm.Both);
         base.OnRangedWeak(context);
-        Deploy(rightCannons, 0f, foldAngle, 0f);
-        Deploy(leftCannons, 0f, -foldAngle, 0f);
+        Deploy(rightCannons, foldVectors[0]);
+        Deploy(leftCannons, foldVectors[1]);
         right = true;
         left = false;
+        barrel = 0;
     }
 
     public override void OnRangedStrong(CallbackContext context)
@@ -122,8 +135,8 @@ public class Silverbolt : BeastWarrior
         Equip(leftBlade, leftHolster);
         character.OverrideArm(WeaponArm.None);
         base.OnRangedStrong(context);
-        Deploy(rightCannons, 0f, deployAngle, 0f);
-        Deploy(leftCannons, 0f, -deployAngle, 0f);
+        Deploy(rightCannons, deployVectors[0]);
+        Deploy(leftCannons, deployVectors[1]);
         barrel = 0;
     }
 

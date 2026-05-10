@@ -37,14 +37,26 @@ public class Jetstorm : BeastWarrior
 
     public int laserCost;
 
-    private float foldAngle;
+    private Vector3[] foldVectors;
 
-    private float deployAngle;
+    private Vector3[] deployVectors;
 
     new void Awake()
     {
-        foldAngle = 180;
-        deployAngle = 90;
+        foldVectors = new Vector3[]
+        {
+            new(0f, 180f, 0f),
+            new(0f, 0f, 0f),
+            new(0f, -180f, 0f),
+            new(0f, 0f, 0f)
+        };
+        deployVectors = new Vector3[]
+        {
+            new(0f, 90f, 0f),
+            new(0f, 0f, -90f),
+            new(0f, -90f, 0f),
+            new(0f, 0f, 90f)
+        };
         base.Awake();
     }
 
@@ -69,10 +81,10 @@ public class Jetstorm : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         character.OverrideArm(WeaponArm.None);
         base.OnMeleeWeak(context);
-        Deploy(rightGun, 0f, foldAngle, 0f);
-        Deploy(rightGunBarrel, deployAngle, 0f, 0f);
-        Deploy(leftGun, 0f, -foldAngle, 0f);
-        Deploy(leftGunBarrel, -deployAngle, 0f, 0f);
+        Deploy(rightGun, foldVectors[0]);
+        Deploy(rightGunBarrel, foldVectors[1]);
+        Deploy(leftGun, foldVectors[2]);
+        Deploy(leftGunBarrel, foldVectors[3]);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -83,10 +95,10 @@ public class Jetstorm : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         character.OverrideArm(WeaponArm.None);
         base.OnMeleeStrong(context);
-        Deploy(rightGun, 0f, foldAngle, 0f);
-        Deploy(rightGunBarrel, deployAngle, 0f, 0f);
-        Deploy(leftGun, 0f, -foldAngle, 0f);
-        Deploy(leftGunBarrel, -deployAngle, 0f, 0f);
+        Deploy(rightGun, foldVectors[0]);
+        Deploy(rightGunBarrel, foldVectors[1]);
+        Deploy(leftGun, foldVectors[2]);
+        Deploy(leftGunBarrel, foldVectors[3]);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -97,10 +109,10 @@ public class Jetstorm : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         character.OverrideArm(WeaponArm.None);
         base.OnRangedWeak(context);
-        Deploy(rightGun, 0f, deployAngle, 0f);
-        Deploy(rightGunBarrel, foldAngle, 0f, 0f);
-        Deploy(leftGun, 0f, -deployAngle, 0f);
-        Deploy(leftGunBarrel, -foldAngle, 0f, 0f);
+        Deploy(rightGun, deployVectors[0]);
+        Deploy(rightGunBarrel, deployVectors[1]);
+        Deploy(leftGun, deployVectors[2]);
+        Deploy(leftGunBarrel, deployVectors[3]);
         barrel = 0;
     }
 
@@ -112,10 +124,10 @@ public class Jetstorm : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         character.OverrideArm(WeaponArm.None);
         base.OnRangedStrong(context);
-        Deploy(rightGun, 0f, foldAngle, 0f);
-        Deploy(rightGunBarrel, deployAngle, 0f, 0f);
-        Deploy(leftGun, 0f, -foldAngle, 0f);
-        Deploy(leftGunBarrel, -deployAngle, 0f, 0f);
+        Deploy(rightGun, foldVectors[0]);
+        Deploy(rightGunBarrel, foldVectors[1]);
+        Deploy(leftGun, foldVectors[2]);
+        Deploy(leftGunBarrel, foldVectors[3]);
     }
 
     public override void OnAttack(CallbackContext context)

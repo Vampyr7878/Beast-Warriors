@@ -43,14 +43,22 @@ public class LioConvoy : BeastWarrior
 
     public int ballCost;
 
-    private float foldAngle;
+    private Vector3[] foldVectors;
 
-    private float deployAngle;
+    private Vector3[] deployVectors;
 
     new void Awake()
     {
-        foldAngle = 90;
-        deployAngle = -90;
+        foldVectors = new Vector3[]
+        {
+            new(0f, 90f, -90f),
+            new(0f, -90f, 90f)
+        };
+        deployVectors = new Vector3[]
+        {
+            new(0f, -90f, -90f),
+            new(0f, 90f, 90f)
+        };
         base.Awake();
     }
 
@@ -77,8 +85,8 @@ public class LioConvoy : BeastWarrior
         Equip(leftBlaster, leftHolster);
         character.OverrideArm(WeaponArm.None);
         base.OnMeleeWeak(context);
-        Deploy(rightClaw, 0f, foldAngle, 90f);
-        Deploy(leftClaw, 0f, -foldAngle, -90f);
+        Deploy(rightClaw, foldVectors[0]);
+        Deploy(leftClaw, foldVectors[1]);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -91,8 +99,8 @@ public class LioConvoy : BeastWarrior
         Equip(leftBlaster, leftHolster);
         character.OverrideArm(WeaponArm.None);
         base.OnMeleeStrong(context);
-        Deploy(rightClaw, 0f, deployAngle, 90f);
-        Deploy(leftClaw, 0f, -deployAngle, -90f);
+        Deploy(rightClaw, deployVectors[0]);
+        Deploy(leftClaw, deployVectors[1]);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -105,8 +113,8 @@ public class LioConvoy : BeastWarrior
         Equip(leftBlaster, leftHolster);
         character.OverrideArm(WeaponArm.Both);
         base.OnRangedWeak(context);
-        Deploy(rightClaw, 0f, foldAngle, 90f);
-        Deploy(leftClaw, 0f, -foldAngle, -90f);
+        Deploy(rightClaw, foldVectors[0]);
+        Deploy(leftClaw, foldVectors[1]);
         barrel = 0;
         right = true;
         left = false;
@@ -122,8 +130,8 @@ public class LioConvoy : BeastWarrior
         Equip(leftBlaster, leftHold);
         character.OverrideArm(WeaponArm.Both);
         base.OnRangedStrong(context);
-        Deploy(rightClaw, 0f, foldAngle, 90f);
-        Deploy(leftClaw, 0f, -foldAngle, -90f);
+        Deploy(rightClaw, foldVectors[0]);
+        Deploy(leftClaw, foldVectors[1]);
         barrel = 0;
         right = true;
         left = false;

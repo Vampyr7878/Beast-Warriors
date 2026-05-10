@@ -47,14 +47,22 @@ public class Galvatron : BeastWarrior
 
     public int ballCost;
 
-    private float foldAngle;
+    private Vector3[] foldVectors;
 
-    private float deployAngle;
+    private Vector3[] deployVectors;
 
     new void Awake()
     {
-        foldAngle = 90;
-        deployAngle = 270;
+        foldVectors = new Vector3[]
+        {
+            new(0f, 90f, -90f),
+            new(0f, -90f, 90f)
+        };
+        deployVectors = new Vector3[]
+        {
+            new(0f, 270f, -90f),
+            new(0f, -270f, 90f)
+        };
         base.Awake();
     }
 
@@ -82,8 +90,8 @@ public class Galvatron : BeastWarrior
         Equip(claw, clawHolster);
         character.OverrideArm(WeaponArm.None);
         base.OnMeleeWeak(context);
-        Deploy(rightBlaster, 0f, foldAngle, 90f);
-        Deploy(leftBlaster, 0f, -foldAngle, -90f);
+        Deploy(rightBlaster, foldVectors[0]);
+        Deploy(leftBlaster, foldVectors[1]);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -97,8 +105,8 @@ public class Galvatron : BeastWarrior
         Equip(claw, rightHold);
         character.OverrideArm(WeaponArm.None);
         base.OnMeleeStrong(context);
-        Deploy(rightBlaster, 0f, foldAngle, 90f);
-        Deploy(leftBlaster, 0f, -foldAngle, -90f);
+        Deploy(rightBlaster, foldVectors[0]);
+        Deploy(leftBlaster, foldVectors[1]);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -112,8 +120,8 @@ public class Galvatron : BeastWarrior
         Equip(claw, clawHolster);
         character.OverrideArm(WeaponArm.Both);
         base.OnRangedWeak(context);
-        Deploy(rightBlaster, 0f, deployAngle, 90f);
-        Deploy(leftBlaster, 0f, -deployAngle, -90f);
+        Deploy(rightBlaster, deployVectors[0]);
+        Deploy(leftBlaster, deployVectors[1]);
         barrel = 0;
         right = true;
         left = false;
@@ -130,8 +138,8 @@ public class Galvatron : BeastWarrior
         Equip(claw, rightHold);
         character.OverrideArm(WeaponArm.Right);
         base.OnRangedStrong(context);
-        Deploy(rightBlaster, 0f, foldAngle, 90f);
-        Deploy(leftBlaster, 0f, -foldAngle, -90f);
+        Deploy(rightBlaster, foldVectors[0]);
+        Deploy(leftBlaster, foldVectors[1]);
     }
 
     public override void OnAttack(CallbackContext context)

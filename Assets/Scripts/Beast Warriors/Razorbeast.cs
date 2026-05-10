@@ -33,16 +33,24 @@ public class Razorbeast : BeastWarrior
 
     public int slugCount;
 
-    private float foldAngle;
+    private Vector3[] foldVectors;
 
-    private float deployAngle;
+    private Vector3[] deployVectors;
 
     private float time;
 
     new void Awake()
     {
-        foldAngle = -40;
-        deployAngle = -80;
+        foldVectors = new Vector3[]
+        {
+            new(0f, 180f, 0f),
+            new(0f, 180f, 0f)
+        };
+        deployVectors = new Vector3[]
+        {
+            new(-45f, 180f, 0f),
+            new(-45f, 180f, 0f)
+        };
         base.Awake();
     }
 
@@ -73,8 +81,8 @@ public class Razorbeast : BeastWarrior
         Equip(gun, holster);
         character.OverrideArm(WeaponArm.None);
         base.OnMeleeWeak(context);
-        Deploy(rightGun, foldAngle, 0f, 0f);
-        Deploy(leftGun, foldAngle, 0f, 0f);
+        Deploy(rightGun, foldVectors[0]);
+        Deploy(leftGun, foldVectors[1]);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -86,8 +94,8 @@ public class Razorbeast : BeastWarrior
         Equip(gun, holster);
         character.OverrideArm(WeaponArm.None);
         base.OnMeleeStrong(context);
-        Deploy(rightGun, foldAngle, 0f, 0f);
-        Deploy(leftGun, foldAngle, 0f, 0f);
+        Deploy(rightGun, foldVectors[0]);
+        Deploy(leftGun, foldVectors[1]);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -99,8 +107,8 @@ public class Razorbeast : BeastWarrior
         Equip(gun, holster);
         character.OverrideArm(WeaponArm.None);
         base.OnRangedWeak(context);
-        Deploy(rightGun, deployAngle, 0f, 0f);
-        Deploy(leftGun, deployAngle, 0f, 0f);
+        Deploy(rightGun, deployVectors[0]);
+        Deploy(leftGun, deployVectors[1]);
     }
 
     public override void OnRangedStrong(CallbackContext context)
@@ -112,8 +120,8 @@ public class Razorbeast : BeastWarrior
         Equip(gun, hold);
         character.OverrideArm(WeaponArm.Right);
         base.OnRangedStrong(context);
-        Deploy(rightGun, foldAngle, 0f, 0f);
-        Deploy(leftGun, foldAngle, 0f, 0f);
+        Deploy(rightGun, foldVectors[0]);
+        Deploy(leftGun, foldVectors[1]);
         barrel = 0;
     }
 

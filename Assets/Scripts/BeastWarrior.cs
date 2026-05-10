@@ -682,6 +682,11 @@ public abstract class BeastWarrior : MonoBehaviour
         weapon.transform.localEulerAngles = Vector3.zero;
     }
 
+    protected void Deploy(GameObject weapon, Vector3 angles)
+    {
+        weapon.transform.localEulerAngles = angles;
+    }
+
     protected void Deploy(GameObject weapon, float xAngle, float yAngle, float zAngle)
     {
         weapon.transform.localEulerAngles = new Vector3(xAngle, yAngle, zAngle);

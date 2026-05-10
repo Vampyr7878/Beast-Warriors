@@ -33,14 +33,22 @@ public class Manterror : BeastWarrior
 
     public int discCost;
 
-    private float foldAngle;
+    private Vector3[] foldVectors;
 
-    private float deployAngle;
+    private Vector3[] deployVectors;
 
     new void Awake()
     {
-        foldAngle = 9;
-        deployAngle = 170;
+        foldVectors = new Vector3[]
+        {
+            new(0f, 90f, -90f),
+            new(0f, -90f, 90f)
+        };
+        deployVectors = new Vector3[]
+        {
+            new(0f, -100f, -90f),
+            new(0f, 100f, 90f)
+        };
         base.Awake();
     }
 
@@ -65,8 +73,8 @@ public class Manterror : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         character.OverrideArm(WeaponArm.None);
         base.OnMeleeWeak(context);
-        Deploy(rightLauncher, 0f, foldAngle, 0f);
-        Deploy(leftLauncher, 0f, -foldAngle, 0f);
+        Deploy(rightLauncher, foldVectors[0]);
+        Deploy(leftLauncher, foldVectors[1]);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -77,8 +85,8 @@ public class Manterror : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         character.OverrideArm(WeaponArm.None);
         base.OnMeleeStrong(context);
-        Deploy(rightLauncher, 0f, deployAngle, 0f);
-        Deploy(leftLauncher, 0f, -deployAngle, 0f);
+        Deploy(rightLauncher, deployVectors[0]);
+        Deploy(leftLauncher, deployVectors[1]);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -89,8 +97,8 @@ public class Manterror : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         character.OverrideArm(WeaponArm.None);
         base.OnRangedWeak(context);
-        Deploy(rightLauncher, 0f, foldAngle, 0f);
-        Deploy(leftLauncher, 0f, -foldAngle, 0f);
+        Deploy(rightLauncher, foldVectors[0]);
+        Deploy(leftLauncher, foldVectors[1]);
     }
 
     public override void OnRangedStrong(CallbackContext context)
@@ -101,8 +109,8 @@ public class Manterror : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         character.OverrideArm(WeaponArm.Both);
         base.OnRangedStrong(context);
-        Deploy(rightLauncher, 0f, deployAngle, 0f);
-        Deploy(leftLauncher, 0f, -deployAngle, 0f);
+        Deploy(rightLauncher, deployVectors[0]);
+        Deploy(leftLauncher, deployVectors[1]);
         barrel = 0;
         right = true;
         left = false;

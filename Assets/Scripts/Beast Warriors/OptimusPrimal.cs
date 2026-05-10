@@ -45,16 +45,24 @@ public class OptimusPrimal : BeastWarrior
 
     public int missleCost;
 
-    private float foldAngle;
+    private Vector3[] foldVectors;
 
-    private float deployAngle;
+    private Vector3[] deployVectors;
 
     private float time;
 
     new void Awake()
     {
-        foldAngle = 0;
-        deployAngle = 90;
+        foldVectors = new Vector3[]
+        {
+            new(0f, 180f, 0f),
+            new(0f, 180f, 0f)
+        };
+        deployVectors = new Vector3[]
+        {
+            new(90f, 180f, 0f),
+            new(90f, 180f, 0f)
+        };
         base.Awake();
     }
 
@@ -87,8 +95,8 @@ public class OptimusPrimal : BeastWarrior
         Equip(leftSword, leftHolster);
         character.OverrideArm(WeaponArm.None);
         base.OnMeleeWeak(context);
-        Deploy(rightCannon, foldAngle, 0f, 0f);
-        Deploy(leftCannon, foldAngle, 0f, 0f);
+        Deploy(rightCannon, foldVectors[0]);
+        Deploy(leftCannon, foldVectors[1]);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -102,8 +110,8 @@ public class OptimusPrimal : BeastWarrior
         Equip(leftSword, leftHold);
         character.OverrideArm(WeaponArm.None);
         base.OnMeleeStrong(context);
-        Deploy(rightCannon, foldAngle, 0f, 0f);
-        Deploy(leftCannon, foldAngle, 0f, 0f);
+        Deploy(rightCannon, foldVectors[0]);
+        Deploy(leftCannon, foldVectors[1]);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -117,8 +125,8 @@ public class OptimusPrimal : BeastWarrior
         Equip(leftSword, leftHolster);
         character.OverrideArm(WeaponArm.Left);
         base.OnRangedWeak(context);
-        Deploy(rightCannon, foldAngle, 0f, 0f);
-        Deploy(leftCannon, foldAngle, 0f, 0f);
+        Deploy(rightCannon, foldVectors[0]);
+        Deploy(leftCannon, foldVectors[1]);
     }
 
     public override void OnRangedStrong(CallbackContext context)
@@ -132,8 +140,8 @@ public class OptimusPrimal : BeastWarrior
         Equip(leftSword, leftHolster);
         character.OverrideArm(WeaponArm.None);
         base.OnRangedStrong(context);
-        Deploy(rightCannon, deployAngle, 0f, 0f);
-        Deploy(leftCannon, deployAngle, 0f, 0f);
+        Deploy(rightCannon, deployVectors[0]);
+        Deploy(leftCannon, deployVectors[1]);
         barrel = 0;
     }
 

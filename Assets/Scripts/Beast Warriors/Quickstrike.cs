@@ -27,16 +27,16 @@ public class Quickstrike : BeastWarrior
 
     public int laserCost;
 
-    private float foldAngle;
+    private Vector3 foldVector;
 
-    private float deployAngle;
+    private Vector3 deployVector;
 
     private float time;
 
     new void Awake()
     {
-        foldAngle = 90;
-        deployAngle = 225;
+        foldVector = new(0f, 90f, -90f);
+        deployVector = new(0f, 225f, -90f);
         base.Awake();
     }
 
@@ -66,7 +66,7 @@ public class Quickstrike : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         character.OverrideArm(WeaponArm.None);
         base.OnMeleeWeak(context);
-        Deploy(cobraHead, 0f, foldAngle, 90f);
+        Deploy(cobraHead, foldVector);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -77,7 +77,7 @@ public class Quickstrike : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         character.OverrideArm(WeaponArm.None);
         base.OnMeleeStrong(context);
-        Deploy(cobraHead, 0f, foldAngle, 90f);
+        Deploy(cobraHead, foldVector);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -88,7 +88,7 @@ public class Quickstrike : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         character.OverrideArm(WeaponArm.None);
         base.OnRangedWeak(context);
-        Deploy(cobraHead, 0f, foldAngle, 90f);
+        Deploy(cobraHead, foldVector);
     }
 
     public override void OnRangedStrong(CallbackContext context)
@@ -99,7 +99,7 @@ public class Quickstrike : BeastWarrior
         animator.SetInteger("Weapon", weapon);
         character.OverrideArm(WeaponArm.Right);
         base.OnRangedStrong(context);
-        Deploy(cobraHead, 0f, deployAngle, 90f);
+        Deploy(cobraHead, deployVector);
     }
 
     public override void OnAttack(CallbackContext context)

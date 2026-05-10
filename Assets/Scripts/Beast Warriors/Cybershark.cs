@@ -39,14 +39,14 @@ public class Cybershark : BeastWarrior
 
     public int missleCost;
 
-    private float foldAngle;
+    private Vector3 foldVector;
 
-    private float deployAngle;
+    private Vector3 deployVector;
 
     new void Awake()
     {
-        foldAngle = -90;
-        deployAngle = 0;
+        foldVector = new(0f, 180f, 0f);
+        deployVector = new(90f, 180f, 0f);
         base.Awake();
     }
 
@@ -73,7 +73,7 @@ public class Cybershark : BeastWarrior
         Equip(tail, tailHolster);
         character.OverrideArm(WeaponArm.None);
         base.OnMeleeWeak(context);
-        Deploy(chestCannon, foldAngle, 0f, 0f);
+        Deploy(chestCannon, foldVector);
     }
 
     public override void OnMeleeStrong(CallbackContext context)
@@ -86,7 +86,7 @@ public class Cybershark : BeastWarrior
         Equip(tail, hold);
         character.OverrideArm(WeaponArm.None);
         base.OnMeleeStrong(context);
-        Deploy(chestCannon, foldAngle, 0f, 0f);
+        Deploy(chestCannon, foldVector);
     }
 
     public override void OnRangedWeak(CallbackContext context)
@@ -99,7 +99,7 @@ public class Cybershark : BeastWarrior
         Equip(tail, hold);
         character.OverrideArm(WeaponArm.Right);
         base.OnRangedWeak(context);
-        Deploy(chestCannon, foldAngle, 0f, 0f);
+        Deploy(chestCannon, foldVector);
     }
 
     public override void OnRangedStrong(CallbackContext context)
@@ -112,7 +112,7 @@ public class Cybershark : BeastWarrior
         Equip(tail, tailHolster);
         character.OverrideArm(WeaponArm.None);
         base.OnRangedStrong(context);
-        Deploy(chestCannon, deployAngle, 0f, 0f);
+        Deploy(chestCannon, deployVector);
     }
 
     public override void OnAttack(CallbackContext context)

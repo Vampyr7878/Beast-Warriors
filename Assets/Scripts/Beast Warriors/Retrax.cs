@@ -38,7 +38,7 @@ public class Retrax : BeastWarrior
         }
         else if (heavyShoot)
         {
-            heavyShoot = ShootBall(WeaponArm.Right, flash, ball, heavyBarrel, ballColor, ballColor, ballCooldown, ballCost);
+            heavyShoot = ShootBall(WeaponArm.Right, flash, ball, heavyBarrel, flashColor, ballColor, ballCooldown, ballCost);
         }
     }
 
